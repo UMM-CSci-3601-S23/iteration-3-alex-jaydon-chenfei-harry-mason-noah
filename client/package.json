@@ -38,7 +38,7 @@
     "@angular/cli": "^15.2.0",
     "@angular/compiler-cli": "^15.1.2",
     "@angular/language-service": "^15.1.2",
-    "@cypress/schematic": "^2.1.1",
+    "@cypress/schematic": "^2.5.0",
     "@floogulinc/cypress-mongo-seeder": "^1.1.1",
     "@types/jasmine": "^4.0.3",
     "@types/node": "^18.13.0",
