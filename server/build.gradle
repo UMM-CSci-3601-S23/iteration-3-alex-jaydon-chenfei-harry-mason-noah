@@ -46,7 +46,7 @@ dependencies {
   implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
 
   // Simple Logging Facade for Java
-  implementation 'org.slf4j:slf4j-simple:2.0.6'
+  implementation 'org.slf4j:slf4j-simple:2.0.7'
 
   // JUnit Jupiter API for testing.
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
