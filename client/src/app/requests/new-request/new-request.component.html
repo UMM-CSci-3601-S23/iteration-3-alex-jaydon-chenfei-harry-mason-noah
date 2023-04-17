@@ -1,73 +1,336 @@
 <div class="flex-row">
   <div class="flex-1">
-    <form [formGroup]="newRequestForm" (ngSubmit)="submitForm();">
+    <mat-card class="home-card">
       <mat-card-header>
-        <mat-card-title class = "new-request-title">
-          Item Request Form
+        <mat-card-title>
+          PocketShelf: Request Form!
         </mat-card-title>
       </mat-card-header>
-    <mat-card-content>
-    <div class = "drop-downs">
-      <mat-form-field>
-        <mat-label>Item Category</mat-label>
-        <mat-select
-        required
-        [(ngModel)]="type"
-        formControlName="itemType"
-        data-test="itemTypeSelect">
-          <mat-option value ="--">--</mat-option>
-          <mat-option value="food">Food</mat-option>
-          <mat-option value="toiletries">Toiletries</mat-option>
-          <mat-option value="other">Other</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formControlHasError('itemType')" data-test="itemTypeError">
-          {{getErrorMessage('itemType')}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Food Category</mat-label>
-        <mat-select
-        [disabled]="type !== 'food'"
-        formControlName="foodType"
-        >
-          <mat-option value="dairy">Dairy</mat-option>
-          <mat-option value="grain">Grain</mat-option>
-          <mat-option value="meat">Meat</mat-option>
-          <mat-option value="fruit">Fruit</mat-option>
-          <mat-option value="vegetable">Vegetable</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formControlHasError('foodType')" data-test="foodTypeError">
-          {{getErrorMessage('foodType')}}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class = "desc">
-        <mat-label>Item description</mat-label>
-        <textarea matInput formControlName="description"
-              required>
-        </textarea>
-        <mat-error *ngIf="formControlHasError('description')" data-test="descriptionError">
-          {{getErrorMessage('description')}}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    </mat-card-content>
-    <div>
-    <mat-card-actions align="end">
-      <button
-        mat-button
-        class = "submit_button"
-        type="button"
-        color="dark-primary"
-        [disabled]="!newRequestForm.valid"
-        type="submit"
-        data-test="confirmNewRequestButton"
-      >
-        SUBMIT REQUEST
-      </button>
-    </mat-card-actions>
+    </mat-card>
   </div>
-</form>
 </div>
-</div>
+
+<mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+        <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+          <ng-template matStepLabel>Fill out your name </ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label>Name</mat-label>
+                <input matInput placeholder="Name/Nombre" formControlName="clientName" required>
+                  <mat-error *ngIf="formControlHasError('clientName')" data-test="nameDescriptionError">
+                  {{getErrorMessage('clientName')}}
+                  </mat-error>
+            </mat-form-field><br /><br />
+       </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <ng-template matStepLabel>FRUITS / FRUTAS  </ng-template>
+        <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+          <mat-card-subtitle class="fruits-fresh-subtitle">Fresh / Fresca</mat-card-subtitle>
+          <mat-checkbox  (change)="updateList('miscFreshFruit')">Misc Fresh Fruit as available / Varios frutas frescas como disponible</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('appleJuice')">Apple juice / Jugo de manzana</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('frozenPeaches')">Frozen peaches / Duraznos congelados</mat-checkbox><br />
+       </section>
+       <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Canned / En Lata</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('mixedFruit')">Mixed fruit / Mix de fruta</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('peaches')">Peaches / Duraznos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('appleSauce')">Apple Sauce / Puré de manzana</mat-checkbox><br />
+      </section>
+      <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Dried / Seca </mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('dates')">Dates (whole OR pieces) / Dátiles (enteros O piezas)</mat-checkbox><br />
+      </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <ng-template matStepLabel>VEGETABLES / VERDURAS</ng-template>
+        <section class="form-veggies-fresh" [formGroup]="newRequestForm">
+          <mat-card-subtitle class="fruits-fresh-subtitle">Fresh / Fresca</mat-card-subtitle>
+          <mat-checkbox  (change)="updateList('miscFreshFruit')">Carrots / Zanahorias</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('appleJuice')">Potatoes / Papas</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('frozenPeaches')">Misc veggies as available / Varias verduras como disponible</mat-checkbox><br />
+       </section>
+       <section class="form-veggies-canned" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Canned / En Lata</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('corn')">Corn / Elote</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('greenBeans')">Green beans / Ejotes</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('peas')">Peas / Chicharitos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('sweetPotatoes')">Sweet Potatoes / Papas dulces</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('spinach')">Spinach / Espinaca</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('carrots')">Carrots / Zanahorias</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('dicedTomatoes')">Diced Tomatoes / Jitomates en lata</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('spaghettiSauce')">Spaghetti sauce/ Salsa para espagueti </mat-checkbox><br />
+      </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="newRequestForm">
+    <form [formGroup]="newRequestForm">
+      <ng-template matStepLabel>PROTEINS / PROTEÍNAS</ng-template>
+      <section class="form-frozen-meat" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Frozen meat / Carne congelada</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('groundBeef')">Ground beef / Carne de res molido</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('groundBeefPorkBlend')">Ground Beef/Pork Blend / Mezcla de carne de res y puerco molido</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('plantBasedBurgers')">Plant based burgers / Hamburguesas vegetarianas</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('pizzaRanchPizza')">Pizza Ranch Pizza / Pizza de Pizza Ranch</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('veggieRavioli')">Veggie Ravioli (for one) / Raviolis con verduras (para uno)</mat-checkbox><br />
+      </section>
+      <section class="form-chose-1-or-2" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="choose-1-or-2-subtitle">Choose 1 or 2 / Escoja 1 o 2</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('chickenDrumsticks')">Chicken drumsticks / Piernas de pollo (pequeños) </mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('wholeChicken')">Whole chicken / Pollo entero</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('chickenBreast')">Chicken breast / Pechuga de pollo</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('chickenLegQtrs')">Chicken Leg Qtrs / Piernas de pollo (grande)</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('fishSticks')">Fish Sticks/ Pescado</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('ham')">Ham / Jamón </mat-checkbox><br />
+       </section>
+       <section>
+        <mat-card-subtitle class="choose-1-or-2-subtitle">Canned meat / Carne en Lata</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('chicken')">Chicken / Pollo</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('tuna')">Tuna / Atun</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('salmon')">Salmon / Salmon</mat-checkbox><br />
+      </section>
+      <section class="form-ready-to-eat-canned-meals" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="choose-1-or-2-subtitle">Ready to eat canned meals / Comida instantanea</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('pastaWithMeatSauce')">Pasta with meat sauce / Espagueti en lata con carne</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('pastaInButterSauce')">Pasta in butter sauce / Espagueti en lata con mantequilla</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('cannedChili')">Canned chili / Chili en lata</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('vegCurry')">Veg Curry (for one) / Curry con verduras (para uno)</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('hotDogSauce')">Hot Dog sauce / Salsa para salchichas</mat-checkbox><br />
+      </section>
+      <section class="form-canned-beans" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="choose-1-or-2-subtitle">Canned beans / Frijoles en Lata</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('blackEyedPeas')">Black eyed peas / Frijol carita negro</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('yellowEyedBeans')">Yellow eyed beans / Frijoles amarillos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('pintoBeans')">Pinto beans / Frijoles pintos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('porkAndBeans')">Pork & beans / Frijoles con puerco</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('refriedBeans')">Refried beans / Frijoles refritos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('whiteBeans')">White beans / Frijoles blancos</mat-checkbox><br />
+      </section>
+      <section class="form-dried-beans" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="choose-1-or-2-subtitle">Dried beans / Frijoles secos</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('blackBeans')">Black beans / Frijoles negros</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('pintoBeansDry')">Pinto beans / Frijoles pintos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('yellowSplitPeas')">Yellow split peas / Chícharos amarillos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('kidneyBeans')">Kidney beans / Frijoles rojos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('miscDriedBeans')">Misc dried beans / Varios frijoles secos</mat-checkbox><br />
+      </section>
+      <section class="form-nuts" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="choose-1-or-2-subtitle">Nuts / Nueces </mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('peanutButter')">Peanut butter / Mantequilla de cacahuate</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('almonds')">Almonds / Almendras</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('walnuts')">Walnuts / Nuez de nogal</mat-checkbox><br />
+      </section>
+      <section class="form-snacks" [formGroup]="newRequestForm">
+        <mat-checkbox  (change)="updateList('crackers')">Crackers / Galletas saladas</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('cookies')">Cookies / Galletas dulces</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('miscSnacks')">Misc snacks / Varios bocadillos</mat-checkbox><br />
+      </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <ng-template matStepLabel>GRAINS / GRANOS</ng-template>
+        <section class="form-grains" [formGroup]="newRequestForm">
+          <mat-checkbox  (change)="updateList('rice')">Rice / Arroz</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('stuffingMix')">Stuffing mix / Mezcla para estofada</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('pancakeMix')">Pancake mix / Mezcla para hot cakes</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('quickOats')">Quick Oats / Avena instantánea </mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('readyToEatCereal')">Ready-to-eat cereal / Cereal</mat-checkbox><br />
+       </section>
+       <section class="form-dried-pasta" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Dried pasta / Pasta seca</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('elbowNoodles')">Elbow Noodles / Coditos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('macAndCheese')">Macaroni & cheese / Macaroni & queso</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('pennePasta')">Penne pasta / Pasta penne</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('instantPastaOrRice')">Instant pasta or rice / Pasta o arroz instantánea</mat-checkbox><br />
+      </section>
+      <section class="form-bakery" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Bakery / Panaderia</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('bread')">Bread / Pan</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('hamburgerBuns')">Hamburger buns / Pan para hamburguesas</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('hotDogBuns')">Hot dog buns / Pan para Hot Dog</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('bakedGoods')">Baked goods / Postres</mat-checkbox><br />
+      </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <ng-template matStepLabel>MILK & CHEESE / LÁCTEOS</ng-template>
+        <section class="form-milk-and-cheese" [formGroup]="newRequestForm">
+          <mat-checkbox  (change)="updateList('freshMilk')">Fresh milk (lactose free) / Leche (sin lactosa)</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('miscDairyProducts')">Misc dairy products / Varios productos lácteos</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('cheese')">Cheese / Queso</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('yogurt')">Yogurt / Yogur</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('butter')">Butter / Mantequilla</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('shelfStableMilk')">Shelf stable milk / Leche que no necesita refrigeración </mat-checkbox><br />
+       </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <ng-template matStepLabel>PANTRY, COOKING, & BAKING / COCINAR y HORNEAR</ng-template>
+        <section class="form-baking" [formGroup]="newRequestForm">
+          <mat-card-subtitle class="baking-subtitle">Baking / Hornear</mat-card-subtitle>
+          <mat-checkbox  (change)="updateList('bakingMix')">Baking mix / Mezcla para panecillos</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('cakeMix')">Cake mix / Mezcla para pastel </mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('flour')">Flour / Harina</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('muffinMix')">Muffin mix / O mezcla para panquecitos</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('cookieMix')">Cookie mix / Mezcla para galletas</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('miscBakingItems')">Miscellaneous baking items / Varios productos para hornear</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('vegOil')">Vegetable oil / Aceite vegetal</mat-checkbox><br />
+       </section>
+       <section class="form-soups" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Soups / Sopas</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('chickenNoodle')">Chicken noodle / Espagueti con pollo</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('tomatoSoup')">Tomato soup / Crema de jitomate</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('vegSoup')">Vegetable soup / Sopa de vegetales</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('creamyCannedSoup')">Creamy canned soup / Crema de hongos o pollo</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('miscSoups')">Misc soups, as available / Varios sopas en lata, disponibilidad variable</mat-checkbox><br />
+      </section>
+      <section class="form-condiments" [formGroup]="newRequestForm">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Condiments / Condimentos</mat-card-subtitle>
+        <mat-checkbox  (change)="updateList('seasonings')">Seasonings / Condimentos</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('hotSauce')">Hot Sauce / Salsa picante</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('saladDressing')">Salad dressing (miscellaneous) / Varios aderezos </mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('ranchDressing')">Ranch dressing / Aderezo “Ranch”</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('mustard')">Mustard / Mostaza</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('syrup')">Syrup / Jarabe para panqueques</mat-checkbox><br />
+        <mat-checkbox  (change)="updateList('miscPickled')">Misc pickles, olives, etc / Varios encurtidos, olivas, etc.</mat-checkbox><br />
+      </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <ng-template matStepLabel>BABY / PARA BEBE</ng-template>
+        <section class="form-milk-and-cheese" [formGroup]="newRequestForm">
+          <mat-checkbox  (change)="updateList('fruitOrVegetablePuree')">Fruit or Vegetable puree / Puré de fruta o verdura</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('babyCereal')">Baby cereal / Cereal para bebe</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('formula')">Formula / Formula láctea</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('newbornGiftBag')">Newborn gift bag / Regalo para bebe recien nacido</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('diapers')">Diapers / Pañales</mat-checkbox><br />
+          <mat-form-field  appearance="fill">
+            <mat-label>Size? / ¿Talla?</mat-label>
+            <mat-select [disabled]="!diapers">
+              <mat-option>Premature / Prematuro</mat-option>
+              <mat-option>Newborn / Recién nacido</mat-option>
+              <mat-option>1</mat-option>
+              <mat-option>2</mat-option>
+              <mat-option>3</mat-option>
+              <mat-option>4</mat-option>
+              <mat-option>5</mat-option>
+              <mat-option>6</mat-option>
+              <mat-option>7</mat-option>
+            </mat-select>
+          </mat-form-field>
+       </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <ng-template matStepLabel>PERSONAL / PERSONAL</ng-template>
+        <section class="form-personal" [formGroup]="newRequestForm">
+          <mat-checkbox  (change)="updateList('shampoo')">Shampoo / Shampu</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('bodyOrHandSoap')">Body or hand soap / Jabón para el cuerpo o manos  </mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('toothpaste')">Toothpaste / Pasta dental</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('toothbrushes')">Toothbrushes / Cepillo dental</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('birthdayDayPartyKit')">Birthday Party Kit / Kit para una fiesta de cumpleaños </mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('handSanitizer')">Hand sanitizer / Desinfectante de manos</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('feminineHygiene')">Feminine hygiene / Artículos higiénicos para mujer</mat-checkbox><br />
+        </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <ng-template matStepLabel>HOUSEHOLD / PARA LA CASA</ng-template>
+        <section class="form-personal" [formGroup]="newRequestForm">
+          <mat-checkbox  (change)="updateList('dishSoap')">Dish soap / Jabón para trastes</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('laundryDetergent')">Laundry detergent / Detergente para ropa</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('disinfectingWipes')">Disinfecting wipes / Toallitas desinfectantes</mat-checkbox><br />
+        </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <ng-template matStepLabel>MISCELLANEOUS / OTRAS COSAS</ng-template>
+        <section class="form-personal" [formGroup]="newRequestForm">
+          <p>Please feel free to write in requests for other food options! Our volunteers will check which items are currently available. /
+            ¡Por favor escriban otras opciones que sería bueno para usted! Nuestros voluntarios pueden chequear cuales cosas están disponibl
+          </p>
+          <mat-form-field class = "misc">
+            <textarea matInput placeholder="Ex. Folgers coffee grounds"
+            cdkTextareaAutosize
+            formControlName = "misc"
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="50"
+            ></textarea>
+          </mat-form-field>
+        </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="newRequestForm">
+    <form [formGroup]="newRequestForm" (ngSubmit) = "submitForm()">
+      <ng-template matStepLabel>Finish</ng-template>
+      <p>Make sure you double check all the foods wanted are checked. If so, submit form!</p>
+      <mat-card-actions align="start">
+        <button
+          mat-button
+          type="button"
+          class= "submit_button"
+          type="submit"
+          data-test="confirmAddRequestButton">
+          Submit Request Form
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-step>
+</mat-stepper>
