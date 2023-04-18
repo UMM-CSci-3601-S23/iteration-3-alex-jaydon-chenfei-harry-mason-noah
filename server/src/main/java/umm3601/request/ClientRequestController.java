@@ -173,7 +173,7 @@ public class ClientRequestController {
     ctx.status(HttpStatus.CREATED);
   }
 
-  public void setRequestPriority(Context ctx) {
+  public void setPriority(Context ctx) {
     Integer priority = ctx.queryParamAsClass(PRIORITY_KEY, Integer.class)
       .check(it -> it >= LOWER_PRIORITY_BOUND && it <= UPPER_PRIORITY_BOUND,
     "Priority must be a number between 1 and 5 inclusive")
