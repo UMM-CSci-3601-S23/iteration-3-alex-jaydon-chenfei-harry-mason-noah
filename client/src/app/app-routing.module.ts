@@ -14,8 +14,8 @@ const routes: Routes = [
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/volunteer', component: RequestVolunteerComponent, title: 'Volunteer View'},
   {path: 'requests/client', component: NewRequestComponent, title: 'New Request'},
-  {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
-  {path: 'requests/volunteer/:id', component: EditRequestComponent, title: 'Edit Request'}
+  {path: 'requests/volunteer/:id', component: EditRequestComponent, title: 'Edit Request'},
+  {path: 'requests/:id', component: RequestDonorComponent, title: 'Pledge Request'}
 
 ];
 

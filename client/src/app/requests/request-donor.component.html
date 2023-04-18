@@ -70,6 +70,9 @@
               <button mat-icon-button data-test="deleteRequestButton" (click)="deleteRequest(request)">
                 <mat-icon>delete</mat-icon>
               </button>
+              <button mat-button data-test="pledgeRequestButton" *ngIf="this.simple" [routerLink]="['/requests', this.request._id]">
+                Click here to donate
+              </button>
             </mat-card-actions>
           </mat-card>
         </div>
@@ -89,3 +92,4 @@
     </div>
   </ng-template>
 </div>
+
