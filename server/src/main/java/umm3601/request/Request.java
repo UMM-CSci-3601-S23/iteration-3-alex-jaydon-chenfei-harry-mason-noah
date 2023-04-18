@@ -18,6 +18,7 @@ public class Request {
   public String description;
   public String foodType;
   public String dateAdded;
+  public String diaperSize;
 
   @Override
   public boolean equals(Object obj) {
