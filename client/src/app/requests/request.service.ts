@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, pipe } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Request, ItemType, FoodType } from './request';
 import { map } from 'rxjs/operators';
@@ -14,12 +14,18 @@ export class RequestService {
   readonly newRequestClientUrl: string = `${environment.apiUrl}clientRequests`;
   readonly requestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newRequestDonorUrl: string = `${environment.apiUrl}donorRequests`;
+  readonly priorityUrl: string = `${environment.apiUrl}requests/set-priority`
 
   private readonly itemTypeKey = 'itemType';
   private readonly foodTypeKey = 'foodType';
-  private readonly descriptionKey = 'description';
+  private readonly priorityKey = 'priority';
+
 
   constructor(private httpClient: HttpClient) {
+  }
+
+  public getPriorityKey(): string{
+    return this.priorityKey;
   }
 
   getClientRequests(filters?: {itemType?: ItemType; foodType?: FoodType; description?: string}): Observable<Request[]> {
@@ -92,5 +98,14 @@ export class RequestService {
   deleteDonorRequest(request: Partial<Request>): Observable<object> {
     // Send delete request to delete a request
     return this.httpClient.delete(this.requestDonorUrl + '/' + request._id).pipe(map(res => res));
+  }
+
+  addRequestPriority(request: Request, priorityGiven: string): Observable<number>{
+    const putUrl = `${this.priorityUrl}/${request._id}`;
+    const priorityBody = new HttpParams().set(this.priorityKey, priorityGiven);
+
+    return this.httpClient.put<{priority: number}>(putUrl, priorityGiven,{
+      params:priorityBody,
+    }).pipe(map(res => res.priority));
   }
 }

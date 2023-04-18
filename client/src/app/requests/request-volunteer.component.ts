@@ -16,13 +16,12 @@ import { RequestService } from './request.service';
 
 export class RequestVolunteerComponent implements OnInit, OnDestroy {
   @Input() request: Request;
-  public serverFilteredRequests: Request[];
+  public serverFilteredRequests: Request[] = [];
   public filteredRequests: Request[];
-
   public requestItemType: ItemType;
-
   public requestDescription: string;
   public requestFoodType: FoodType;
+  public sortedRequests: Request[];
 
   authHypothesis: boolean;
 
@@ -54,6 +53,11 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   //
   public updateFilter(): void {
     this.filteredRequests = this.serverFilteredRequests;
+  }
+
+  updateRequestPriority(reqeust: Request[], priority: string){
+    
+
   }
 
   ngOnInit(): void {

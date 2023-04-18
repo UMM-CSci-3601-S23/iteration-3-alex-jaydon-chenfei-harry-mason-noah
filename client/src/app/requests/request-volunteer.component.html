@@ -1,4 +1,4 @@
-<div *ngIf="this.authHypothesis">
+<div *ngIf="this.authHypothesis" class="requests-container">
   <div class="flex-row">
     <div class="flex-1">
       <!--Filters-->
@@ -37,6 +37,25 @@
       </mat-card>
     </div>
   </div>
+
+ <!-- card view -->
+<div class = "flex-row">
+  <div class = "flex-1" fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10" *ngIf="serverFilteredRequests">
+    <div * ngIf="filteredRequests.length > 0" class="highest-priority">
+      <app-request-card [showname]="true" [request]="filteredRequests[0]" class="volunteer-request-card" fxFlex="1 1 280px">
+      </app-request-card>
+    </div>
+    <div class="request-cards-container flex-row gap-10 flew-wrap">
+      <app-request-card [showname]="true" *ngFor="let request of filteredRequests.slice(1)" class="volunteer-request-card">
+        
+      </app-request-card>
+
+    </div>
+  </div>
+</div>
+
+
+
 
   <!--List View-->
   <div class="flex-row">
