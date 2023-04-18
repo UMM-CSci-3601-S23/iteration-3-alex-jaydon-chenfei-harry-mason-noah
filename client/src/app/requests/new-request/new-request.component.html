@@ -243,16 +243,16 @@
           <mat-checkbox  (change)="updateList('diapers')">Diapers / Pañales</mat-checkbox><br />
           <mat-form-field  appearance="fill">
             <mat-label>Size? / ¿Talla?</mat-label>
-            <mat-select [disabled]="!diapers">
-              <mat-option>Premature / Prematuro</mat-option>
-              <mat-option>Newborn / Recién nacido</mat-option>
-              <mat-option>1</mat-option>
-              <mat-option>2</mat-option>
-              <mat-option>3</mat-option>
-              <mat-option>4</mat-option>
-              <mat-option>5</mat-option>
-              <mat-option>6</mat-option>
-              <mat-option>7</mat-option>
+            <mat-select formControlName = "diaperSize">
+              <mat-option value = "premature">Premature / Prematuro</mat-option>
+              <mat-option value = "newborn">Newborn / Recién nacido</mat-option>
+              <mat-option value = "1">1</mat-option>
+              <mat-option value = "2">2</mat-option>
+              <mat-option value = "3">3</mat-option>
+              <mat-option value = "4">4</mat-option>
+              <mat-option value = "5">5</mat-option>
+              <mat-option value = "6">6</mat-option>
+              <mat-option value = "7">7</mat-option>
             </mat-select>
           </mat-form-field>
        </section>
