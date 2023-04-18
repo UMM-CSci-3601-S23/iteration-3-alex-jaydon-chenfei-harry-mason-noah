@@ -71,30 +71,14 @@ describe('NewRequestComponent', () => {
       descControl = newRequestComponent.newRequestForm.controls.misc;
     });
 
-    it('should not allow empty descriptions', () => {
+    it('should allow empty descriptions', () => {
       descControl.setValue('');
-      expect(descControl.valid).toBeFalsy();
-    });
-
-    it('should not descriptions with less than 5 chars', () => {
-      descControl.setValue('tysm');
-      expect(descControl.valid).toBeFalsy();
-    });
-
-    it('should be fine with "Nature valley bars"', () => {
-      descControl.setValue('Nature valley bars');
       expect(descControl.valid).toBeTruthy();
     });
 
-    // In the real world, you'd want to be pretty careful about
-    // setting upper limits on things like name lengths just
-    // because there are people with really long names.
-    it('should fail on really long descriptions', () => {
-      descControl.setValue('x'.repeat(400));
-      expect(descControl.valid).toBeFalsy();
-      // Annoyingly, Angular uses lowercase 'l' here
-      // when it's an upper case 'L' in `Validators.maxLength(2)`.
-      expect(descControl.hasError('maxlength')).toBeTruthy();
+    it('should allow descriptions with less than 5 chars', () => {
+      descControl.setValue('tysm');
+      expect(descControl.valid).toBeTruthy();
     });
 
     it('should allow digits in the description', () => {
@@ -159,52 +143,38 @@ describe('NewRequestComponent', () => {
   });
 
   describe('Can we submit stuff to the client database?', ()=>{
-    let itemTypeControl: AbstractControl;
-    let foodTypeControl: AbstractControl;
-    let descControl: AbstractControl;
+    let nameControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
-      foodTypeControl = newRequestForm.controls.foodType;
-      descControl = newRequestComponent.newRequestForm.controls.misc;
+      nameControl = newRequestForm.controls.clientName;
     });
 
     it('should not get angy', ()=> {
-      foodTypeControl.setValue('dairy');
-      itemTypeControl.setValue('food');
-      descControl.setValue('this is a description I guess');
-
+      nameControl.setValue('Mr. Rogers');
+      newRequestComponent.selections = ['hotSauce', 'bdayPartyKit'];
       newRequestComponent.submitForm();
 
-      expect(service.addedClientRequests[0].itemType).toEqual('food');
-      expect(service.addedClientRequests[0].foodType).toEqual('dairy');
-      expect(service.addedClientRequests[0].description).toEqual('this is a description I guess');
+      expect(service.addedClientRequests[0].name).toEqual('Mr. Rogers');
+      expect(service.addedClientRequests[0].selections.includes('hotSauce')).toBeTruthy();
     });
   });
 
   describe('Can we submit stuff to the donor database?', ()=>{
-    let itemTypeControl: AbstractControl;
-    let foodTypeControl: AbstractControl;
-    let descControl: AbstractControl;
+    let nameControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
-      foodTypeControl = newRequestForm.controls.foodType;
-      descControl = newRequestComponent.newRequestForm.controls.misc;
+      nameControl = newRequestForm.controls.clientName;
     });
 
     it('should not get angy', ()=> {
       newRequestComponent.destination = 'donor';
 
-      foodTypeControl.setValue('dairy');
-      itemTypeControl.setValue('food');
-      descControl.setValue('this is a description I guess');
-
+      nameControl.setValue('Mr. Rogers');
+      newRequestComponent.selections = ['hotSauce', 'bdayPartyKit'];
       newRequestComponent.submitForm();
 
-      expect(service.addedDonorRequests[0].itemType).toEqual('food');
-      expect(service.addedDonorRequests[0].foodType).toEqual('dairy');
-      expect(service.addedDonorRequests[0].description).toEqual('this is a description I guess');
+      expect(service.addedClientRequests[0].name).toEqual('Mr. Rogers');
+      expect(service.addedClientRequests[0].selections.includes('hotSauce')).toBeTruthy();
     });
   });
 });
@@ -269,8 +239,6 @@ describe('Misbehaving request service', () => {
       expect(newRequestForm).toBeDefined();
       expect(newRequestForm.controls).toBeDefined();
 
-      itemTypeControl = newRequestForm.controls.itemType;
-      foodTypeControl = newRequestForm.controls.foodType;
       descControl = newRequestComponent.newRequestForm.controls.misc;
     });
   }));
@@ -287,8 +255,7 @@ describe('Misbehaving request service', () => {
   it('should get angy when talking with the donor database', ()=> {
     newRequestComponent.destination = 'donor';
 
-    foodTypeControl.setValue('dairy');
-    itemTypeControl.setValue('food');
+
     descControl.setValue('this is a description I guess');
 
     newRequestComponent.submitForm();
@@ -297,8 +264,7 @@ describe('Misbehaving request service', () => {
   it('should get angy when talking with the client database', ()=> {
     newRequestComponent.destination = 'client';
 
-    foodTypeControl.setValue('dairy');
-    itemTypeControl.setValue('food');
+
     descControl.setValue('this is a description I guess');
 
     newRequestComponent.submitForm();
@@ -374,7 +340,6 @@ describe('Misbehaving request service', () => {
     });
 
   });
-
 
 });
 
