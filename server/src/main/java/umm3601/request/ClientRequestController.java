@@ -150,9 +150,10 @@ public class ClientRequestController {
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Request newRequest = ctx.bodyValidator(Request.class)
-      .check(req -> req.itemType.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-      .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type").get();
+    Request newRequest = ctx.bodyValidator(Request.class).get();
+      /*.check(req -> req.itemType.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
+      .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
+      */
 
     // Add the date to the request formatted as an ISO 8601 string
     newRequest.dateAdded = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);

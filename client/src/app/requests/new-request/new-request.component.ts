@@ -101,7 +101,7 @@ export class NewRequestComponent {
     }
     const myDate: string = (this.date.getFullYear().toString()+  month + day);
     console.log(myDate);
-    const newRequest = {selections: this.selections, timeSubmitted: myDate, name: this.newRequestForm.get('clientName').getRawValue(),
+    const newRequest = {selections: this.selections, dateAdded: myDate, name: this.newRequestForm.get('clientName').getRawValue(),
      description: this.newRequestForm.get('misc').getRawValue()};
     console.log(newRequest);
     if (this.destination === 'client') {

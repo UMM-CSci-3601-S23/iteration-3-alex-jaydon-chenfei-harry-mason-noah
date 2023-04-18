@@ -12,6 +12,8 @@ public class Request {
 
   public String _id;
 
+  public String name;
+  public String[] selections;
   public String itemType;
   public String description;
   public String foodType;
