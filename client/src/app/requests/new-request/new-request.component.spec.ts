@@ -103,96 +103,58 @@ describe('NewRequestComponent', () => {
     });
   });
 
-  describe('The itemType field', () => {
-    let itemTypeControl: AbstractControl;
+  describe('The name field', () =>{
+    let nameControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
+      nameControl = newRequestComponent.newRequestForm.controls.clientName;
     });
 
-    it('should not allow empty values', () => {
-      itemTypeControl.setValue('');
-      expect(itemTypeControl.valid).toBeFalsy();
-      expect(itemTypeControl.hasError('required')).toBeTruthy();
+    it ('should not allow blank names', () =>{
+      nameControl.setValue('');
+      expect(nameControl.valid).toBeFalsy();
     });
 
-    it('should allow "food"', () => {
-      itemTypeControl.setValue('food');
-      expect(itemTypeControl.valid).toBeTruthy();
+    it ('should not allow really short names', () =>{
+      nameControl.setValue('M');
+      expect(nameControl.valid).toBeFalsy();
     });
 
-    it('should allow "toiletries"', () => {
-      itemTypeControl.setValue('toiletries');
-      expect(itemTypeControl.valid).toBeTruthy();
+    it ('should allow names between 2 and 50 characters', () =>{
+      nameControl.setValue('Mason Eischens');
+      expect(nameControl.valid).toBeTruthy();
     });
 
-    it('should allow "other"', () => {
-      itemTypeControl.setValue('other');
-      expect(itemTypeControl.valid).toBeTruthy();
-    });
-
-    it('should not allow "cars"', () => {
-      itemTypeControl.setValue('cars');
-      expect(itemTypeControl.valid).toBeFalsy();
-    });
-  });
-
-  describe('The foodType field', () => {
-    let foodTypeControl: AbstractControl;
-
-    beforeEach(() => {
-      foodTypeControl = newRequestForm.controls.foodType;
-    });
-
-    it('should allow empty values', () => {
-      foodTypeControl.setValue('');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "dairy"', () => {
-      foodTypeControl.setValue('dairy');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "grain"', () => {
-      foodTypeControl.setValue('grain');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "meat"', () => {
-      foodTypeControl.setValue('meat');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "fruit"', () => {
-      foodTypeControl.setValue('fruit');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "vegetable"', () => {
-      foodTypeControl.setValue('vegetable');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should not allow "cars"', () => {
-      foodTypeControl.setValue('cars');
-      expect(foodTypeControl.valid).toBeFalsy();
+    it ('should not allow really long names', () =>{
+      nameControl.setValue('MASON EISCHENS TO THE MOON, I LOVE DOGECOIN AND ELON MUSK WOOOOOOOO TAKE MY MONEY TESLA');
+      expect(nameControl.valid).toBeFalsy();
     });
   });
   describe('The getErrorMessage method', ()=>{
-    let itemTypeControl: AbstractControl;
+    let nameControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
+      nameControl = newRequestComponent.newRequestForm.controls.clientName;
     });
 
-    it('should return "unknown error" when passed an invalid error code', ()=> {
-      expect(newRequestComponent.getErrorMessage('foodType') === 'Unknown error');
+    it('should return "unknown error" when there is not an error', ()=> {
+      nameControl.setValue('Mason Eischens');
+      expect(newRequestComponent.getErrorMessage('clientName') === 'Unknown error');
     });
 
-    it('should return "required" error when itemType is empty', ()=> {
-      itemTypeControl.setValue('--');
-      expect(newRequestComponent.getErrorMessage('itemType')).toBeTruthy();
+    it('should return "required" error when name is empty', ()=> {
+      nameControl.setValue('');
+      expect(newRequestComponent.getErrorMessage('clientName')).toBeTruthy();
+    });
+
+    it('should return "minlength" error when name too short', ()=> {
+      nameControl.setValue('A');
+      expect(newRequestComponent.getErrorMessage('clientName')).toBeTruthy();
+    });
+
+    it('should return "maxlength" error when name is too long', ()=> {
+      nameControl.setValue('MASON EISCHENS TO THE MOON, I LOVE DOGECOIN AND ELON MUSK WOOOOOOOO TAKE MY MONEY TESLA');
+      expect(newRequestComponent.getErrorMessage('clientName')).toBeTruthy();
     });
   });
 
@@ -381,6 +343,34 @@ describe('Misbehaving request service', () => {
     it('behaves correctly when newItem = diapers', ()=> {
       newRequestComponent.updateList('diapers');
       expect(newRequestComponent.diapers).toBeTruthy();
+    });
+
+  });
+
+  describe('The formatDate method', ()=>{
+
+    beforeEach(() => {
+      newRequestComponent.selections = ['hotSauce', 'rice', 'bread'];
+    });
+
+    it('should work with a long month and a long day', ()=> {
+      const output = newRequestComponent.formatDate('12', '12').substring(4, 8);
+      expect(output === '1212').toBeTruthy();
+    });
+
+    it('should work with a long month and a short day', ()=> {
+      const output = newRequestComponent.formatDate('12', '2').substring(4, 8);
+      expect(output === '1202').toBeTruthy();
+    });
+
+    it('should work with a short month and a long day', ()=> {
+      const output = newRequestComponent.formatDate('4', '12').substring(4, 8);
+      expect(output === '0412').toBeTruthy();
+    });
+
+    it('should work with a short month and a short day', ()=> {
+      const output = newRequestComponent.formatDate('2', '2').substring(4, 8);
+      expect(output === '0202').toBeTruthy();
     });
 
   });

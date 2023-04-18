@@ -91,18 +91,12 @@ export class NewRequestComponent {
   }
 
   submitForm() {
-    let month: string = this.date.getMonth().toString();
-    let day: string = this.date.getDate().toString();
-    if (month.length !== 2){
-      month = '0' + month;
-    }
-    if (day.length !== 2){
-      day = '0' + day;
-    }
-    const myDate: string = (this.date.getFullYear().toString()+  month + day);
-    console.log(myDate);
-    const newRequest = {selections: this.selections, dateAdded: myDate, name: this.newRequestForm.get('clientName').getRawValue(),
-     description: this.newRequestForm.get('misc').getRawValue()};
+    const newRequest = {
+      selections: this.selections,
+      dateAdded: this.formatDate(this.date.getMonth().toString(), this.date.getDate().toString()),
+      name: this.newRequestForm.get('clientName').getRawValue(),
+      description: this.newRequestForm.get('misc').getRawValue()
+    };
     console.log(newRequest);
     if (this.destination === 'client') {
       this.requestService.addClientRequest(newRequest).subscribe({
@@ -168,6 +162,15 @@ export class NewRequestComponent {
     console.log(this.selections);
   }
 
+  formatDate(month: string, day: string): string{
+    if (month.length !== 2){
+      month = '0' + month;
+    }
+    if (day.length !== 2){
+      day = '0' + day;
+    }
+    return this.date.getFullYear().toString()+  month + day;
+  }
 }
 /* import {Component} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
