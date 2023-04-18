@@ -68,7 +68,7 @@ describe('NewRequestComponent', () => {
     let descControl: AbstractControl;
 
     beforeEach(() => {
-      descControl = newRequestComponent.newRequestForm.controls.description;
+      descControl = newRequestComponent.newRequestForm.controls.misc;
     });
 
     it('should not allow empty descriptions', () => {
@@ -204,7 +204,7 @@ describe('NewRequestComponent', () => {
     beforeEach(() => {
       itemTypeControl = newRequestForm.controls.itemType;
       foodTypeControl = newRequestForm.controls.foodType;
-      descControl = newRequestComponent.newRequestForm.controls.description;
+      descControl = newRequestComponent.newRequestForm.controls.misc;
     });
 
     it('should not get angy', ()=> {
@@ -228,7 +228,7 @@ describe('NewRequestComponent', () => {
     beforeEach(() => {
       itemTypeControl = newRequestForm.controls.itemType;
       foodTypeControl = newRequestForm.controls.foodType;
-      descControl = newRequestComponent.newRequestForm.controls.description;
+      descControl = newRequestComponent.newRequestForm.controls.misc;
     });
 
     it('should not get angy', ()=> {
@@ -309,7 +309,7 @@ describe('Misbehaving request service', () => {
 
       itemTypeControl = newRequestForm.controls.itemType;
       foodTypeControl = newRequestForm.controls.foodType;
-      descControl = newRequestComponent.newRequestForm.controls.description;
+      descControl = newRequestComponent.newRequestForm.controls.misc;
     });
   }));
 
@@ -341,6 +341,50 @@ describe('Misbehaving request service', () => {
 
     newRequestComponent.submitForm();
   });
+
+
+  describe('The updateDiapers method', ()=>{
+
+    beforeEach(() => {
+      newRequestComponent.diapers = false;
+    });
+
+    it('correctly changes diapers to true when it\'s false', ()=> {
+      newRequestComponent.updateDiapers();
+      expect(newRequestComponent.diapers).toBeTruthy();
+    });
+
+    it('correctly changes diapers to false when it\'s true', ()=> {
+      newRequestComponent.diapers = true;
+      newRequestComponent.updateDiapers();
+      expect(newRequestComponent.diapers).toBeFalsy();
+    });
+
+  });
+
+  describe('The updateList method', ()=>{
+
+    beforeEach(() => {
+      newRequestComponent.selections = ['hotSauce', 'rice', 'bread'];
+    });
+
+    it('correctly adds items to selections', ()=> {
+      newRequestComponent.updateList('tomatoSoup');
+      expect(newRequestComponent.selections.includes('tomatoSoup')).toBeTruthy();
+    });
+
+    it('correctly removes items from selections', ()=> {
+      newRequestComponent.updateList('hotSauce');
+      expect(newRequestComponent.selections.includes('hotSauce')).toBeFalsy();
+    });
+
+    it('behaves correctly when newItem = diapers', ()=> {
+      newRequestComponent.updateList('diapers');
+      expect(newRequestComponent.diapers).toBeTruthy();
+    });
+
+  });
+
 
 });
 

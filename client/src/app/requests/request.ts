@@ -1,7 +1,7 @@
 export interface Request {
   _id: string;
   name?: string;
-  dateAdded: string;
+  dateAdded?: string;
   itemType?: ItemType;
   description: string;
   foodType?: FoodType;
