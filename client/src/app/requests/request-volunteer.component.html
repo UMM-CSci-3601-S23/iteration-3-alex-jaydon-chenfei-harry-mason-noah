@@ -4,35 +4,18 @@
       <!--Filters-->
       <mat-card class="search-card">
         <mat-card-header>
-          <mat-card-title class="volunteer-view-title">Needs requested</mat-card-title>
+          <mat-card-title class="donor-view-title">Needs requested</mat-card-title>
         </mat-card-header>
       <mat-card-content>
         <!--Item Type Filter-->
         <div class="flex-row gap-8 flex-wrap">
-          <mat-form-field class="input-field">
-            <mat-label>Item Type</mat-label>
-            <mat-select (selectionChange)="getRequestsFromServer()" [(ngModel)]="requestItemType" data-test="requestItemTypeSelect">
-              <mat-option>--</mat-option>
-              <mat-option value="food">Food</mat-option>
-              <mat-option value="toiletries">Toiletries</mat-option>
-              <mat-option value="other">Other</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <!--Food Type Filter-->
-        <mat-form-field class="input-field">
-          <mat-label>Food Type</mat-label>
-          <mat-select (selectionChange)="getRequestsFromServer()" [(ngModel)]="requestFoodType" data-test="requestFoodTypeSelect">
-            <mat-option>--</mat-option>
-            <mat-option value="dairy">Dairy</mat-option>
-            <mat-option value="grain">Grain</mat-option>
-            <mat-option value="meat">Meat</mat-option>
-            <mat-option value="fruit">Fruit</mat-option>
-            <mat-option value="vegetable">Vegetable</mat-option>
-          </mat-select>
+        <mat-form-field class="input-field" id="descriptionID">
+          <mat-label>Description</mat-label>
+          <input matInput data-test="requestDescriptionInput" placeholder="Filter by description"
+          [(ngModel)]="requestDescription" (input)="getRequestsFromServer()">
+          <mat-hint> Filtered on Server </mat-hint>
         </mat-form-field>
-
+      </div>
       </mat-card-content>
       </mat-card>
     </div>
@@ -47,8 +30,8 @@
           <div mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/requests/donor', request._id]" class="volunteer-list-item edit-request">
             <mat-card class="example-card">
               <mat-card-header>
-                <mat-card-title class="volunteer-list-itemType">{{request.itemType}}</mat-card-title>
-                <mat-card-subtitle class="volunteer-list-foodType">{{request.foodType}}</mat-card-subtitle>
+                <mat-card-title class="volunteer-list-itemType">{{request.name}}</mat-card-title>
+                <mat-card-subtitle class="volunteer-list-foodType">{{request.selections}}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 <p matListItemBody class="volunteer-list-description"> {{request.description}} </p>
