@@ -1,9 +1,9 @@
 export interface Request {
   _id: string;
-  name?: string;
-  dateAdded?: string;
+  name: string;
+  dateAdded: string;
   itemType?: ItemType;
-  description: string;
+  description?: string;
   foodType?: FoodType;
   selections?: string[];
   diaperSize?: string;
