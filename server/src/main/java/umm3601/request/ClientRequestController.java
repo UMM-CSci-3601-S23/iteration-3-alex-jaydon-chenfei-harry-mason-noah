@@ -52,7 +52,7 @@ public class ClientRequestController {
     this.auth = auth;
     requestCollection = JacksonMongoCollection.builder().build(
       database,
-      "clientRequests",
+      "requests",
       Request.class,
       UuidRepresentation.STANDARD);
   }
@@ -71,13 +71,11 @@ public class ClientRequestController {
       request = requestCollection.find(eq("_id", new ObjectId(id))).first();
     } catch (IllegalArgumentException e) {
       throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID.");
-    }
-    if (request == null) {
+    } catch (NullPointerException e) {
       throw new NotFoundResponse("The desired request was not found");
-    } else {
-      ctx.json(request);
-      ctx.status(HttpStatus.OK);
     }
+    ctx.json(request);
+    ctx.status(HttpStatus.OK);
   }
 
   /**
@@ -174,18 +172,21 @@ public class ClientRequestController {
   }
 
   public void setPriority(Context ctx) {
+    System.out.println("setPriority() called");
     Integer priority = ctx.queryParamAsClass(PRIORITY_KEY, Integer.class)
       .check(it -> it >= LOWER_PRIORITY_BOUND && it <= UPPER_PRIORITY_BOUND,
     "Priority must be a number between 1 and 5 inclusive")
       .get();
+    System.out.println(priority);
     String id = ctx.pathParam("id");
+    System.out.println(id);
     Request request;
     try {
       // ctx requires an _id path parameter.
       // We should make sure this is a real request id before continuing.
       request = requestCollection
-        .find(eq("_id", new ObjectId(id)))
-        .first();
+        .find(eq("_id", new ObjectId(id))).first();
+      System.out.println("request found with id " + request._id);
     } catch (IllegalArgumentException e) {
       throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID");
     } catch (NotFoundResponse e) {

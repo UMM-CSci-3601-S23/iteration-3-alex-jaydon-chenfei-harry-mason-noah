@@ -548,9 +548,8 @@ class ClientRequestControllerSpec {
 
     clientRequestController.setPriority(ctx);
     verify(ctx).json(requestCaptor.capture());
+    System.out.println(requestCaptor.getValue()._id + " and " + requestCaptor.getValue().priority);
     verify(ctx).status(HttpStatus.OK);
-
-    clientRequestController.setPriority(ctx);
 
     //Verify that the correct priority was assigned
     assertEquals(3, requestCaptor.getValue().priority);
