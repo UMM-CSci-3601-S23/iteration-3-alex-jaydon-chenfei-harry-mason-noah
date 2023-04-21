@@ -1,8 +1,12 @@
 export interface Request {
   _id: string;
-  itemType: ItemType;
+  name?: string;
+  dateAdded?: string;
+  itemType?: ItemType;
   description: string;
-  foodType: FoodType;
+  foodType?: FoodType;
+  selections?: string[];
+  diaperSize?: string;
 }
 
 export type ItemType = 'food' | 'toiletries' | 'other';

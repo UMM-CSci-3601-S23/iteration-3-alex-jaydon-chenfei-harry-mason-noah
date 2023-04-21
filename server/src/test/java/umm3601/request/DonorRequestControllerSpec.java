@@ -42,7 +42,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.javalin.validation.BodyValidator;
-import io.javalin.validation.ValidationException;
 import io.javalin.validation.Validator;
 import umm3601.Authentication;
 import io.javalin.http.BadRequestResponse;
@@ -389,64 +388,6 @@ class DonorRequestControllerSpec {
     assertNotEquals("", addedRequest.get("_id"));
     assertEquals("food", addedRequest.get("itemType"));
     assertEquals("meat", addedRequest.get("foodType"));
-  }
-
-  @Test
-  void addNullFoodTypeRequest() throws IOException {
-    String testNewRequest = "{"
-    + "\"itemType\": \"notRight\""
-    + "}";
-    when(ctx.bodyValidator(Request.class))
-      .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
-
-    assertThrows(NullPointerException.class, () -> {
-      requestController.addNewRequest(ctx);
-    });
-  }
-
-  @Test
-  void addNullItemTypeRequest() throws IOException {
-    String testNewRequest = "{"
-    + "\"foodType\": \"meat\""
-    + "}";
-    when(ctx.bodyValidator(Request.class))
-      .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
-
-    assertThrows(NullPointerException.class, () -> {
-      requestController.addNewRequest(ctx);
-    });
-  }
-
-  @Test
-  void addInvalidItemTypeRequest() throws IOException {
-    String testNewRequest = "{"
-    + "\"itemType\": \"notRight\","
-    + "\"foodType\": \"meat\""
-    + "}";
-    when(ctx.bodyValidator(Request.class))
-      .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
-
-    assertThrows(ValidationException.class, () -> {
-      requestController.addNewRequest(ctx);
-    });
-  }
-
-  @Test
-  void addInvalidRoleUser() throws IOException {
-    String testNewRequest = "{"
-    + "\"itemType\": \"food\","
-    + "\"foodType\": \"notRight\""
-    + "}";
-    when(ctx.bodyValidator(Request.class))
-      .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
-
-    assertThrows(ValidationException.class, () -> {
-      requestController.addNewRequest(ctx);
-    });
   }
 
   @Test

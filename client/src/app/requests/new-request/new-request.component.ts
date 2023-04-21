@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { FoodType } from '../request';
@@ -16,7 +16,17 @@ export class NewRequestComponent {
   @Input() destination: 'client' | 'donor' = 'client';
   public type: ItemType = 'food';
 
-  newRequestForm = new FormGroup({
+  newRequestForm = this.formBuilder.group({
+    clientName:['', Validators.compose([
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50),
+    ])],
+    diaperSize: new FormControl({value: '0', disabled: true}),
+    misc: ''
+  });
+
+  /*newRequestForm = new FormGroup({
     // We want descriptions to be short and sweet, yet still required so we have at least some idea what
     // the client wants
     description: new FormControl('', Validators.compose([
@@ -33,9 +43,14 @@ export class NewRequestComponent {
     foodType: new FormControl<FoodType>('', Validators.compose([
       Validators.pattern('^(dairy|grain|meat|fruit|vegetable|)$'),
     ])),
-  });
+  });*/
 
   readonly newRequestValidationMessages = {
+    clientName: [
+      { type: 'required', message: 'Name is required' },
+      { type: 'minlength', message: 'Name must be at least 2 characters long' },
+      { type: 'maxlength', message: 'Name cannot be more than 50 characters long' },
+    ],
     description: [
       { type: 'required', message: 'Description is required' },
       { type: 'minlength', message: 'Description must be at least 5 characters long' },
@@ -50,7 +65,15 @@ export class NewRequestComponent {
     ]
   };
 
-  constructor(private requestService: RequestService, private snackBar: MatSnackBar, private router: Router) {
+  selections: string[] = new Array();
+  isLinear = false;
+  diapers = false;
+  diaperSize = '1';
+  date: Date = new Date();
+  done = false;
+
+  constructor(private formBuilder: FormBuilder, private requestService: RequestService, private snackBar: MatSnackBar,
+    private router: Router) {
   }
 
   formControlHasError(controlName: string): boolean {
@@ -68,8 +91,16 @@ export class NewRequestComponent {
   }
 
   submitForm() {
+    const newRequest = {
+      selections: this.selections,
+      dateAdded: this.formatDate(this.date.getMonth().toString(), this.date.getDate().toString()),
+      name: this.newRequestForm.get('clientName').getRawValue(),
+      description: this.newRequestForm.get('misc').getRawValue(),
+      diaperSize: (this.diapers ? this.newRequestForm.controls.diaperSize.getRawValue() : undefined)
+    };
+    console.log(newRequest);
     if (this.destination === 'client') {
-      this.requestService.addClientRequest(this.newRequestForm.value).subscribe({
+      this.requestService.addClientRequest(newRequest).subscribe({
         next: (newId) => {
           this.snackBar.open(
             `Request successfully submitted`,
@@ -90,7 +121,7 @@ export class NewRequestComponent {
 //this if statement checks if destination is set to donor. Destination is set in the
 //html of the request-volunteer component.
     if (this.destination === 'donor') {
-      this.requestService.addDonorRequest(this.newRequestForm.value).subscribe({
+      this.requestService.addDonorRequest(newRequest).subscribe({
         next: (newId) => {
           this.snackBar.open(
             `Request successfully submitted`,
@@ -110,4 +141,40 @@ export class NewRequestComponent {
     }
   }
 
+
+
+  updateDiapers(): void{
+    if (this.diapers){
+      this.diapers = false;
+      this.newRequestForm.get('diaperSize')?.disable();
+    }
+    else {
+      this.diapers = true;
+      this.newRequestForm.get('diaperSize')?.enable();
+    }
+  }
+
+  updateList(newItem: string): void{
+    if (newItem === 'diapers'){
+      this.updateDiapers();
+    }
+    if (this.selections.length !== 0 && this.selections.includes(newItem)){
+      this.selections.splice(this.selections.indexOf(newItem));
+    }
+    else{
+      this.selections.push(newItem);
+    }
+    console.log(this.selections);
+    console.log(this.newRequestForm.controls.diaperSize.getRawValue());
+  }
+
+  formatDate(month: string, day: string): string{
+    if (month.length !== 2){
+      month = '0' + month;
+    }
+    if (day.length !== 2){
+      day = '0' + day;
+    }
+    return this.date.getFullYear().toString()+  month + day;
+  }
 }
