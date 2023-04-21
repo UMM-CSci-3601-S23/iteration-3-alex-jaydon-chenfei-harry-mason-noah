@@ -27,11 +27,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     itemType: new FormControl<ItemType>('food',Validators.compose([
       Validators.required,
       Validators.pattern('^(food|toiletries|other)$'),
-    ])),
-
-    foodType: new FormControl<FoodType>('',Validators.compose([
-      Validators.pattern('^(dairy|grain|meat|fruit|vegetable|)$'),
-    ])),
+    ]))
   });
 
   readonly newRequestValidationMessages = {
@@ -40,12 +36,9 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
       {type: 'maxlength', message: 'Description cannot be more than 200 characters long'},
     ],
     itemType: [
-      { type: 'required', message: 'Item type is required' },
+      { type: 'required', message: 'Timeslot is required' },
       { type: 'pattern', message: 'Item type must be food, toiletries, or other' },
     ],
-    foodType: [
-      {type: 'pattern', message: 'Food type must be one of dairy, grain, meat, fruit, or vegetable'},
-    ]
   };
   private ngUnsubscribe = new Subject<void>();
 
@@ -94,7 +87,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     this.request = request;
 
     this.newRequestForm.setValue({description: this.request.description,
-      foodType: this.request.foodType, itemType: this.request.itemType});
+    itemType: this.request.itemType});
   }
 
 

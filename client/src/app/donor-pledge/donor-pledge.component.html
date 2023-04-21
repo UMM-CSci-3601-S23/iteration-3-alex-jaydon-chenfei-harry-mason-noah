@@ -17,14 +17,14 @@
       <div>
         <mat-form-field class="input-field">
           <mat-label>Amount to donate</mat-label>
-          <input matInput data-test="donateAmount" type="number" placeholder="Ex.3"
+          <input matInput required data-test="donateAmount" type="number" placeholder="Ex.3"
           min="1" max="5">
        </mat-form-field>
       </div>
 
     <div class = "drop-downs">
       <mat-form-field>
-        <mat-label>Item Category</mat-label>
+        <mat-label>Schedule a Timeslot</mat-label>
         <mat-select
         required
         [(ngModel)]="itemType"
@@ -32,28 +32,14 @@
         data-test="itemTypeSelect"
         >
           <mat-option value ="--">--</mat-option>
-          <mat-option value="food">Food</mat-option>
-          <mat-option value="toiletries">Toiletries</mat-option>
-          <mat-option value="other">Other</mat-option>
+          <mat-option value="food">Monday: 2:30-3:30 PM</mat-option>
+          <mat-option value="toiletries">Tuesday: 5:30-6:30 PM</mat-option>
+          <mat-option value="other">Wednesday: 10:30-11:30 AM</mat-option>
+          <mat-option value="other">Thursday: 5:30-6:30 PM</mat-option>
+          <mat-option value="other">Friday: 10:30-11:30 AM</mat-option>
         </mat-select>
         <mat-error *ngIf="formControlHasError('itemType')" data-test="itemTypeError">
           {{getErrorMessage('itemType')}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Schedule a Timeslot</mat-label>
-        <mat-select
-        [disabled]="itemType !== 'food'"
-        formControlName="foodType"
-        >
-          <mat-option value="dairy">Dairy</mat-option>
-          <mat-option value="grain">Grain</mat-option>
-          <mat-option value="meat">Meat</mat-option>
-          <mat-option value="fruit">Fruit</mat-option>
-          <mat-option value="vegetable">Vegetable</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formControlHasError('foodType')" data-test="foodTypeError">
-          {{getErrorMessage('foodType')}}
         </mat-error>
       </mat-form-field>
     </div>
