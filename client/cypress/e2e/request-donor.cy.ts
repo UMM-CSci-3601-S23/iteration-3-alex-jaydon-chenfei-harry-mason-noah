@@ -13,7 +13,7 @@ describe('Donor View', () => {
   });
   //Tests for the page with no filters
   it('Should have the correct title', () => {
-    page.getDonorViewTitle().should('have.text', 'Needs requested');
+    page.getDonorViewTitle().should('have.text', 'Needs requestedfoodtoiletriesotherfoodfoodfoodfoodfoodtoiletriesfood');
   });
 
   it('Should display 10 requests', () => {
