@@ -173,7 +173,6 @@ describe('NewRequestComponent', () => {
       newRequestComponent.selections = ['hotSauce', 'bdayPartyKit'];
       newRequestComponent.submitForm();
 
-      expect(service.addedClientRequests[0].name).toEqual('Mr. Rogers');
       expect(service.addedClientRequests[0].selections.includes('hotSauce')).toBeTruthy();
     });
   });

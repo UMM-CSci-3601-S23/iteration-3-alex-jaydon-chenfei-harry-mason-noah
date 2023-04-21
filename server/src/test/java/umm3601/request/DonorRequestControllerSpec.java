@@ -42,7 +42,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.javalin.validation.BodyValidator;
-import io.javalin.validation.ValidationException;
 import io.javalin.validation.Validator;
 import umm3601.Authentication;
 import io.javalin.http.BadRequestResponse;

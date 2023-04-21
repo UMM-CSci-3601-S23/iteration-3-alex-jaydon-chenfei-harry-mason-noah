@@ -2,7 +2,7 @@ import { ItemType, FoodType } from 'src/app/requests/request';
 
 export class RequestDonorPage {
   private readonly baseUrl = '/requests/donor';
-  private readonly pageTitle = '.donor-view-title';
+  private readonly pageTitle = 'mat-card-title';
   private readonly requestItemTypeDropDown = '[data-test=requestItemTypeSelect]';
   private readonly requestFoodTypeDropDown = '[data-test=requestFoodTypeSelect]';
   private readonly dropdownOptionSelector = `mat-option`;

@@ -2,7 +2,7 @@
   <div class="flex-1">
     <mat-card class="home-card">
       <mat-card-header>
-        <mat-card-title>
+        <mat-card-title data-cy="requestHeader">
           PocketShelf: Request Form!
         </mat-card-title>
       </mat-card-header>
@@ -11,13 +11,17 @@
 </div>
 
 <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
-  <mat-step [stepControl] = "newRequestForm">
+  <mat-step [stepControl] = "newRequestForm" class="nameStep">
     <form [formGroup] = "newRequestForm">
         <section class="form-fruits-fresh" [formGroup]="newRequestForm">
           <ng-template matStepLabel>Fill out your name </ng-template>
             <mat-form-field appearance="fill">
               <mat-label>Name</mat-label>
-                <input matInput placeholder="Name/Nombre" formControlName="clientName" required>
+                <input
+                matInput placeholder="Name/Nombre"
+                formControlName="clientName"
+                required
+                data-cy="clientName">
                   <mat-error *ngIf="formControlHasError('clientName')" data-test="nameDescriptionError">
                   {{getErrorMessage('clientName')}}
                   </mat-error>
@@ -29,7 +33,7 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl] = "newRequestForm">
+  <mat-step [stepControl] = "newRequestForm" class="fruitStep">
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>FRUITS / FRUTAS  </ng-template>
         <section class="form-fruits-fresh" [formGroup]="newRequestForm">
@@ -54,7 +58,7 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl] = "newRequestForm">
+  <mat-step [stepControl] = "newRequestForm" class="vegetableStep">
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>VEGETABLES / VERDURAS</ng-template>
         <section class="form-veggies-fresh" [formGroup]="newRequestForm">
@@ -80,7 +84,7 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl]="newRequestForm">
+  <mat-step [stepControl]="newRequestForm" class="proteinStep">
     <form [formGroup]="newRequestForm">
       <ng-template matStepLabel>PROTEINS / PROTEÍNAS</ng-template>
       <section class="form-frozen-meat" [formGroup]="newRequestForm">
@@ -148,7 +152,7 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl] = "newRequestForm">
+  <mat-step [stepControl] = "newRequestForm" class="grainStep">
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>GRAINS / GRANOS</ng-template>
         <section class="form-grains" [formGroup]="newRequestForm">
@@ -178,7 +182,7 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl] = "newRequestForm">
+  <mat-step [stepControl] = "newRequestForm" class="dairyStep">
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>MILK & CHEESE / LÁCTEOS</ng-template>
         <section class="form-milk-and-cheese" [formGroup]="newRequestForm">
@@ -195,7 +199,7 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl] = "newRequestForm">
+  <mat-step [stepControl] = "newRequestForm" class="bakingStep">
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>PANTRY, COOKING, & BAKING / COCINAR y HORNEAR</ng-template>
         <section class="form-baking" [formGroup]="newRequestForm">
@@ -232,7 +236,7 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl] = "newRequestForm">
+  <mat-step [stepControl] = "newRequestForm" class="babyStep">
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>BABY / PARA BEBE</ng-template>
         <section class="form-milk-and-cheese" [formGroup]="newRequestForm">
@@ -262,7 +266,7 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl] = "newRequestForm">
+  <mat-step [stepControl] = "newRequestForm" class="personalStep">
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>PERSONAL / PERSONAL</ng-template>
         <section class="form-personal" [formGroup]="newRequestForm">
@@ -280,7 +284,7 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl] = "newRequestForm">
+  <mat-step [stepControl] = "newRequestForm" class="householdStep">
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>HOUSEHOLD / PARA LA CASA</ng-template>
         <section class="form-personal" [formGroup]="newRequestForm">
@@ -294,9 +298,9 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl] = "newRequestForm">
-    <form [formGroup] = "newRequestForm">
-      <ng-template matStepLabel>MISCELLANEOUS / OTRAS COSAS</ng-template>
+  <mat-step [stepControl] = "newRequestForm"  class="miscStep">
+    <form [formGroup] = "newRequestForm" data-cy="miscStep">
+      <ng-template matStepLabel >MISCELLANEOUS / OTRAS COSAS</ng-template >
         <section class="form-personal" [formGroup]="newRequestForm">
           <p>Please feel free to write in requests for other food options! Our volunteers will check which items are currently available. /
             ¡Por favor escriban otras opciones que sería bueno para usted! Nuestros voluntarios pueden chequear cuales cosas están disponibl
@@ -308,6 +312,7 @@
             #autosize="cdkTextareaAutosize"
             cdkAutosizeMinRows="1"
             cdkAutosizeMaxRows="50"
+            data-cy="misc"
             ></textarea>
           </mat-form-field>
         </section>
@@ -317,8 +322,8 @@
     </form>
   </mat-step>
 
-  <mat-step [stepControl]="newRequestForm">
-    <form [formGroup]="newRequestForm" (ngSubmit) = "submitForm()">
+  <mat-step [stepControl]="newRequestForm" >
+    <form [formGroup]="newRequestForm" (ngSubmit) = "submitForm()"  data-cy="finalStep">
       <ng-template matStepLabel>Finish</ng-template>
       <p>Make sure you double check all the foods wanted are checked. If so, submit form!</p>
       <mat-card-actions align="start">
@@ -327,7 +332,8 @@
           type="button"
           class= "submit_button"
           type="submit"
-          data-test="confirmAddRequestButton">
+          data-test="confirmAddRequestButton"
+          data-cy="confirmAddRequestButton">
           Submit Request Form
         </button>
       </mat-card-actions>

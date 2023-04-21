@@ -3,12 +3,11 @@ import {Request} from 'src/app/requests/request';
 export class NewRequestPage {
 
   private readonly url = '/requests/client';
-  private readonly title = '.new-request-title';
-  private readonly button = '[data-test=confirmNewRequestButton]';
+  private readonly title = 'mat-card-title';
+  private readonly button = '[data-cy="confirmAddRequestButton"]';
   private readonly snackBar = '.mat-mdc-simple-snack-bar';
-  private readonly itemTypeFieldName = 'itemType';
-  private readonly foodTypeFieldName = 'foodType';
-  private readonly descFieldName = 'description';
+  private readonly nameField = 'clientName';
+  private readonly descFieldName = 'misc';
   private readonly formFieldSelector = `mat-form-field`;
   private readonly dropDownSelector = `mat-option`;
 
@@ -20,14 +19,15 @@ export class NewRequestPage {
     return cy.get(this.title);
   }
 
-  capitalize(str: string){
-    return str[0].toUpperCase() + str.substr(1);
-  }
-
   newRequestButton() {
-    return cy.get(this.button);
+    cy.get(`[data-cy=finalStep]`).click({force: true});
+    return cy.get(this.button).click({force: true});
   }
 
+  getMisc(){
+    cy.get(`[data-cy=miscStep]`).click({force: true});
+    return cy.get(`[data-cy=misc]`).click({force: true});
+  }
   selectMatSelectValue(select: Cypress.Chainable, value: string) {
     // Find and click the drop down
     return select.click()
@@ -44,8 +44,17 @@ export class NewRequestPage {
     return cy.get(`mat-select[formControlName=${formControlName}]`).click();
   }
 
+  getMatStep(className: string){
+    return cy.get(`mat-step[class=${className}]`).click();
+  }
+
+  makeFirstSelection(stepClassName: string, checkBoxIndex: number){
+    cy.get(`mat-step[class=${stepClassName}]`).click();
+    cy.get(`section mat-checkbox:first`).click();
+  }
+
   getFormField(fieldName: string) {
-    return cy.get(`${this.formFieldSelector} [formcontrolname=${fieldName}]`);
+    return cy.get(`[data-cy=${fieldName}]`).click();
   }
 
   getSnackBar() {
@@ -53,12 +62,12 @@ export class NewRequestPage {
   }
 
   newRequest(newRequest: Request) {
-    this.getFormField(this.descFieldName).type(newRequest.description);
-    this.setMatSelect('itemType', this.capitalize(newRequest.itemType));
-    if (newRequest.itemType === 'food'){
-      this.setMatSelect('foodType', this.capitalize(newRequest.foodType));
+    this.getFormField(this.nameField).type(newRequest.name);
+    this.getMisc().type(newRequest.description, {force: true});
+    if (newRequest.diaperSize){
+      this.setMatSelect('diaperSize', newRequest.diaperSize);
     }
-    return this.newRequestButton().click();
+    return this.newRequestButton().click({force: true});
   }
 
 }
