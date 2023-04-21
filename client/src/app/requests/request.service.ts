@@ -14,7 +14,7 @@ export class RequestService {
   readonly newRequestClientUrl: string = `${environment.apiUrl}clientRequests`;
   readonly requestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newRequestDonorUrl: string = `${environment.apiUrl}donorRequests`;
-  readonly priorityUrl: string = `${environment.apiUrl}requests/set-priority`
+  readonly priorityUrl: string = `${environment.apiUrl}requests/set-priority`;
 
   private readonly itemTypeKey = 'itemType';
   private readonly foodTypeKey = 'foodType';
@@ -37,10 +37,7 @@ export class RequestService {
       if (filters.foodType) {
         httpParams = httpParams.set(this.foodTypeKey, filters.foodType);
       }
-      if (filters.description) {
-        httpParams = httpParams.set(this.descriptionKey, filters.description);
       }
-    }
 // We'll need to add a conditional in here that handles a donor get request as well
     return this.httpClient.get<Request[]>(this.requestClientUrl, {
       params: httpParams,
@@ -53,7 +50,7 @@ export class RequestService {
   }
 
 
-  getDonorRequests(filters?: {itemType?: ItemType; foodType?: FoodType; description?: string}): Observable<Request[]> {
+  getDonorRequests(filters?: {itemType?: ItemType; foodType?: FoodType}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
       if (filters.itemType) {
@@ -62,9 +59,6 @@ export class RequestService {
       if (filters.foodType) {
         httpParams = httpParams.set(this.foodTypeKey, filters.foodType);
       }
-      if (filters.description) {
-        httpParams = httpParams.set(this.descriptionKey, filters.description);
-      }
     }
 // We'll need to add a conditional in here that handles a donor get request as well
     return this.httpClient.get<Request[]>(this.requestDonorUrl, {
@@ -72,10 +66,12 @@ export class RequestService {
     });
 
   }
+  descriptionKey(descriptionKey: any, description: string): HttpParams {
+    throw new Error('Method not implemented.');
+  }
 
   filterRequests(requests: Request[]): Request[] {
     const filteredRequests = requests;
-
     return filteredRequests;
   }
 // This is the method that submit form calls on the new request component.

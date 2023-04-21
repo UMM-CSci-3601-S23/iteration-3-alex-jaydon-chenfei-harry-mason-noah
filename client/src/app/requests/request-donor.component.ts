@@ -32,7 +32,6 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
     this.requestService.getDonorRequests({
       itemType: this.requestItemType,
       foodType: this.requestFoodType,
-      description: this.requestDescription
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({

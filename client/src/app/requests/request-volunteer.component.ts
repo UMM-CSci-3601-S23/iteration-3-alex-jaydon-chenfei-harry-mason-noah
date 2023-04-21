@@ -55,9 +55,14 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     this.filteredRequests = this.serverFilteredRequests;
   }
 
-  updateRequestPriority(reqeust: Request[], priority: string){
-    
-
+  updateRequestPriority(reqeust: Request, priority: string){
+    this.requestService
+    .addRequestPriority(this.request, priority)
+    .subscribe({
+      next: () => {
+        this.updateFilter();
+      }
+    });
   }
 
   ngOnInit(): void {
