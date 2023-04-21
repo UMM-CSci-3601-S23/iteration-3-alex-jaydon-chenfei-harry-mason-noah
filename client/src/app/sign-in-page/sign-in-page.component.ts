@@ -15,15 +15,14 @@ export class SignInPageComponent implements OnInit {
     private router: Router,
     private service: AuthService,
     private ngZone: NgZone,
-    private fb: FormBuilder,
-    private _snackBar: MatSnackBar) { }
+    private fb: FormBuilder) { }
 
     ngOnInit(): void {
       // @ts-ignore
       window.onGoogleLibraryLoad = () => {
         // @ts-ignore
         google.accounts.id.initialize({
-          client_id: '',
+          client_id: '662107657916-qr702be6n57p43kig8e2ub74esc1da5j.apps.googleusercontent.com',
           callback: this.handleCredentialResponse.bind(this),
           auto_select: false,
           cancel_on_tap_outside: true
@@ -32,7 +31,7 @@ export class SignInPageComponent implements OnInit {
         google.accounts.id.renderButton(
         // @ts-ignore
         document.getElementById('buttonDiv'),
-          { theme: 'outline', size: 'large', width: '100%' }
+          { theme: 'outline', size: 'large', width: 200 }
         );
         // @ts-ignore
         google.accounts.id.prompt((notification: PromptMomentNotification) => {});
@@ -43,7 +42,7 @@ export class SignInPageComponent implements OnInit {
         (x: any) => {
           this.ngZone.run(() => {
             this.router.navigate(['/logout']);
-          })},
+          });},
         (error: any) => {
             console.log(error);
           }
