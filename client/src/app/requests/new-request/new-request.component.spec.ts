@@ -180,8 +180,6 @@ describe('NewRequestComponent', () => {
 });
 
 describe('Misbehaving request service', () => {
-  let itemTypeControl: AbstractControl;
-  let foodTypeControl: AbstractControl;
   let descControl: AbstractControl;
   let newRequestComponent: NewRequestComponent;
   let newRequestForm: FormGroup;

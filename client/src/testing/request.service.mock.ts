@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
-import { Request, ItemType, FoodType } from 'src/app/requests/request';
+import { Request } from 'src/app/requests/request';
 import { RequestService } from 'src/app/requests/request.service';
 
 @Injectable({
@@ -11,27 +11,35 @@ export class MockRequestService extends RequestService {
   public static testRequests: Request[] = [
     {
       _id: '1_id',
-      itemType: 'food',
+      name: 'noah',
+      dateAdded: '20210213',
+      // itemType: 'food',
       description: 'I would like some ground beef',
-      foodType: 'meat'
+      // foodType: 'meat'
     },
     {
       _id: '2_id',
-      itemType: 'toiletries',
+      name: 'mason',
+      dateAdded: '20220618',
+      // itemType: 'toiletries',
       description: 'I need more toothpaste',
-      foodType: ''
+      // foodType: ''
     },
     {
       _id: '3_id',
-      itemType: 'other',
+      name: 'harry',
+      dateAdded: '20180401',
+      // itemType: 'other',
       description: 'I need more paper plates',
-      foodType: ''
+      // foodType: ''
     },
     {
       _id: '4_id',
-      itemType: 'food',
+      name: 'jaydon',
+      dateAdded: '20140817',
+      // itemType: 'food',
       description: 'I would like some milk',
-      foodType: 'dairy'
+      // foodType: 'dairy'
     }
   ];
 
@@ -45,11 +53,11 @@ export class MockRequestService extends RequestService {
     super(null);
   }
 
-  getClientRequests(filters?: { itemType?: ItemType; foodType?: FoodType }): Observable<Request[]> {
+  getClientRequests(): Observable<Request[]> {
       return of(MockRequestService.testRequests);
   }
 
-  getDonorRequests(filters?: { itemType?: ItemType; foodType?: FoodType }): Observable<Request[]> {
+  getDonorRequests(): Observable<Request[]> {
     return of(MockRequestService.testRequests);
   }
   deleteClientRequest(request: Partial<Request>): Observable<object> {

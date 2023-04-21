@@ -7,41 +7,6 @@
         </mat-card-title>
       </mat-card-header>
     <mat-card-content>
-    <div class = "drop-downs">
-      <mat-form-field>
-        <mat-label>Item Category</mat-label>
-        <mat-select
-        required
-        [(ngModel)]="itemType"
-        formControlName="itemType"
-        data-test="itemTypeSelect"
-        >
-          <mat-option value ="--">--</mat-option>
-          <mat-option value="food">Food</mat-option>
-          <mat-option value="toiletries">Toiletries</mat-option>
-          <mat-option value="other">Other</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formControlHasError('itemType')" data-test="itemTypeError">
-          {{getErrorMessage('itemType')}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Food Category</mat-label>
-        <mat-select
-        [disabled]="itemType !== 'food'"
-        formControlName="foodType"
-        >
-          <mat-option value="dairy">Dairy</mat-option>
-          <mat-option value="grain">Grain</mat-option>
-          <mat-option value="meat">Meat</mat-option>
-          <mat-option value="fruit">Fruit</mat-option>
-          <mat-option value="vegetable">Vegetable</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formControlHasError('foodType')" data-test="foodTypeError">
-          {{getErrorMessage('foodType')}}
-        </mat-error>
-      </mat-form-field>
-    </div>
     <div>
       <mat-form-field class = "desc">
         <mat-label>Item description</mat-label>

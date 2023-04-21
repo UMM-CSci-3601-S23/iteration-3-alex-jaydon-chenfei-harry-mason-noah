@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Request, ItemType, FoodType } from './request';
+import { Request } from './request';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -15,22 +15,15 @@ export class RequestService {
   readonly requestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newRequestDonorUrl: string = `${environment.apiUrl}donorRequests`;
 
-  private readonly itemTypeKey = 'itemType';
-  private readonly foodTypeKey = 'foodType';
   private readonly descriptionKey = 'description';
 
   constructor(private httpClient: HttpClient) {
   }
 
-  getClientRequests(filters?: {itemType?: ItemType; foodType?: FoodType; description?: string}): Observable<Request[]> {
+  getClientRequests(filters?: {description?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-      if (filters.itemType) {
-        httpParams = httpParams.set(this.itemTypeKey, filters.itemType);
-      }
-      if (filters.foodType) {
-        httpParams = httpParams.set(this.foodTypeKey, filters.foodType);
-      }
+
       if (filters.description) {
         httpParams = httpParams.set(this.descriptionKey, filters.description);
       }
@@ -47,15 +40,9 @@ export class RequestService {
   }
 
 
-  getDonorRequests(filters?: {itemType?: ItemType; foodType?: FoodType; description?: string}): Observable<Request[]> {
+  getDonorRequests(filters?: {description?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-      if (filters.itemType) {
-        httpParams = httpParams.set(this.itemTypeKey, filters.itemType);
-      }
-      if (filters.foodType) {
-        httpParams = httpParams.set(this.foodTypeKey, filters.foodType);
-      }
       if (filters.description) {
         httpParams = httpParams.set(this.descriptionKey, filters.description);
       }

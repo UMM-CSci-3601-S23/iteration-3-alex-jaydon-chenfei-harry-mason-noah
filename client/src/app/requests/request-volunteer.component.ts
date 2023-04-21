@@ -3,7 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Request, ItemType, FoodType } from './request';
+import { Request } from './request';
 import { RequestService } from './request.service';
 
 
@@ -19,9 +19,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   @Input() request: Request;
   public serverFilteredRequests: Request[];
   public filteredRequests: Request[];
-  public requestItemType: ItemType;
   public requestDescription: string;
-  public requestFoodType: FoodType;
 
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],

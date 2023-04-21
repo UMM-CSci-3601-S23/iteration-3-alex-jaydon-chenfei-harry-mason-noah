@@ -1,4 +1,4 @@
-import { FoodType, ItemType, Request } from 'src/app/requests/request';
+import { Request } from 'src/app/requests/request';
 
 export class EditRequestPage {
   private readonly requestUrl = '/requests/volunteer/588935f57546a2daea44de7c';
@@ -6,13 +6,13 @@ export class EditRequestPage {
   private readonly title = '.new-request-title';
   private readonly button = '[data-test=confirmNewRequestButton]';
   private readonly snackBar = '.mat-mdc-simple-snack-bar';
-  private readonly itemTypeFieldName = 'itemType';
-  private readonly foodTypeFieldName = 'foodType';
+  // private readonly itemTypeFieldName = 'itemType';
+  // private readonly foodTypeFieldName = 'foodType';
   private readonly descFieldName = 'description';
   private readonly formFieldSelector = `mat-form-field`;
   private readonly dropDownSelector = `mat-option`;
-  private readonly requestItemTypeDropDown = '[data-test=requestItemTypeSelect]';
-  private readonly requestFoodTypeDropDown = '[data-test=requestFoodTypeSelect]';
+  // private readonly requestItemTypeDropDown = '[data-test=requestItemTypeSelect]';
+  // private readonly requestFoodTypeDropDown = '[data-test=requestFoodTypeSelect]';
   private readonly requestDescription = '[data-test=requestDescriptionInput]';
   navigateToRequest() {
     return cy.visit(this.requestUrl);
@@ -56,22 +56,22 @@ export class EditRequestPage {
 
   editRequest(newRequest: Request) {
     this.getFormField(this.descFieldName).click().clear().type(newRequest.description);
-    this.setMatSelect('itemType', this.capitalize(newRequest.itemType));
-    if (newRequest.itemType === 'food'){
-      this.setMatSelect('foodType', this.capitalize(newRequest.foodType));
-    }
+    // this.setMatSelect('itemType', this.capitalize(newRequest.itemType));
+    // if (newRequest.itemType === 'food'){
+    //   this.setMatSelect('foodType', this.capitalize(newRequest.foodType));
+    // }
     return this.newRequestButton().click();
   }
 
-  selectItemType(value: ItemType) {
+  /*selectItemType(value: ItemType) {
     cy.get(this.requestItemTypeDropDown).click();
     return cy.get(`${this.dropDownSelector}[value="${value}"]`).click();
-  }
+  }*/
 
-  selectFoodType(value: FoodType) {
-    cy.get(this.requestFoodTypeDropDown).click();
+  /* selectFoodType(value: FoodType) {
+    // cy.get(this.requestFoodTypeDropDown).click();
     return cy.get(`${this.dropDownSelector}[value="${value}"]`).click();
-  }
+  }*/
 
   filterDescription(value: string) {
     cy.get(this.requestDescription).click().type(value);

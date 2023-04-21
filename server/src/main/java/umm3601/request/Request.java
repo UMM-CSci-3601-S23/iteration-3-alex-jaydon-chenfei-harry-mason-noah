@@ -14,9 +14,7 @@ public class Request {
 
   public String name;
   public String[] selections;
-  public String itemType;
   public String description;
-  public String foodType;
   public String dateAdded;
   public String diaperSize;
 

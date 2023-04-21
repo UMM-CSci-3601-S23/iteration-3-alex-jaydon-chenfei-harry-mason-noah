@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
-import { Request, ItemType, FoodType } from './request';
+import { Request } from './request';
 import { RequestService } from './request.service';
 
 
@@ -15,9 +15,7 @@ import { RequestService } from './request.service';
 export class RequestDonorComponent implements OnInit, OnDestroy {
   public serverFilteredRequests: Request[];
   public filteredRequests: Request[];
-  public requestItemType: ItemType;
   public requestDescription: string;
-  public requestFoodType: FoodType;
 
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],

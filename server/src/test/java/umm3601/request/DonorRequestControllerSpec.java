@@ -136,26 +136,26 @@ class DonorRequestControllerSpec {
     List<Document> testRequests = new ArrayList<>();
     testRequests.add(
         new Document()
-            .append("itemType", "food")
+            // .append("itemType", "food")
             .append("description", "apple")
-            .append("foodType", "fruit"));
+            // .append("foodType", "fruit"));
     testRequests.add(
         new Document()
-            .append("itemType", "other")
+            // .append("itemType", "other")
             .append("description", "Paper Plate")
-            .append("foodType", ""));
+            // .append("foodType", ""));
     testRequests.add(
         new Document()
-            .append("itemType", "toiletries")
+            // .append("itemType", "toiletries")
             .append("description", "tooth paste")
-            .append("foodType", ""));
+            // append("foodType", ""));
 
     samsId = new ObjectId();
     Document sam = new Document()
         .append("_id", samsId)
-        .append("itemType", "food")
+        // .append("itemType", "food")
         .append("description", "steak")
-        .append("foodType", "meat");
+        // .append("foodType", "meat");
 
     requestDocuments.insertMany(testRequests);
     requestDocuments.insertOne(sam);
@@ -196,11 +196,11 @@ class DonorRequestControllerSpec {
   @Test
   void canGetRequestsWithItemType() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
+    // queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "food", ClientRequestController.ITEM_TYPE_KEY));
+    /*when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
+      .thenReturn(Validator.create(String.class, "food", ClientRequestController.ITEM_TYPE_KEY));*/
 
     requestController.getRequests(ctx);
 
@@ -209,17 +209,17 @@ class DonorRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("food", request.itemType);
+    //   assertEquals("food", request.itemType);
     }
   }
   @Test
   void canGetRequestsWithFoodType() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
+    // queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "meat", ClientRequestController.FOOD_TYPE_KEY));
+    /*when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
+      .thenReturn(Validator.create(String.class, "meat", ClientRequestController.FOOD_TYPE_KEY));*/
 
     requestController.getRequests(ctx);
 
@@ -228,18 +228,18 @@ class DonorRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("meat", request.foodType);
+    //   assertEquals("meat", request.foodType);
     }
   }
 
   @Test
   public void canGetRequestWithItemTypeUppercase() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"FOOD"}));
+    // queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"FOOD"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "FOOD", ClientRequestController.ITEM_TYPE_KEY));
+    /*when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
+      .thenReturn(Validator.create(String.class, "FOOD", ClientRequestController.ITEM_TYPE_KEY));*/
 
     requestController.getRequests(ctx);
 
@@ -248,18 +248,18 @@ class DonorRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("food", request.itemType);
+    //   assertEquals("food", request.itemType);
     }
   }
 
   @Test
   void canSortAscending() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
+    // queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"asc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "meat", ClientRequestController.FOOD_TYPE_KEY));
+    /*when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
+      .thenReturn(Validator.create(String.class, "meat", ClientRequestController.FOOD_TYPE_KEY));*/
 
     requestController.getRequests(ctx);
 
@@ -268,18 +268,18 @@ class DonorRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("meat", request.foodType);
+    //   assertEquals("meat", request.foodType);
     }
   }
 
   @Test
   void canSortDescending() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
+    // queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "meat", ClientRequestController.FOOD_TYPE_KEY));
+    /*when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
+      .thenReturn(Validator.create(String.class, "meat", ClientRequestController.FOOD_TYPE_KEY));*/
 
     requestController.getRequests(ctx);
 
@@ -288,20 +288,20 @@ class DonorRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("meat", request.foodType);
+    //   assertEquals("meat", request.foodType);
     }
   }
 
   @Test
   void getRequestsByItemTypeAndFoodType() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
-    queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"fruit"}));
+    // queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
+    // queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"fruit"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
+    /*when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
       .thenReturn(Validator.create(String.class, "food", ClientRequestController.ITEM_TYPE_KEY));
     when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "fruit", ClientRequestController.FOOD_TYPE_KEY));
+      .thenReturn(Validator.create(String.class, "fruit", ClientRequestController.FOOD_TYPE_KEY));*/
 
     requestController.getRequests(ctx);
 
@@ -309,8 +309,8 @@ class DonorRequestControllerSpec {
     verify(ctx).status(HttpStatus.OK);
     assertEquals(1, requestArrayListCaptor.getValue().size());
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("food", request.itemType);
-      assertEquals("fruit", request.foodType);
+    //   assertEquals("food", request.itemType);
+    //   assertEquals("fruit", request.foodType);
     }
   }
 
@@ -323,9 +323,9 @@ class DonorRequestControllerSpec {
 
     verify(ctx).json(requestCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
-    assertEquals("food", requestCaptor.getValue().itemType);
+    // assertEquals("food", requestCaptor.getValue().itemType);
     assertEquals("steak", requestCaptor.getValue().description);
-    assertEquals("meat", requestCaptor.getValue().foodType);
+    // assertEquals("meat", requestCaptor.getValue().foodType);
 
   }
 
@@ -338,7 +338,7 @@ class DonorRequestControllerSpec {
 
     verify(ctx).json(requestCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
-    assertEquals("food", requestCaptor.getValue().itemType);
+    // assertEquals("food", requestCaptor.getValue().itemType);
     assertEquals(samsId.toHexString(), requestCaptor.getValue()._id);
   }
 
@@ -368,8 +368,8 @@ class DonorRequestControllerSpec {
   @Test
   void addRequest() throws IOException {
     String testNewRequest = "{"
-        + "\"itemType\": \"food\","
-        + "\"foodType\": \"meat\""
+        // + "\"itemType\": \"food\","
+        // + "\"foodType\": \"meat\""
         + "}";
     when(ctx.bodyValidator(Request.class))
       .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
@@ -387,15 +387,15 @@ class DonorRequestControllerSpec {
 
     // Successfully adding the request should return the newly generated, non-empty MongoDB ID for that request.
     assertNotEquals("", addedRequest.get("_id"));
-    assertEquals("food", addedRequest.get("itemType"));
-    assertEquals("meat", addedRequest.get("foodType"));
+    // assertEquals("food", addedRequest.get("itemType"));
+    // assertEquals("meat", addedRequest.get("foodType"));
   }
 
   @Test
   void addRequestInsertsDateTime() throws IOException {
     String testNewRequest = "{"
-        + "\"itemType\": \"food\","
-        + "\"foodType\": \"meat\""
+        // + "\"itemType\": \"food\","
+        // + "\"foodType\": \"meat\""
         + "}";
     when(ctx.bodyValidator(Request.class))
       .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
@@ -421,8 +421,8 @@ class DonorRequestControllerSpec {
   @Test
   void throwsForbiddenForAddBadToken() throws IOException {
     String testNewRequest = "{"
-        + "\"itemType\": \"food\","
-        + "\"foodType\": \"meat\""
+        // + "\"itemType\": \"food\","
+        // + "\"foodType\": \"meat\""
         + "}";
     when(ctx.bodyValidator(Request.class))
       .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
@@ -439,8 +439,8 @@ class DonorRequestControllerSpec {
   @Test
   void throwsForbiddenForAddNoToken() throws IOException {
     String testNewRequest = "{"
-        + "\"itemType\": \"food\","
-        + "\"foodType\": \"meat\""
+        // + "\"itemType\": \"food\","
+        // + "\"foodType\": \"meat\""
         + "}";
     when(ctx.bodyValidator(Request.class))
       .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));

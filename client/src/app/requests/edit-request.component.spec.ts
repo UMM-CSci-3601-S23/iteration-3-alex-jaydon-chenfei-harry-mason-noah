@@ -71,56 +71,58 @@ describe('EditRequestComponent', () => {
   });
 
   describe('The getErrorMessage method', ()=>{
-    let itemTypeControl: AbstractControl;
+    // let itemTypeControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
+    //   itemTypeControl = newRequestForm.controls.itemType;
     });
 
     it('should return "unknown error" when passed an invalid error code', ()=> {
-      expect(editRequestComponent.getErrorMessage('foodType') === 'Unknown error');
+    //   expect(editRequestComponent.getErrorMessage('foodType') === 'Unknown error');
     });
 
     it('should return "required" error when itemType is empty', ()=> {
-      itemTypeControl.setValue('--');
-      expect(editRequestComponent.getErrorMessage('itemType')).toBeTruthy();
+    //   itemTypeControl.setValue('--');
+    //   expect(editRequestComponent.getErrorMessage('itemType')).toBeTruthy();
     });
   });
 
   describe('Can we submit stuff to the donor database?', ()=>{
-    let itemTypeControl: AbstractControl;
-    let foodTypeControl: AbstractControl;
+    // let itemTypeControl: AbstractControl;
+    // let foodTypeControl: AbstractControl;
     let descControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
-      foodTypeControl = newRequestForm.controls.foodType;
+    //   itemTypeControl = newRequestForm.controls.itemType;
+    //   foodTypeControl = newRequestForm.controls.foodType;
       descControl = editRequestComponent.newRequestForm.controls.description;
     });
 
     it('should not get angy', ()=> {
 
-      foodTypeControl.setValue('dairy');
-      itemTypeControl.setValue('food');
+    //   foodTypeControl.setValue('dairy');
+    //   itemTypeControl.setValue('food');
       descControl.setValue('this is a description I guess');
 
       editRequestComponent.submitForm();
 
-      expect(service.addedDonorRequests[0].itemType).toEqual('food');
-      expect(service.addedDonorRequests[0].foodType).toEqual('dairy');
+    //   expect(service.addedDonorRequests[0].itemType).toEqual('food');
+    //   expect(service.addedDonorRequests[0].foodType).toEqual('dairy');
       expect(service.addedDonorRequests[0].description).toEqual('this is a description I guess');
     });
 
     it('should fill in values properly', ()=> {
       editRequestComponent.setRequestValues({
-        _id: '134',
-        itemType: 'food',
-        description: 'Description',
-        foodType: 'fruit'
+        _id: '588935f57546a2daea44de7c',
+        name: 'joe',
+        dateAdded: '20230423',
+      //   itemType: 'food',
+      //   foodType: 'meat',
+        description: 'This is a test edit'
       });
 
-      expect(itemTypeControl.value === 'food').toBeTrue();
-      expect(foodTypeControl.value === 'fruit').toBeTrue();
+      // expect(itemTypeControl.value === 'food').toBeTrue();
+      // expect(foodTypeControl.value === 'fruit').toBeTrue();
       expect(descControl.value === 'Description').toBeTrue();
     });
   });
@@ -145,8 +147,8 @@ describe('EditRequestComponent', () => {
 });
 
 describe('Misbehaving request service', () => {
-  let itemTypeControl: AbstractControl;
-  let foodTypeControl: AbstractControl;
+  // let itemTypeControl: AbstractControl;
+  // let foodTypeControl: AbstractControl;
   let descControl: AbstractControl;
   let editRequestComponent: EditRequestComponent;
   let newRequestForm: FormGroup;
@@ -204,8 +206,8 @@ describe('Misbehaving request service', () => {
       expect(newRequestForm).toBeDefined();
       expect(newRequestForm.controls).toBeDefined();
 
-      itemTypeControl = newRequestForm.controls.itemType;
-      foodTypeControl = newRequestForm.controls.foodType;
+      // itemTypeControl = newRequestForm.controls.itemType;
+      // foodTypeControl = newRequestForm.controls.foodType;
       descControl = editRequestComponent.newRequestForm.controls.description;
     });
   }));
@@ -220,8 +222,8 @@ describe('Misbehaving request service', () => {
   });
 
   it('should get angy when talking with the donor database', ()=> {
-    foodTypeControl.setValue('dairy');
-    itemTypeControl.setValue('food');
+    // foodTypeControl.setValue('dairy');
+    // itemTypeControl.setValue('food');
     descControl.setValue('this is a description I guess');
 
     editRequestComponent.submitForm();
@@ -234,8 +236,8 @@ describe('Misbehaving request service', () => {
 
 
 describe('Partially Misbehaving request service', () => {
-  let itemTypeControl: AbstractControl;
-  let foodTypeControl: AbstractControl;
+  // let itemTypeControl: AbstractControl;
+  // let foodTypeControl: AbstractControl;
   let descControl: AbstractControl;
   let editRequestComponent: EditRequestComponent;
   let newRequestForm: FormGroup;
@@ -295,8 +297,8 @@ describe('Partially Misbehaving request service', () => {
       expect(newRequestForm).toBeDefined();
       expect(newRequestForm.controls).toBeDefined();
 
-      itemTypeControl = newRequestForm.controls.itemType;
-      foodTypeControl = newRequestForm.controls.foodType;
+      // itemTypeControl = newRequestForm.controls.itemType;
+      // foodTypeControl = newRequestForm.controls.foodType;
       descControl = editRequestComponent.newRequestForm.controls.description;
     });
   }));
@@ -312,17 +314,19 @@ describe('Partially Misbehaving request service', () => {
 
   it('should fill in values properly', ()=> {
     editRequestComponent.setRequestValues({
-      _id: '134',
-      itemType: 'food',
-      description: 'Description',
-      foodType: 'fruit'
+      _id: '588935f57546a2daea44de7c',
+      name: 'joe',
+      dateAdded: '20230423',
+    //   itemType: 'food',
+    //   foodType: 'meat',
+      description: 'This is a test edit'
     });
 
 
 
     expect(newRequestForm.value.description === 'Description').toBeTrue();
-    expect(newRequestForm.value.foodType === 'fruit').toBeTrue();
-    expect(newRequestForm.value.itemType === 'food').toBeTrue();
+    // expect(newRequestForm.value.foodType === 'fruit').toBeTrue();
+    // expect(newRequestForm.value.itemType === 'food').toBeTrue();
   });
 
 });

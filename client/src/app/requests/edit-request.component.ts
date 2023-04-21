@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
-import { FoodType, ItemType, Request } from './request';
+import { Request } from './request';
 import { RequestVolunteerComponent } from './request-volunteer.component';
 import { RequestService } from './request.service';
 import { ɵparseCookieValue } from '@angular/common';
@@ -27,15 +27,6 @@ export class EditRequestComponent implements OnInit, OnDestroy{
       Validators.required,
       Validators.minLength(5),
       Validators.maxLength(200),
-    ])),
-
-    itemType: new FormControl<ItemType>('food',Validators.compose([
-      Validators.required,
-      Validators.pattern('^(food|toiletries|other)$'),
-    ])),
-
-    foodType: new FormControl<FoodType>('',Validators.compose([
-      Validators.pattern('^(dairy|grain|meat|fruit|vegetable|)$'),
     ])),
   });
 
@@ -99,8 +90,8 @@ export class EditRequestComponent implements OnInit, OnDestroy{
     console.log(request);
     this.request = request;
 
-    this.newRequestForm.setValue({description: this.request.description,
-      foodType: this.request.foodType, itemType: this.request.itemType});
+    /*this.newRequestForm.setValue({description: this.request.description,
+      foodType: this.request.foodType, itemType: this.request.itemType});*/
   }
 
 

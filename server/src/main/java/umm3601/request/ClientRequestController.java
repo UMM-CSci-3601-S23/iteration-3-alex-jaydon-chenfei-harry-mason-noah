@@ -32,13 +32,9 @@ import java.time.format.DateTimeFormatter;
 
 
 public class ClientRequestController {
-  static final String ITEM_TYPE_KEY = "itemType";
-  static final String FOOD_TYPE_KEY = "foodType";
   static final String SORT_ORDER_KEY = "sortorder";
   static final String DESCRIPTION_KEY = "description";
 
-  private static final String ITEM_TYPE_REGEX = "^(food|toiletries|other|FOOD)$";
-  private static final String FOOD_TYPE_REGEX = "^(|dairy|grain|meat|fruit|vegetable)$";
 
   private final JacksonMongoCollection<Request> requestCollection;
   private Authentication auth;
@@ -107,18 +103,6 @@ public class ClientRequestController {
 
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>(); // start with a blank document
-    if (ctx.queryParamMap().containsKey(ITEM_TYPE_KEY)) {
-      String itemType = ctx.queryParamAsClass(ITEM_TYPE_KEY, String.class)
-        .check(it -> it.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-        .get();
-      filters.add(eq(ITEM_TYPE_KEY, itemType));
-    }
-    if (ctx.queryParamMap().containsKey(FOOD_TYPE_KEY)) {
-      String foodType = ctx.queryParamAsClass(FOOD_TYPE_KEY, String.class)
-        .check(it -> it.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
-        .get();
-      filters.add(eq(FOOD_TYPE_KEY, foodType));
-    }
     if (ctx.queryParamMap().containsKey(DESCRIPTION_KEY)) {
       Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(DESCRIPTION_KEY)),
       Pattern.CASE_INSENSITIVE);
