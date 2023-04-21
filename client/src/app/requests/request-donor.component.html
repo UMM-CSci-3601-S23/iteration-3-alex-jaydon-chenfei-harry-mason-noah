@@ -34,13 +34,8 @@
         <div mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/requests/donor', request._id]" class="donor-list-item">
           <mat-card class="example-card">
             <mat-card-header>
-<<<<<<< HEAD
               <mat-card-title class="donor-list-name">{{request.name}}</mat-card-title>
               <mat-card-subtitle class="donor-list-selections">{{request.selections}}</mat-card-subtitle>
-=======
-              <mat-card-title class="donor-list-itemType">{{request.name}}</mat-card-title>
-              <mat-card-subtitle class="donor-list-foodType">{{request.selections}}</mat-card-subtitle>
->>>>>>> working-on-requestform
             </mat-card-header>
             <mat-card-content>
               <p matListItemBody class="donor-list-description"> {{request.description}} </p>
