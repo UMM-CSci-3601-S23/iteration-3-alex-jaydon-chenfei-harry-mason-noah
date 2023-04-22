@@ -18,9 +18,10 @@ import umm3601.user.UserController;
 
 public class Server {
 
-  private static final int SERVER_PORT = 4568;
+  private static final int SERVER_PORT = 4577;
 
   public static void main(String[] args) {
+
     // Check for the presence of the `--no-auth` command line flag if this flag
     // is present, authorization will require the dummy `TOKEN` token instead
     // of the proper auth tokens.
@@ -70,7 +71,6 @@ public class Server {
     });
     Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
 
-
     server.start(SERVER_PORT);
 
     // List users, filtered using query parameters
@@ -102,10 +102,6 @@ public class Server {
     server.delete("/api/clientRequests/{id}", clientRequestController::deleteRequest);
     server.delete("/api/donorRequests/{id}", donorRequestController::deleteRequest);
 
-    // Magically grant authorization for the demo
-    // DO NOT USE THIS! THIS IS A TERRIBLE IDEA AND NOT THE WAY SECURITY SHOULD EVER WORK, THIS IS FOR THE DEMO ONLY
-    server.get("/api/auth", auth::grant);
-
 
     // This catches any uncaught exceptions thrown in the server
     // code and turns them into a 500 response ("Internal Server
@@ -121,5 +117,7 @@ public class Server {
       throw new InternalServerErrorResponse(e.toString());
     });
   */
+
+
   }
 }

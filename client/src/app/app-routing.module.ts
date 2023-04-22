@@ -17,7 +17,7 @@ const routes: Routes = [
   {path: 'requests/client', component: NewRequestComponent, title: 'New Request'},
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/volunteer/:id', component: EditRequestComponent, title: 'Edit Request'},
-  {path: 'sign-in-page/sign-in-page', component: SignInPageComponent, title: 'SignIn View'}
+  {path: 'LoginWithGoogle', component: SignInPageComponent, title: 'SignIn View'}
 
 ];
 

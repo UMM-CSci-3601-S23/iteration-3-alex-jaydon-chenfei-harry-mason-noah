@@ -18,9 +18,10 @@ export class AuthService {
   };
 
 
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   LoginWithGoogle(credentials: string): Observable<any> {
     const header = new HttpHeaders().set('Content-type', 'application/json');
-    return this.httpClient.post(this.path + 'LoginWithGoogle', JSON.stringify(credentials), { headers: header, withCredentials: true });
+    return this.httpClient.post(this.path + '', JSON.stringify(credentials), { headers: header, withCredentials: true });
   }
 
 

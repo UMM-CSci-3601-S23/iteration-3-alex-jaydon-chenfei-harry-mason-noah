@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnInit, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -41,7 +42,7 @@ export class SignInPageComponent implements OnInit {
       await this.service.LoginWithGoogle(response.credential).subscribe(
         (x: any) => {
           this.ngZone.run(() => {
-            this.router.navigate(['/logout']);
+            this.router.navigate(['/']);
           });},
         (error: any) => {
             console.log(error);
