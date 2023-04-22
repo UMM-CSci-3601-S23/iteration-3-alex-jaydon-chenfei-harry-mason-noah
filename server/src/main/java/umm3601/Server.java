@@ -52,6 +52,7 @@ public class Server {
     UserController userController = new UserController(database);
     ClientRequestController clientRequestController = new ClientRequestController(database, auth);
     DonorRequestController donorRequestController = new DonorRequestController(database, auth);
+    //DonorRequestController donorRequestController = new DonorRequestController(database, auth);
 
     Javalin server = Javalin.create(config ->
       config.plugins.register(new RouteOverviewPlugin("/api"))
@@ -68,6 +69,7 @@ public class Server {
       event.serverStopped(mongoClient::close);
     });
     Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
+
 
     server.start(SERVER_PORT);
 
