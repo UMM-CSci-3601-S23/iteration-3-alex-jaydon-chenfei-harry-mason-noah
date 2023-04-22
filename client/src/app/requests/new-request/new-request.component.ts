@@ -95,7 +95,6 @@ export class NewRequestComponent {
       description: this.newRequestForm.get('misc').getRawValue(),
       diaperSize: (this.diapers ? this.newRequestForm.controls.diaperSize.getRawValue() : undefined)
     };
-    console.log(newRequest);
     if (this.destination === 'client') {
       this.requestService.addClientRequest(newRequest).subscribe({
         next: (newId) => {

@@ -134,8 +134,6 @@ public class DonorRequestController {
      */
     Request newRequest = ctx.bodyValidator(Request.class).get();
 
-    // Add the date to the request formatted as an ISO 8601 string
-    newRequest.dateAdded = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
 
     // Insert the newRequest into the requestCollection
     requestCollection.insertOne(newRequest);
