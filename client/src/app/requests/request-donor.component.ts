@@ -16,6 +16,7 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
   public serverFilteredRequests: Request[];
   public filteredRequests: Request[];
   public requestDescription: string;
+  public readableRequests: Request[];
 
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
@@ -147,7 +148,8 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
       next: (returnedRequests) => {
-        this.serverFilteredRequests = this.makeRequestsReadable(returnedRequests);
+        this.makeRequestsReadable(returnedRequests);
+        this.serverFilteredRequests = returnedRequests;
       },
 
       error: (err) => {
@@ -159,8 +161,7 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
     });
   }
 
-  public makeRequestsReadable(formList: Request[]): Request[]{
-    console.log(formList);
+  public makeRequestsReadable(formList: Request[]){
     const items = this.itemMap;
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < formList.length; i++){
@@ -173,10 +174,15 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
       }
       console.log(formList[i].dateAdded);
       for (let ii = 0; ii < formList[i].selections.length; ii++){
-        formList[i].selections[ii] = ' ' + items.get(formList[i].selections[ii]);
+        if (formList[i].selections[ii] === 'diapers' && formList[i].diaperSize){
+          formList[i].selections[ii] = ' ' + items.get(formList[i].selections[ii]) + ' (size: ' + formList[i].diaperSize + ')';
+        }else {
+          formList[i].selections[ii] = ' ' + items.get(formList[i].selections[ii]);
+        }
+
       }
     }
-    return formList;
+    this.readableRequests = formList;
   }
   //
   public updateFilter(): void {

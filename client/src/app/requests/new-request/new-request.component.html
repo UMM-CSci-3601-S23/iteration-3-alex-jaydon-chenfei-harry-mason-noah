@@ -31,6 +31,46 @@
 
   <mat-step [stepControl] = "newRequestForm">
     <form [formGroup] = "newRequestForm">
+        <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+          <ng-template matStepLabel>Household Size</ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label># of persons in your home</mat-label>
+                <input matInput formControlName="clientHouseholdSize" required>
+                  <mat-error *ngIf="formControlHasError('clientHouseholdSize')" data-test="nameDescriptionError">
+                  {{getErrorMessage('clientHouseholdSize')}}
+                  </mat-error>
+            </mat-form-field><br /><br />
+       </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+        <ng-template matStepLabel>Household Income</ng-template>
+        <p>Is your household income less than {{calculateHouseholdIncome()}}</p>
+        <mat-form-field appearance="fill">
+            <mat-select formControlName = "incomeValid" required>
+              <mat-option value = True>Yes</mat-option>
+              <mat-option value = False>No</mat-option>
+            </mat-select>
+            <!-- this error does not work yet -->
+            <mat-error *ngIf="formControlHasError('incomeValid')" data-test="nameDescriptionError">
+              {{getErrorMessage('incomeValid')}}
+              </mat-error>
+        </mat-form-field><br /><br />
+     </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>FRUITS / FRUTAS  </ng-template>
         <section class="form-fruits-fresh" [formGroup]="newRequestForm">
           <mat-card-subtitle class="fruits-fresh-subtitle">Fresh / Fresca</mat-card-subtitle>

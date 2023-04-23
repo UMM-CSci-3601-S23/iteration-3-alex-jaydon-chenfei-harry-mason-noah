@@ -19,28 +19,17 @@ export class NewRequestComponent {
       Validators.minLength(2),
       Validators.maxLength(50),
     ])],
+    clientHouseholdSize: [1, Validators.compose([
+      Validators.required,
+      Validators.min(1),
+      // need a validator for it being something thats not a number
+    ])],
+    incomeValid: ['false', Validators.compose([
+      Validators.required,
+    ])],
     diaperSize: new FormControl({value: '0', disabled: true}),
     misc: ''
   });
-
-  /*newRequestForm = new FormGroup({
-    // We want descriptions to be short and sweet, yet still required so we have at least some idea what
-    // the client wants
-    description: new FormControl('', Validators.compose([
-      Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(200),
-    ])),
-
-    itemType: new FormControl<ItemType>('food', Validators.compose([
-      Validators.required,
-      Validators.pattern('^(food|toiletries|other)$'),
-    ])),
-
-    foodType: new FormControl<FoodType>('', Validators.compose([
-      Validators.pattern('^(dairy|grain|meat|fruit|vegetable|)$'),
-    ])),
-  });*/
 
   readonly newRequestValidationMessages = {
     clientName: [
@@ -48,18 +37,18 @@ export class NewRequestComponent {
       { type: 'minlength', message: 'Name must be at least 2 characters long' },
       { type: 'maxlength', message: 'Name cannot be more than 50 characters long' },
     ],
-    description: [
-      { type: 'required', message: 'Description is required' },
-      { type: 'minlength', message: 'Description must be at least 5 characters long' },
+    clientHouseholdSize: [
+      { type: 'required', message: 'Household is required' },
+      { type: 'min', message: 'Household needs to be at least 1 ' },
+      // need a validator message for it being something thats not a number
+    ],
+    incomeValid:[
+      { type: 'required', message: 'Household income validity is required ' +
+      '/n **Note, you can still make a request even if you do not meet validity standards' },
+    ]
+    /*description: [
       { type: 'maxlength', message: 'Description cannot be more than 200 characters long' },
-    ],
-    /*itemType: [
-      { type: 'required', message: 'Item type is required' },
-      { type: 'pattern', message: 'Item type must be food, toiletries, or other' },
-    ],
-    foodType: [
-      { type: 'pattern', message: 'Food type must be one of dairy, grain, meat, fruit, or vegetable' },
-    ]*/
+    ],*/
   };
 
   selections: string[] = new Array();
@@ -71,6 +60,29 @@ export class NewRequestComponent {
 
   constructor(private formBuilder: FormBuilder, private requestService: RequestService, private snackBar: MatSnackBar,
     private router: Router) {
+  }
+
+  calculateHouseholdIncome(): string{
+    const pop = this.newRequestForm.get('clientHouseholdSize').getRawValue();
+    if (pop === 1) {
+      return '$40770';
+    } else if (pop === 2) {
+      return '$54930';
+    } else if (pop === 3) {
+      return '$69090';
+    } else if (pop === 4) {
+      return '$83250';
+    } else if (pop === 5) {
+      return '$97410';
+    } else if (pop === 6) {
+      return '$111570';
+    } else if (pop === 7) {
+      return '$125730';
+    } else if (pop === 8) {
+      return '$139890';
+    } else {
+      return '$' + (139890 + (pop - 8) * 4720).toString();
+    }
   }
 
   formControlHasError(controlName: string): boolean {
@@ -89,12 +101,14 @@ export class NewRequestComponent {
 
   submitForm() {
     const newRequest = {
-      selections: this.selections,
-      dateAdded: this.formatDate(this.date.getMonth().toString(), this.date.getDate().toString()),
       name: this.newRequestForm.get('clientName').getRawValue(),
+      income: this.newRequestForm.get('incomeValid').getRawValue(),
+      dateAdded: this.formatDate((this.date.getMonth() + 1).toString(), this.date.getDate().toString()),
       description: this.newRequestForm.get('misc').getRawValue(),
+      selections: this.selections,
       diaperSize: (this.diapers ? this.newRequestForm.controls.diaperSize.getRawValue() : undefined)
     };
+    console.log(newRequest);
     if (this.destination === 'client') {
       this.requestService.addClientRequest(newRequest).subscribe({
         next: (newId) => {
@@ -160,8 +174,6 @@ export class NewRequestComponent {
     else{
       this.selections.push(newItem);
     }
-    console.log(this.selections);
-    console.log(this.newRequestForm.controls.diaperSize.getRawValue());
   }
 
   formatDate(month: string, day: string): string{

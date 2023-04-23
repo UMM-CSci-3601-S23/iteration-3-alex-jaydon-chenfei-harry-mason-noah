@@ -166,8 +166,8 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   }
 
   public makeRequestsReadable(formList: Request[]){
-    console.log(formList);
     const items = this.itemMap;
+
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < formList.length; i++){
       const tempTime = formList[i].dateAdded;
@@ -180,11 +180,10 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
       console.log(formList[i].dateAdded);
       for (let ii = 0; ii < formList[i].selections.length; ii++){
         if (formList[i].selections[ii] === 'diapers' && formList[i].diaperSize){
-          formList[i].selections[ii] = ' ' + items.get(formList[i].selections[ii]) + '(size: ' + formList[i].diaperSize + ')';
+          formList[i].selections[ii] = ' ' + items.get(formList[i].selections[ii]) + ' (size: ' + formList[i].diaperSize + ')';
         }else {
           formList[i].selections[ii] = ' ' + items.get(formList[i].selections[ii]);
         }
-
       }
     }
     this.readableRequests = formList;
@@ -219,6 +218,19 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
       },
     });
   }
+
+  public fixSelections(request: Request): void {
+    for (let i = 0; i < request.selections.length; i++){
+      const iterator1 = this.itemMap.entries();
+      for (let ii =0; ii < 112; ii++){
+        const valuePair = iterator1.next().value();
+        if (valuePair[1] === request.selections[i]){
+          request.selections[i] = valuePair[0];
+        }
+      }
+    }
+  }
+
   public postRequest(request: Request): void {
     const strippedRequest: Partial<Request> = {...request};
     delete strippedRequest._id;
