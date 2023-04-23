@@ -25,8 +25,8 @@ export class NewRequestComponent {
       Validators.pattern('^(\\d*)$'),
       // need a validator for it being something thats not a number
     ])],
-    incomeValid: ['false', Validators.compose([
-      Validators.required,
+    incomeValid: ['--', Validators.compose([
+      Validators.pattern('True|False'),
     ])],
     diaperSize: new FormControl({value: '0', disabled: true}),
     misc: ''
@@ -45,8 +45,8 @@ export class NewRequestComponent {
       // need a validator message for it being something thats not a number
     ],
     incomeValid:[
-      { type: 'required', message: 'Household income validity is required ' +
-      '/n **Note, you can still make a request even if you do not meet validity standards' },
+      { type: 'pattern', message: 'Household income validity is required ' +
+      '\n **Note, you can still make a request even if you do not meet validity standards' },
     ]
     /*description: [
       { type: 'maxlength', message: 'Description cannot be more than 200 characters long' },

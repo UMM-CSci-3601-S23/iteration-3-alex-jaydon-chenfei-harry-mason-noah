@@ -10,7 +10,8 @@
       "pancakeMix",
       "cheese",
       "creamyCannedSoup"
-    ]
+    ],
+    "incomeValid": true
   },
   {
     "_id": {
@@ -23,7 +24,8 @@
       "almonds",
       "sweetPotatoes",
       "peaches"
-    ]
+    ],
+    "incomeValid": false
   },
   {
     "_id": {
@@ -36,7 +38,8 @@
       "groundPorkBeefBlend",
       "wholeChicken",
       "hotDogSauce"
-    ]
+    ],
+    "incomeValid": true
   },
   {
     "_id": {
@@ -49,7 +52,8 @@
       "kidneyBeans",
       "rice",
       "cookieMix"
-    ]
+    ],
+    "incomeValid": false
   },
   {
     "_id": {
@@ -63,7 +67,8 @@
       "veggieRavioli",
       "diapers"
     ],
-    "diaperSize": "premature"
+    "diaperSize": "premature",
+    "incomeValid": true
   },
   {
     "_id": {
@@ -76,7 +81,8 @@
       "chicken",
       "tuna",
       "fishSticks"
-    ]
+    ],
+    "incomeValid": false
   },
   {
     "_id": {
@@ -89,6 +95,7 @@
       "peanutButter",
       "bread",
       "fruitOrVegetablePuree"
-    ]
+    ],
+    "incomeValid": true
   }
 ]
