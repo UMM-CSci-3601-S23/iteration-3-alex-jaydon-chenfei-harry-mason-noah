@@ -52,8 +52,10 @@
       <section class="form-fruits-fresh" [formGroup]="newRequestForm">
         <ng-template matStepLabel>Household Income</ng-template>
         <p>Is your household income less than {{calculateHouseholdIncome()}}</p>
-        <mat-form-field appearance="fill">
-            <mat-select formControlName = "incomeValid" required>
+        <mat-form-field appearance="fill" >
+            <mat-select formControlName = "incomeValid"
+            required
+            [disabled]="newRequestForm.get('clientHouseholdSize').invalid">
               <mat-option value = True>Yes</mat-option>
               <mat-option value = False>No</mat-option>
             </mat-select>
@@ -367,7 +369,8 @@
           type="button"
           class= "submit_button"
           type="submit"
-          data-test="confirmAddRequestButton">
+          data-test="confirmAddRequestButton"
+          [disabled]="newRequestForm.invalid">
           Submit Request Form
         </button>
       </mat-card-actions>

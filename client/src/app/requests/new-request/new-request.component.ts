@@ -22,6 +22,7 @@ export class NewRequestComponent {
     clientHouseholdSize: [1, Validators.compose([
       Validators.required,
       Validators.min(1),
+      Validators.pattern('^(\\d*)$'),
       // need a validator for it being something thats not a number
     ])],
     incomeValid: ['false', Validators.compose([
@@ -38,8 +39,9 @@ export class NewRequestComponent {
       { type: 'maxlength', message: 'Name cannot be more than 50 characters long' },
     ],
     clientHouseholdSize: [
-      { type: 'required', message: 'Household is required' },
-      { type: 'min', message: 'Household needs to be at least 1 ' },
+      { type: 'required', message: 'Household size is required' },
+      { type: 'min', message: 'Household size needs to be at least 1 ' },
+      { type: 'pattern', message: 'Household size must be a number'}
       // need a validator message for it being something thats not a number
     ],
     incomeValid:[
@@ -102,7 +104,7 @@ export class NewRequestComponent {
   submitForm() {
     const newRequest = {
       name: this.newRequestForm.get('clientName').getRawValue(),
-      income: this.newRequestForm.get('incomeValid').getRawValue(),
+      incomeValid: this.newRequestForm.get('incomeValid').getRawValue(),
       dateAdded: this.formatDate((this.date.getMonth() + 1).toString(), this.date.getDate().toString()),
       description: this.newRequestForm.get('misc').getRawValue(),
       selections: this.selections,
