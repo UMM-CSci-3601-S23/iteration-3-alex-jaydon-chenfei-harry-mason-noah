@@ -67,11 +67,11 @@
               <p matListItemBody class="donor-list-description"> {{request.description}} </p>
             </mat-card-content>
             <mat-card-actions *ngIf="this.authHypothesis">
-              <button mat-icon-button data-test="deleteRequestButton" (click)="deleteRequest(request)">
+              <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
                 <mat-icon>delete</mat-icon>
               </button>
-              <button mat-button [routerLink]="['/requests/donor', request._id]" data-test="pledgeRequestButton">
-                Click here to donate
+              <button mat-mini-fab matTooltip="Pledge" color="accent" data-test="pledgeRequestButton" [routerLink]="['/requests/donor', request._id]">
+                <mat-icon>favorite</mat-icon>
               </button>
             </mat-card-actions>
           </mat-card>
