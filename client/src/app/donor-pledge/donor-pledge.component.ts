@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
-import { FoodType, ItemType, Request } from '../requests/request';
+import { TimeSlot, Request } from '../requests/request';
 import { RequestService } from '../requests/request.service';
 
 @Component({
@@ -13,32 +13,50 @@ import { RequestService } from '../requests/request.service';
 })
 export class DonorPledgeComponent implements OnInit, OnDestroy{
   request: Request;
-  router: any;
-  itemType: any;
+  timeSlot: any;
 
-  newRequestForm = new FormGroup({
-    // We want descriptions to be short and sweet, yet still required so we have at least some idea what
+
+
+  newPledgeForm = new FormGroup({
+    // We want comments to be short and sweet, yet still required so we have at least some idea what
     // the client wants
-    description: new FormControl('', Validators.compose([
-      Validators.minLength(5),
+    comment: new FormControl('', Validators.compose([
       Validators.maxLength(200),
     ])),
 
-    itemType: new FormControl<ItemType>('food',Validators.compose([
+    timeSlot: new FormControl<TimeSlot>('',Validators.compose([
       Validators.required,
-      Validators.pattern('^(food|toiletries|other)$'),
-    ]))
+      Validators.pattern('^(Mon|Tue|Wed|Thu|Fri)$'),
+    ])),
+
+    name: new FormControl('', Validators.compose([
+      Validators.required,
+    ])),
+
+    amount: new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.min(1),
+      Validators.max(5),
+    ])),
+
   });
 
   readonly newRequestValidationMessages = {
-    description: [
-      {type: 'minlength', message: 'Description must be at least 5 characters long'},
-      {type: 'maxlength', message: 'Description cannot be more than 200 characters long'},
+    comment: [
+      {type: 'maxlength', message: 'Comment cannot be more than 200 characters long'},
     ],
-    itemType: [
+    timeSlot: [
       { type: 'required', message: 'Timeslot is required' },
-      { type: 'pattern', message: 'Item type must be food, toiletries, or other' },
+      { type: 'pattern', message: 'Choose one of the weekdays' },
     ],
+    name: [
+      { type: 'required', message: 'Preferred name is required' },
+    ],
+    amount:[
+      { type: 'required', message: 'The amount is required' },
+      { type: 'min', message: 'The amount can not be less than 1' },
+      { type: 'max', message: 'The amount can not be more than 5' },
+    ]
   };
   private ngUnsubscribe = new Subject<void>();
 
@@ -48,13 +66,13 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
   }
 
   formControlHasError(controlName: string): boolean {
-    return this.newRequestForm.get(controlName).invalid &&
-      (this.newRequestForm.get(controlName).dirty || this.newRequestForm.get(controlName).touched);
+    return this.newPledgeForm.get(controlName).invalid &&
+      (this.newPledgeForm.get(controlName).dirty || this.newPledgeForm.get(controlName).touched);
   }
 
   getErrorMessage(name: string): string {
     for (const { type, message } of this.newRequestValidationMessages[name]) {
-      if (this.newRequestForm.get(name).hasError(type)) {
+      if (this.newPledgeForm.get(name).hasError(type)) {
         return message;
       }
     }
@@ -62,7 +80,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
   }
 
   submitForm() {
-    this.requestService.addDonorRequest(this.newRequestForm.value).subscribe({
+    this.requestService.addDonorRequest(this.newPledgeForm.value).subscribe({
       next: (newId) => {
         this.snackBar.open(
           `Request successfully submitted`,
@@ -86,8 +104,10 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     console.log(request);
     this.request = request;
 
-    this.newRequestForm.setValue({description: this.request.description,
-    itemType: this.request.itemType});
+    // this.newPledgeForm.setValue({
+    //   comment: this.request.comment,
+    //   timeSlot: this.request.timeSlot,
+    // });
   }
 
 

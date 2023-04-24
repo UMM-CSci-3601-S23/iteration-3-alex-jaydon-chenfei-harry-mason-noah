@@ -1,25 +1,41 @@
 <div class="flex-row">
   <div class="flex-1">
-    <form [formGroup]="newRequestForm" (ngSubmit)="submitForm();">
+    <form [formGroup]="newPledgeForm" (ngSubmit)="submitForm();">
       <mat-card-header>
-        <mat-card-title class = "new-request-title">
+        <mat-card-title class = "donor-pledge-title">
           Pledge Form
         </mat-card-title>
+        <mat-card-subtitle>
+          <div>
+            <p>Itemtype: <span class="donor-pledge-itemType">{{ this.request.itemType }}</span></p>
+            <p *ngIf="this.request.itemType === 'food'">FoodType: <span class="donor-pledge-foodType">{{ this.request.foodType }}</span></p>
+            <p>Description: <span class="donor-pledge-description">{{ this.request.description }}</span></p>
+          </div>
+        </mat-card-subtitle>
       </mat-card-header>
     <mat-card-content>
+
       <div>
         <mat-form-field class="input-field">
           <mat-label>Preferred Name</mat-label>
           <input matInput formControlName="name"
           required data-test="donorNameInput" placeholder="Ex.Alex">
         </mat-form-field>
+        <mat-error *ngIf="formControlHasError('name')" data-test="nameError">
+          {{getErrorMessage('name')}}
+        </mat-error>
       </div>
+
       <div>
         <mat-form-field class="input-field">
           <mat-label>Amount to donate</mat-label>
-          <input matInput required data-test="donateAmount" type="number" placeholder="Ex.3"
+          <input matInput formControlName="amount"
+          required data-test="donateAmount" type="number" placeholder="Ex.3"
           min="1" max="5">
        </mat-form-field>
+       <mat-error *ngIf="formControlHasError('amount')" data-test="amountError">
+        {{getErrorMessage('amount')}}
+      </mat-error>
       </div>
 
     <div class = "drop-downs">
@@ -27,33 +43,35 @@
         <mat-label>Schedule a Timeslot</mat-label>
         <mat-select
         required
-        [(ngModel)]="itemType"
-        formControlName="itemType"
-        data-test="itemTypeSelect"
+        [(ngModel)]="timeSlot"
+        formControlName="timeSlot"
+        data-test="timeSlotSelect"
         >
           <mat-option value ="--">--</mat-option>
-          <mat-option value="food">Monday: 2:30-3:30 PM</mat-option>
-          <mat-option value="toiletries">Tuesday: 5:30-6:30 PM</mat-option>
-          <mat-option value="other">Wednesday: 10:30-11:30 AM</mat-option>
-          <mat-option value="other">Thursday: 5:30-6:30 PM</mat-option>
-          <mat-option value="other">Friday: 10:30-11:30 AM</mat-option>
+          <mat-option value="Mon">Monday: 2:30-3:30 PM</mat-option>
+          <mat-option value="Tue">Tuesday: 5:30-6:30 PM</mat-option>
+          <mat-option value="Wed">Wednesday: 10:30-11:30 AM</mat-option>
+          <mat-option value="Thu">Thursday: 5:30-6:30 PM</mat-option>
+          <mat-option value="Fri">Friday: 10:30-11:30 AM</mat-option>
         </mat-select>
-        <mat-error *ngIf="formControlHasError('itemType')" data-test="itemTypeError">
-          {{getErrorMessage('itemType')}}
+        <mat-error *ngIf="formControlHasError('timeSlot')" data-test="timeSlotError">
+          {{getErrorMessage('timeSlot')}}
         </mat-error>
       </mat-form-field>
     </div>
+
     <div>
       <mat-form-field class = "desc">
-        <mat-label>Any comments</mat-label>
-        <textarea matInput formControlName="description">
+        <mat-label>Any Comments</mat-label>
+        <textarea matInput formControlName="comment">
         </textarea>
-        <mat-error *ngIf="formControlHasError('description')" data-test="descriptionError">
-          {{getErrorMessage('description')}}
+        <mat-error *ngIf="formControlHasError('comment')" data-test="commentError">
+          {{getErrorMessage('comment')}}
         </mat-error>
       </mat-form-field>
     </div>
     </mat-card-content>
+
     <div>
     <mat-card-actions align="end">
       <button
@@ -67,8 +85,8 @@
         SUBMIT REQUEST
       </button>
     </mat-card-actions>
-  </div>
-</form>
+    </div>
+  </form>
 </div>
 </div>
 
