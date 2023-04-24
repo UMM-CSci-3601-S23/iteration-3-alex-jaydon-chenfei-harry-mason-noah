@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -9,10 +9,9 @@ import { RequestService } from '../request.service';
   templateUrl: './new-request.component.html',
   styleUrls: ['./new-request.component.scss']
 })
-export class NewRequestComponent {
+export class NewRequestComponent implements OnInit{
 
   @Input() destination: 'client' | 'donor' = 'client';
-
   newRequestForm = this.formBuilder.group({
     clientName:['', Validators.compose([
       Validators.required,
@@ -28,7 +27,9 @@ export class NewRequestComponent {
     incomeValid: ['--', Validators.compose([
       Validators.pattern('True|False'),
     ])],
-    diaperSize: new FormControl({value: '0', disabled: true}),
+    diaperSize: ['0', Validators.compose([
+      Validators.required,
+    ])],
     misc: ''
   });
 
@@ -158,11 +159,9 @@ export class NewRequestComponent {
   updateDiapers(): void{
     if (this.diapers){
       this.diapers = false;
-      this.newRequestForm.get('diaperSize')?.disable();
     }
     else {
       this.diapers = true;
-      this.newRequestForm.get('diaperSize')?.enable();
     }
   }
 
@@ -176,6 +175,10 @@ export class NewRequestComponent {
     else{
       this.selections.push(newItem);
     }
+  }
+
+  ngOnInit(): void {
+    this.newRequestForm.get('diaperSize').disable();
   }
 
   formatDate(month: string, day: string): string{

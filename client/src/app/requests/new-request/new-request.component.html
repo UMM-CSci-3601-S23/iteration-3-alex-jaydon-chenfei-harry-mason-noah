@@ -224,7 +224,7 @@
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>MILK & CHEESE / LÁCTEOS</ng-template>
         <section class="form-milk-and-cheese" [formGroup]="newRequestForm">
-          <mat-checkbox  (change)="updateList('freshMilk')">Fresh milk (lactose free) / Leche (sin lactosa)</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('freshMilkLactoseFree')">Fresh milk (lactose free) / Leche (sin lactosa)</mat-checkbox><br />
           <mat-checkbox  (change)="updateList('miscDairyProducts')">Misc dairy products / Varios productos lácteos</mat-checkbox><br />
           <mat-checkbox  (change)="updateList('cheese')">Cheese / Queso</mat-checkbox><br />
           <mat-checkbox  (change)="updateList('yogurt')">Yogurt / Yogur</mat-checkbox><br />
@@ -285,7 +285,8 @@
           <mat-checkbox  (change)="updateList('diapers')">Diapers / Pañales</mat-checkbox><br />
           <mat-form-field  appearance="fill">
             <mat-label>Size? / ¿Talla?</mat-label>
-            <mat-select formControlName = "diaperSize">
+
+            <mat-select formControlName = "diaperSize" [disabled]="!this.selections.includes('diapers')">
               <mat-option value = "premature">Premature / Prematuro</mat-option>
               <mat-option value = "newborn">Newborn / Recién nacido</mat-option>
               <mat-option value = "1">1</mat-option>
