@@ -137,24 +137,24 @@ class DonorRequestControllerSpec {
     testRequests.add(
         new Document()
             // .append("itemType", "food")
-            .append("description", "apple")
+            .append("description", "apple"));
             // .append("foodType", "fruit"));
     testRequests.add(
         new Document()
             // .append("itemType", "other")
-            .append("description", "Paper Plate")
+            .append("description", "Paper Plate"));
             // .append("foodType", ""));
     testRequests.add(
         new Document()
             // .append("itemType", "toiletries")
-            .append("description", "tooth paste")
+            .append("description", "tooth paste"));
             // append("foodType", ""));
 
     samsId = new ObjectId();
     Document sam = new Document()
         .append("_id", samsId)
         // .append("itemType", "food")
-        .append("description", "steak")
+        .append("description", "steak");
         // .append("foodType", "meat");
 
     requestDocuments.insertMany(testRequests);
