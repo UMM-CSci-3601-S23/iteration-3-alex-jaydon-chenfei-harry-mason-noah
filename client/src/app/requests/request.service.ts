@@ -96,7 +96,7 @@ export class RequestService {
     return this.httpClient.delete(this.requestDonorUrl + '/' + request._id).pipe(map(res => res));
   }
 
-  addRequestPriority(request: Request, priorityGiven: string): Observable<number>{
+  addRequestPriority(request: Request, priorityGiven: number): Observable<number>{
     const putUrl = `${this.priorityUrl}/${request._id}`;
     const priorityBody = new HttpParams().set(this.priorityKey, priorityGiven);
 

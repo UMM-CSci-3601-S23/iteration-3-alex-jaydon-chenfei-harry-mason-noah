@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Request, ItemType, FoodType } from './request';
 import { RequestService } from './request.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -26,9 +27,27 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   authHypothesis: boolean;
 
   private ngUnsubscribe = new Subject<void>();
+// eslint-disable-next-line @typescript-eslint/member-ordering
+priority: number;
 
 
   constructor(private requestService: RequestService, private snackBar: MatSnackBar) {
+  }
+
+  drop(event: CdkDragDrop<string[]>): void {
+    moveItemInArray(this.filteredRequests, event.previousIndex, event.currentIndex);
+    this.updatePriorities();
+  }
+
+  // Add this method for updating priorities based on the new order of the cards
+  updatePriorities(): void {
+    this.filteredRequests.forEach((request, index) => {
+      const newPriority = index + 1;
+      if (request.priority !== newPriority) {
+        request.priority = newPriority;
+        this.updateRequestPriority(request, newPriority);
+      }
+    });
   }
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
@@ -55,13 +74,44 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     this.filteredRequests = this.serverFilteredRequests;
   }
 
-  updateRequestPriority(reqeust: Request, priority: string){
+  updateRequestPriority(reqeust: Request, priority: number){
     this.requestService
     .addRequestPriority(this.request, priority)
     .subscribe({
       next: () => {
         this.updateFilter();
       }
+    });
+  }
+
+  increasePriority(request: Request): void {
+    if (request.priority > 1) {
+      request.priority--;
+      this.updateRequestPriority(request, request.priority);
+    }
+  }
+
+  decreasePriority(request: Request): void {
+    if (request.priority < 5) {
+      request.priority++;
+      this.updateRequestPriority(request, request.priority);
+    }
+  }
+
+
+  setRequestPriority(request: Request, priority: number): void {
+    this.requestService.addRequestPriority(request, priority).pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe({
+      next: () => {
+        this.getRequestsFromServer();
+      },
+      error: (err) => {
+        this.snackBar.open(
+          `Problem contacting the server to update priority – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          {duration: 5000});
+      },
     });
   }
 

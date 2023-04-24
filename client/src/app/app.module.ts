@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -70,6 +70,7 @@ const MATERIAL_MODULES: any[] = [
     HttpClientModule,
     MATERIAL_MODULES,
     LayoutModule,
+    DragDropModule
   ],
   bootstrap: [AppComponent]
 })

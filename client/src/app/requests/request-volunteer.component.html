@@ -67,6 +67,13 @@
                 <p matListItemBody class="volunteer-list-description"> {{request.description}} </p>
               </mat-card-content>
               <mat-card-actions>
+                <button mat-icon-button (click)="increasePriority(request)" data-test="increasePriorityButton">
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button mat-icon-button (click)="decreasePriority(request)" data-test="decreasePriorityButton">
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+
                 <button mat-button matToolTip="Edit Request" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
                   Edit Request
                 </button>
@@ -106,39 +113,22 @@
         <p>{{ request.description }}</p>
         <div>
           <strong>Priority:</strong>
-          <input #box type="number" id="priority-input-field" [(ngModel)]="request.priority" (input)="updateRequestPriority(request, box.value)"
+          <input #box type="number" id="priority-input-field" [(ngModel)]="request.priority" (input)="updateRequestPriority(request, priority)"
           min="1" max="5" data-test="requestPriorityInput">
         </div>
       </mat-card-content>
     </mat-card>
   </div>
   </div>
-  <style>
-    .request-cards {
-      display: flex;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .request-card {
-      width: calc((100% - 2rem) / 3requestUrl);
-    }
-
-    @media only screen and (max-width: 768px) {
-      .request-card {
-        width: calc((100% - 1rem) / 2);
-      }
-    }
-
-    @media only screen and (max-width: 480px) {
-      .request-card {
-        width: 100%;
-      }
-    }
-  </style>
+  <div>
+    <button
+    mat-raised-button
+    color="primary"
+    routerLink=""
+    data-test="backHomePageButton">
+    Back to Homepage
+  </button>
+  </div>
 
   <!--app-new-request is the selector for the new-request component. By calling it here, we basically
   copy the whole new-request component found on the client page onto the volunteer page.-->
