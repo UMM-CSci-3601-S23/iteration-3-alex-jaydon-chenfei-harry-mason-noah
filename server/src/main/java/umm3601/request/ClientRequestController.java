@@ -74,6 +74,9 @@ public class ClientRequestController {
     } catch (NullPointerException e) {
       throw new NotFoundResponse("The desired request was not found");
     }
+    if (request == null) {
+      throw new NotFoundResponse("The desired request was not found");
+    }
     ctx.json(request);
     ctx.status(HttpStatus.OK);
   }
