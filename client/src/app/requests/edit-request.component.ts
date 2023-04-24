@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
@@ -20,45 +20,39 @@ export class EditRequestComponent implements OnInit, OnDestroy{
   router: any;
   itemType: any;
 
-  newRequestForm = new FormGroup({
-    // We want descriptions to be short and sweet, yet still required so we have at least some idea what
-    // the client wants
-    description: new FormControl('', Validators.compose([
+  editRequestForm = this.formBuilder.group({
+    clientName:['', Validators.compose([
       Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(200),
-    ])),
+      Validators.minLength(2),
+      Validators.maxLength(50),
+    ])],
+    diaperSize: new FormControl({value: '0', disabled: true}),
+    description: ''
   });
 
-  readonly newRequestValidationMessages = {
-    description: [
-      {type: 'required', message: 'Description is required'},
-      {type: 'minlength', message: 'Description must be at least 5 characters long'},
-      {type: 'maxlength', message: 'Description cannot be more than 200 characters long'},
-    ],
-    itemType: [
-      { type: 'required', message: 'Item type is required' },
-      { type: 'pattern', message: 'Item type must be food, toiletries, or other' },
-    ],
-    foodType: [
-      {type: 'pattern', message: 'Food type must be one of dairy, grain, meat, fruit, or vegetable'},
+  readonly editRequestValidationMessages = {
+    clientName: [
+      { type: 'required', message: 'Name is required' },
+      { type: 'minlength', message: 'Name must be at least 2 characters long' },
+      { type: 'maxlength', message: 'Name cannot be more than 50 characters long' },
     ]
   };
   private ngUnsubscribe = new Subject<void>();
 
 
 
-  constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, private requestService: RequestService ) {
+  constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, private requestService: RequestService,
+    private formBuilder: FormBuilder) {
   }
 
   formControlHasError(controlName: string): boolean {
-    return this.newRequestForm.get(controlName).invalid &&
-      (this.newRequestForm.get(controlName).dirty || this.newRequestForm.get(controlName).touched);
+    return this.editRequestForm.get(controlName).invalid &&
+      (this.editRequestForm.get(controlName).dirty || this.editRequestForm.get(controlName).touched);
   }
 
   getErrorMessage(name: string): string {
-    for (const { type, message } of this.newRequestValidationMessages[name]) {
-      if (this.newRequestForm.get(name).hasError(type)) {
+    for (const { type, message } of this.editRequestValidationMessages[name]) {
+      if (this.editRequestForm.get(name).hasError(type)) {
         return message;
       }
     }
@@ -66,7 +60,7 @@ export class EditRequestComponent implements OnInit, OnDestroy{
   }
 
   submitForm() {
-    this.requestService.addDonorRequest(this.newRequestForm.value).subscribe({
+    this.requestService.addDonorRequest(this.editRequestForm.value).subscribe({
       next: (newId) => {
         this.snackBar.open(
           `Request successfully submitted`,
@@ -89,9 +83,8 @@ export class EditRequestComponent implements OnInit, OnDestroy{
     console.log('THIS IS THE REQUEST:');
     console.log(request);
     this.request = request;
-
-    /*this.newRequestForm.setValue({description: this.request.description,
-      foodType: this.request.foodType, itemType: this.request.itemType});*/
+    this.editRequestForm.get('clientName').setValue(this.request.name);
+    this.editRequestForm.get('description').setValue(this.request.description);
   }
 
 
