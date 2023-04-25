@@ -214,7 +214,6 @@ export class RequestService {
   }
 
   public getReadableSelections(selections: string[]): string{
-    const items = this.itemMap;
     let stringSelections = '';
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i =0; i < selections.length; i++){

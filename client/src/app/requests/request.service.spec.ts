@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { Request } from './request';
 import { RequestService } from './request.service';
 
-describe('RequestService', () => {
+fdescribe('RequestService', () => {
   //small collection of test Requests
   const testRequests: Request[] = [
     {
@@ -51,6 +51,39 @@ describe('RequestService', () => {
     httpTestingController.verify();
   });
 
+  describe('The getReadableDate Method', () => {
+    it('should properly format a date in the form year/month/day`', () => {
+      expect(requestService.getReadableDate('20231012') === 'submitted a form on: 10-12-2023').toBeTruthy();
+    });
+  });
+
+  describe('The getReadableItemMethod', () => {
+    const diaper = 'diapers';
+    const ds = '5';
+    const notPresent = 'orangeChickenSlices';
+    const normalValue = 'hotSauce';
+    it('should properly format diaper w/ diapersize', () => {
+      expect(requestService.getReadableItem(diaper, ds) === 'Diapers (size: 5)').toBeTruthy();
+    });
+    it('should properly respond when the item isnt present in the itemMap', () => {
+      expect(requestService.getReadableItem(notPresent) === notPresent).toBeTruthy();
+    });
+    it('should properly return a normal value in the itemMap', () => {
+      expect(requestService.getReadableItem(normalValue) === 'Hot sauce').toBeTruthy();
+    });
+  });
+
+  describe('The getReadableDSelections Method', () => {
+    const testSelections = ['hotSauce', 'tomatoSoup', 'yellowSplitPeas'];
+    const testSelectionsBroken = ['hotSauce', 'tomatoSoup', 'yellowSplitPeas', 'le3emeLien'];
+    it('should properly format all elements of the list', () => {
+      const returnedString = requestService.getReadableSelections(testSelections);
+      expect(returnedString.substring(0, 9)).toEqual('Hot sauce');
+      expect(returnedString.substring(9, 20)).toEqual('Tomato soup');
+      expect(returnedString.substring(20, 37)).toEqual('Yellow split peas');
+    });
+  });
+
   describe('When getRequests() is called with no parameters', () => {
     it('calls `api/requests`', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
@@ -89,53 +122,23 @@ describe('RequestService', () => {
   });
 
   describe('When getClientRequests() is called with a parameter', () => {
-    //test food top level category
-    it('correctly calls api/requests with itemType \'food\'', () => {
-      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
 
-      //getting requests with top category food
-      // requestService.getClientRequests({itemType: 'food'}).subscribe(() => {
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-
-        expect(mockedMethod)
-          .withContext('talks to the correct endpoint');
-        //   .toHaveBeenCalledWith(requestService.requestClientUrl, { params: new HttpParams().set('itemType', 'food')});
+      it('correctly calls api/requests with description \'Need Milk\'', () => {
+        const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
+        //get requests with foodType dairy
+        requestService.getClientRequests({description: 'Need Milk'}).subscribe(() => {
+          //check if called once
+          expect(mockedMethod)
+            .withContext('one call')
+            .toHaveBeenCalledTimes(1);
+          //check if it's at the correct endpoint
+          expect(mockedMethod)
+            .withContext('talks to the correct endpoint')
+            .toHaveBeenCalledWith(requestService.requestClientUrl, { params: new HttpParams().set('description', 'Need Milk')});
+        });
       });
     });
-    //test a foodType level category
-    /*it('correctly calls api/requests with foodType \'dairy\'', () => {
-      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
 
-      //get requests with foodType dairy
-      requestService.getClientRequests({foodType: 'dairy'}).subscribe(() => {
-        //check if called once
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-        //check if it's at the correct endpoint
-        expect(mockedMethod)
-          .withContext('talks to the correct endpoint')
-          .toHaveBeenCalledWith(requestService.requestClientUrl, { params: new HttpParams().set('foodType', 'dairy')});
-      });
-    });*/
-
-    it('correctly calls api/requests with description \'Need Milk\'', () => {
-      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
-
-      //get requests with foodType dairy
-      requestService.getClientRequests({description: 'Need Milk'}).subscribe(() => {
-        //check if called once
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-        //check if it's at the correct endpoint
-        expect(mockedMethod)
-          .withContext('talks to the correct endpoint')
-          .toHaveBeenCalledWith(requestService.requestClientUrl, { params: new HttpParams().set('description', 'Need Milk')});
-      });
-    });
 
   describe('When getDonorRequests() is called with a parameter', () => {
     //test food top level category
@@ -173,8 +176,8 @@ describe('RequestService', () => {
     it('correctly calls api/requests with description \'Need Milk\'', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
 
-      //get requests with foodType dairy
-      /*requestService.getDonorRequests({description: 'Need Milk'}).subscribe(() => {
+
+      requestService.getDonorRequests({description: 'Need Milk'}).subscribe(() => {
         //check if called once
         expect(mockedMethod)
           .withContext('one call')
@@ -183,40 +186,10 @@ describe('RequestService', () => {
         expect(mockedMethod)
           .withContext('talks to the correct endpoint')
           .toHaveBeenCalledWith(requestService.requestDonorUrl, { params: new HttpParams().set('description', 'Need Milk')});
-      });*/
+      });
     });
   });
 
-  /*describe('When getRequests() is called with multiple parameters', () => {
-    //test a itemType 'food' with a foodType 'meat'
-    it('correctly calls api/requests with itemType \'food\' and fitemType
-      requestService.getClientRequests({itemType: 'food', foodType: 'meat'}).subscribe(() => {
-        //This gets the arguments for the first call to the 'mockMethod'
-        const [url, options] = mockedMethod.calls.argsFor(0);
-        //Gets the HttpParams from the options part of the call
-        const calledHttpParams: HttpParams = (options.params) as HttpParams;
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-
-        expect(url)
-          .withContext('talks to the correct endpoint')
-          .toEqual(requestService.requestClientUrl);
-
-        expect(calledHttpParams.get('itemType'))
-          .withContext('type of item')
-          .toEqual('food');
-
-        expect(calledHttpParams.get('foodType'))
-          .withContext('type of food')
-          .toEqual('meat');
-
-        expect(calledHttpParams.get('description'))
-          .toBeNull();
-
-      });
-    });
-  });*/
 
   describe('filterRequests', ()=> {
     it('returns the correct array of requests', ()=>{
@@ -309,6 +282,8 @@ describe('deleteDonorRequest', ()=> {
 
 
 });
+
+
 
 });
 

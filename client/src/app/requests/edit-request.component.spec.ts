@@ -19,7 +19,7 @@ import { Request } from './request';
 
 describe('EditRequestComponent', () => {
   let editRequestComponent: EditRequestComponent;
-  let newRequestForm: FormGroup;
+  let editRequestForm: FormGroup;
   let fixture: ComponentFixture<EditRequestComponent>;
   const service: MockRequestService = new MockRequestService();
   let requestService: RequestService;
@@ -56,25 +56,25 @@ describe('EditRequestComponent', () => {
     fixture = TestBed.createComponent(EditRequestComponent);
     editRequestComponent = fixture.componentInstance;
     fixture.detectChanges();
-    newRequestForm = editRequestComponent.newRequestForm;
-    expect(newRequestForm).toBeDefined();
-    expect(newRequestForm.controls).toBeDefined();
+    editRequestForm = editRequestComponent.editRequestForm;
+    expect(editRequestForm).toBeDefined();
+    expect(editRequestForm.controls).toBeDefined();
   });
 
   it('should create the component and form', () => {
     expect(editRequestComponent).toBeTruthy();
-    expect(newRequestForm).toBeTruthy();
+    expect(editRequestForm).toBeTruthy();
   });
 
   it('form should be invalid when empty', () => {
-    expect(newRequestForm.valid).toBeFalsy();
+    expect(editRequestForm.valid).toBeFalsy();
   });
 
   describe('The getErrorMessage method', ()=>{
     // let itemTypeControl: AbstractControl;
 
     beforeEach(() => {
-    //   itemTypeControl = newRequestForm.controls.itemType;
+    //   itemTypeControl = editRequestForm.controls.itemType;
     });
 
     it('should return "unknown error" when passed an invalid error code', ()=> {
@@ -93,9 +93,9 @@ describe('EditRequestComponent', () => {
     let descControl: AbstractControl;
 
     beforeEach(() => {
-    //   itemTypeControl = newRequestForm.controls.itemType;
-    //   foodTypeControl = newRequestForm.controls.foodType;
-      descControl = editRequestComponent.newRequestForm.controls.description;
+    //   itemTypeControl = editRequestForm.controls.itemType;
+    //   foodTypeControl = editRequestForm.controls.foodType;
+      descControl = editRequestComponent.editRequestForm.controls.description;
     });
 
     it('should not get angy', ()=> {
@@ -151,7 +151,7 @@ describe('Misbehaving request service', () => {
   // let foodTypeControl: AbstractControl;
   let descControl: AbstractControl;
   let editRequestComponent: EditRequestComponent;
-  let newRequestForm: FormGroup;
+  let editRequestForm: FormGroup;
   let fixture: ComponentFixture<EditRequestComponent>;
 
   let requestServiceStub: {
@@ -202,13 +202,13 @@ describe('Misbehaving request service', () => {
       fixture = TestBed.createComponent(EditRequestComponent);
       editRequestComponent = fixture.componentInstance;
       fixture.detectChanges();
-      newRequestForm = editRequestComponent.newRequestForm;
-      expect(newRequestForm).toBeDefined();
-      expect(newRequestForm.controls).toBeDefined();
+      editRequestForm = editRequestComponent.editRequestForm;
+      expect(editRequestForm).toBeDefined();
+      expect(editRequestForm.controls).toBeDefined();
 
-      // itemTypeControl = newRequestForm.controls.itemType;
-      // foodTypeControl = newRequestForm.controls.foodType;
-      descControl = editRequestComponent.newRequestForm.controls.description;
+      // itemTypeControl = editRequestForm.controls.itemType;
+      // foodTypeControl = editRequestForm.controls.foodType;
+      descControl = editRequestComponent.editRequestForm.controls.description;
     });
   }));
 
@@ -216,9 +216,9 @@ describe('Misbehaving request service', () => {
     fixture = TestBed.createComponent(EditRequestComponent);
     editRequestComponent = fixture.componentInstance;
     fixture.detectChanges();
-    newRequestForm = editRequestComponent.newRequestForm;
-    expect(newRequestForm).toBeDefined();
-    expect(newRequestForm.controls).toBeDefined();
+    editRequestForm = editRequestComponent.editRequestForm;
+    expect(editRequestForm).toBeDefined();
+    expect(editRequestForm.controls).toBeDefined();
   });
 
   it('should get angy when talking with the donor database', ()=> {
@@ -240,7 +240,7 @@ describe('Partially Misbehaving request service', () => {
   // let foodTypeControl: AbstractControl;
   let descControl: AbstractControl;
   let editRequestComponent: EditRequestComponent;
-  let newRequestForm: FormGroup;
+  let editRequestForm: FormGroup;
   let fixture: ComponentFixture<EditRequestComponent>;
 
   let requestServiceStub: {
@@ -293,13 +293,13 @@ describe('Partially Misbehaving request service', () => {
       fixture = TestBed.createComponent(EditRequestComponent);
       editRequestComponent = fixture.componentInstance;
       fixture.detectChanges();
-      newRequestForm = editRequestComponent.newRequestForm;
-      expect(newRequestForm).toBeDefined();
-      expect(newRequestForm.controls).toBeDefined();
+      editRequestForm = editRequestComponent.editRequestForm;
+      expect(editRequestForm).toBeDefined();
+      expect(editRequestForm.controls).toBeDefined();
 
-      // itemTypeControl = newRequestForm.controls.itemType;
-      // foodTypeControl = newRequestForm.controls.foodType;
-      descControl = editRequestComponent.newRequestForm.controls.description;
+      // itemTypeControl = editRequestForm.controls.itemType;
+      // foodTypeControl = editRequestForm.controls.foodType;
+      descControl = editRequestComponent.editRequestForm.controls.description;
     });
   }));
 
@@ -307,9 +307,9 @@ describe('Partially Misbehaving request service', () => {
     fixture = TestBed.createComponent(EditRequestComponent);
     editRequestComponent = fixture.componentInstance;
     fixture.detectChanges();
-    newRequestForm = editRequestComponent.newRequestForm;
-    expect(newRequestForm).toBeDefined();
-    expect(newRequestForm.controls).toBeDefined();
+    editRequestForm = editRequestComponent.editRequestForm;
+    expect(editRequestForm).toBeDefined();
+    expect(editRequestForm.controls).toBeDefined();
   });
 
   it('should fill in values properly', ()=> {
@@ -324,9 +324,9 @@ describe('Partially Misbehaving request service', () => {
 
 
 
-    expect(newRequestForm.value.description === 'Description').toBeTrue();
-    // expect(newRequestForm.value.foodType === 'fruit').toBeTrue();
-    // expect(newRequestForm.value.itemType === 'food').toBeTrue();
+    expect(editRequestForm.value.description === 'Description').toBeTrue();
+    // expect(editRequestForm.value.foodType === 'fruit').toBeTrue();
+    // expect(editRequestForm.value.itemType === 'food').toBeTrue();
   });
 
 });
