@@ -17,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ActivatedRouteStub } from 'src/testing/activated-route-stub';
 import { Request } from './request';
 
-describe('EditRequestComponent', () => {
+fdescribe('EditRequestComponent', () => {
   let editRequestComponent: EditRequestComponent;
   let editRequestForm: FormGroup;
   let fixture: ComponentFixture<EditRequestComponent>;
@@ -71,20 +71,30 @@ describe('EditRequestComponent', () => {
   });
 
   describe('The getErrorMessage method', ()=>{
-    // let itemTypeControl: AbstractControl;
+    let clientNameControl: AbstractControl;
 
     beforeEach(() => {
-    //   itemTypeControl = editRequestForm.controls.itemType;
+      clientNameControl = editRequestForm.controls.clientName;
     });
 
     it('should return "unknown error" when passed an invalid error code', ()=> {
-    //   expect(editRequestComponent.getErrorMessage('foodType') === 'Unknown error');
+       expect(editRequestComponent.getErrorMessage('foodType') === 'Unknown error');
     });
 
-    it('should return "required" error when itemType is empty', ()=> {
-    //   itemTypeControl.setValue('--');
-    //   expect(editRequestComponent.getErrorMessage('itemType')).toBeTruthy();
+    it('should return "required" error when clientName is empty', ()=> {
+       clientNameControl.setValue('');
+       expect(editRequestComponent.getErrorMessage('clientName')).toBeTruthy();
     });
+
+    it('should return "minLength" error when clientName is too short', ()=> {
+      clientNameControl.setValue('A');
+      expect(editRequestComponent.getErrorMessage('clientName')).toBeTruthy();
+   });
+
+   it('should return "maxLength" error when clientName is too long', ()=> {
+    clientNameControl.setValue('A182222222222222222222222222222222222222f18f128fj128f1j28f1j28f1j8fj128f1j2f8');
+    expect(editRequestComponent.getErrorMessage('clientName')).toBeTruthy();
+ });
   });
 
   describe('Can we submit stuff to the donor database?', ()=>{

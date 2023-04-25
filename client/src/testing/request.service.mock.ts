@@ -13,6 +13,7 @@ export class MockRequestService extends RequestService {
       _id: '1_id',
       name: 'noah',
       dateAdded: '20210213',
+      selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'food',
       description: 'I would like some ground beef',
       // foodType: 'meat'
@@ -21,6 +22,7 @@ export class MockRequestService extends RequestService {
       _id: '2_id',
       name: 'mason',
       dateAdded: '20220618',
+      selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'toiletries',
       description: 'I need more toothpaste',
       // foodType: ''
@@ -29,6 +31,7 @@ export class MockRequestService extends RequestService {
       _id: '3_id',
       name: 'harry',
       dateAdded: '20180401',
+      selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'other',
       description: 'I need more paper plates',
       // foodType: ''
@@ -37,6 +40,8 @@ export class MockRequestService extends RequestService {
       _id: '4_id',
       name: 'jaydon',
       dateAdded: '20140817',
+      selections: ['hotSauce', 'tomatoSoup', 'vegOil', 'diapers'],
+      diaperSize: 'newborn',
       // itemType: 'food',
       description: 'I would like some milk',
       // foodType: 'dairy'
