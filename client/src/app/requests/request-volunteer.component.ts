@@ -84,19 +84,30 @@ priority: number;
     });
   }
 
-  increasePriority(request: Request): void {
-    if (request.priority > 1) {
-      request.priority--;
-      this.updateRequestPriority(request, request.priority);
+  increaseCardPriority(request: Request): void {
+    const index = this.filteredRequests.findIndex((r) => r === request);
+    if (index > 0) {
+      const targetIndex = index - 1;
+      const targetRequest = this.filteredRequests[targetIndex];
+      this.filteredRequests[targetIndex] = request;
+      this.filteredRequests[index] = targetRequest;
+      this.updatePriorities();
     }
   }
 
-  decreasePriority(request: Request): void {
-    if (request.priority < 5) {
-      request.priority++;
-      this.updateRequestPriority(request, request.priority);
+  decreaseCardPriority(request: Request): void {
+    const index = this.filteredRequests.findIndex((r) => r === request);
+    if (index < this.filteredRequests.length - 1) {
+      const targetIndex = index + 1;
+      const targetRequest = this.filteredRequests[targetIndex];
+      this.filteredRequests[targetIndex] = request;
+      this.filteredRequests[index] = targetRequest;
+      this.updatePriorities();
     }
+
   }
+
+
 
 
   setRequestPriority(request: Request, priority: number): void {

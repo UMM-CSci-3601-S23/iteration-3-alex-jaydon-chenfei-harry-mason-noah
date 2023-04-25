@@ -39,11 +39,27 @@
   </div>
 
  <!-- card view -->
-<div class = "flex-row">
-  <div class = "flex-1" fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10" *ngIf="serverFilteredRequests">
-    <div * ngIf="filteredRequests.length > 0" class="highest-priority">
-    </div>
+ <div class="flex-row">
+  <div class="flex-1" fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10" *ngIf="serverFilteredRequests">
     <div class="request-cards-container flex-row gap-10 flew-wrap">
+      <mat-card *ngFor="let request of filteredRequests" class="priority-request-card">
+        <mat-card-header>
+          <mat-card-title>{{ request.itemType }}</mat-card-title>
+          <mat-card-subtitle>{{ request.foodType }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ request.description }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button (click)="increaseCardPriority(request)" data-test="increasePriorityButton" matTooltip="Move up to increase priority">
+            <mat-icon>arrow_upward</mat-icon>
+          </button>
+          <button mat-icon-button (click)="decreaseCardPriority(request)" data-test="decreasePriorityButton" matTooltip="Move down to decrease priority">
+            <mat-icon>arrow_downward</mat-icon>
+          </button>
+
+        </mat-card-actions>
+      </mat-card>
     </div>
   </div>
 </div>
@@ -67,10 +83,11 @@
                 <p matListItemBody class="volunteer-list-description"> {{request.description}} </p>
               </mat-card-content>
               <mat-card-actions>
-                <button mat-icon-button (click)="increasePriority(request)" data-test="increasePriorityButton">
+
+                <button mat-icon-button (click)="increaseCardPriority(request)" data-test="increasePriorityButton" matTooltip="Move up to increase priority">
                   <mat-icon>arrow_upward</mat-icon>
                 </button>
-                <button mat-icon-button (click)="decreasePriority(request)" data-test="decreasePriorityButton">
+                <button mat-icon-button (click)="decreaseCardPriority(request)" data-test="decreasePriorityButton" matTooltip="Move down to decrease priority">
                   <mat-icon>arrow_downward</mat-icon>
                 </button>
 
@@ -103,32 +120,6 @@
     </ng-template>
   </div>
 
-  <div class="request-cards flex-row gap-10 flex-wrap">
-    <mat-card *ngFor="let request of filteredRequests" class="priority-request-card">
-      <mat-card-header>
-        <mat-card-title>{{ request.itemType }}</mat-card-title>
-        <mat-card-subtitle>{{ request.foodType }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <p>{{ request.description }}</p>
-        <div>
-          <strong>Priority:</strong>
-          <input #box type="number" id="priority-input-field" [(ngModel)]="request.priority" (input)="updateRequestPriority(request, priority)"
-          min="1" max="5" data-test="requestPriorityInput">
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  </div>
-  <div>
-    <button
-    mat-raised-button
-    color="primary"
-    routerLink=""
-    data-test="backHomePageButton">
-    Back to Homepage
-  </button>
-  </div>
 
   <!--app-new-request is the selector for the new-request component. By calling it here, we basically
   copy the whole new-request component found on the client page onto the volunteer page.-->
