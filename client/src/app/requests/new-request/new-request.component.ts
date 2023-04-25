@@ -49,9 +49,6 @@ export class NewRequestComponent implements OnInit{
       { type: 'pattern', message: 'Household income validity is required ' +
       '\n **Note, you can still make a request even if you do not meet validity standards' },
     ]
-    /*description: [
-      { type: 'maxlength', message: 'Description cannot be more than 200 characters long' },
-    ],*/
   };
 
   selections: string[] = new Array();

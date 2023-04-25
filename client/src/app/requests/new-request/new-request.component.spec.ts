@@ -64,6 +64,97 @@ describe('NewRequestComponent', () => {
     expect(newRequestForm.valid).toBeFalsy();
   });
 
+  describe('The calculateHouseholdIncome method', ()=>{
+    let houseSize: AbstractControl;
+    beforeEach(() => {
+      houseSize = newRequestForm.get('clientHouseholdSize');
+    });
+
+    it('should work with a household size of 1', ()=> {
+      houseSize.setValue(1);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$40770');
+    });
+
+    it('should work with a household size of 2', ()=> {
+      houseSize.setValue(2);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$54930');
+    });
+
+    it('should work with a household size of 3', ()=> {
+      houseSize.setValue(3);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$69090');
+    });
+
+    it('should work with a household size of 4', ()=> {
+      houseSize.setValue(4);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$83250');
+    });
+
+    it('should work with a household size of 5', ()=> {
+      houseSize.setValue(5);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$97410');
+    });
+
+    it('should work with a household size of 6', ()=> {
+      houseSize.setValue(6);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$111570');
+    });
+
+    it('should work with a household size of 7', ()=> {
+      houseSize.setValue(7);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$125730');
+    });
+
+    it('should work with a household size of 8', ()=> {
+      houseSize.setValue(8);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$139890');
+    });
+
+    it('should work with a household size of >8', ()=> {
+      houseSize.setValue(10);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$149330');
+    });
+
+  });
+
+  describe('The updateDiapers method', ()=>{
+    it('should switch diapers from false to true', ()=> {
+      newRequestComponent.diapers = false;
+      newRequestComponent.updateDiapers();
+      expect(newRequestComponent.diapers).toBeTrue();
+    });
+
+    it('should switch diapers from true to false', ()=> {
+      newRequestComponent.diapers = true;
+      newRequestComponent.updateDiapers();
+      expect(newRequestComponent.diapers).toBeFalse();
+    });
+  });
+
+  describe('The updateList method', ()=>{
+    let testSelections = [];
+    beforeEach(() => {
+      testSelections = ['hotSauce', 'pintoBeans', 'tomatoSoup'];
+      newRequestComponent.selections = testSelections;
+    });
+    it('should remove items already present in the list', ()=> {
+      newRequestComponent.updateList('hotSauce');
+      expect(newRequestComponent.selections.includes('hotSauce')).toBeFalse();
+    });
+
+    it('should add items not already in the list', ()=> {
+      newRequestComponent.updateList('chicken');
+      expect(newRequestComponent.selections.includes('chicken')).toBeTrue();
+    });
+
+    it('should behave properly when passed \'diapers\'', ()=> {
+      newRequestComponent.updateList('diapers');
+      expect(newRequestComponent.selections.includes('diapers')).toBeTrue();
+      expect(newRequestComponent.diapers).toBeTrue();
+    });
+  });
+
+
   describe('The description field', () => {
     let descControl: AbstractControl;
 
@@ -338,6 +429,7 @@ describe('Misbehaving request service', () => {
     });
 
   });
+
 
 });
 

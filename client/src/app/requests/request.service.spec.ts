@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { Request } from './request';
 import { RequestService } from './request.service';
 
-fdescribe('RequestService', () => {
+describe('RequestService', () => {
   //small collection of test Requests
   const testRequests: Request[] = [
     {
