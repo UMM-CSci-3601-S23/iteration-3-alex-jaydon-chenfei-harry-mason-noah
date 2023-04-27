@@ -28,7 +28,7 @@
 
       <div>
         <mat-form-field class="input-field">
-          <mat-label>Amount to donate</mat-label>
+          <mat-label>Amount to Donate</mat-label>
           <input matInput formControlName="amount"
           required data-test="donateAmount" type="number" placeholder="Ex.3"
           min="1" max="5">
@@ -78,11 +78,11 @@
         mat-button
         class = "submit_button"
         type="button"
-        color="dark-primary"
+        [disabled]="!newPledgeForm.valid"
         type="submit"
-        data-test="confirmNewRequestButton"
+        data-test="confirmNewPledgeButton"
       >
-        SUBMIT REQUEST
+        CONFIRM PLEDGE
       </button>
     </mat-card-actions>
     </div>

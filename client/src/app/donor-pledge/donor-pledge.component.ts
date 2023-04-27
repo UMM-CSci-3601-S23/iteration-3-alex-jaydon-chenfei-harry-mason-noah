@@ -31,6 +31,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
 
     name: new FormControl('', Validators.compose([
       Validators.required,
+      Validators.pattern('^[A-Za-z ]+$'),
     ])),
 
     amount: new FormControl('', Validators.compose([
@@ -51,6 +52,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     ],
     name: [
       { type: 'required', message: 'Preferred name is required' },
+      { type: 'pattern', message: 'Only letters allowed' },
     ],
     amount:[
       { type: 'required', message: 'The amount is required' },
