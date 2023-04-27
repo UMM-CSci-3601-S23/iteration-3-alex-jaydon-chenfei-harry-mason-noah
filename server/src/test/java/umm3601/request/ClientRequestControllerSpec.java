@@ -430,6 +430,7 @@ class ClientRequestControllerSpec {
   void addRequest() throws IOException {
     String testNewRequest = "{"
         + "\"itemType\": \"food\","
+        + "\"description\": \"test description\","
         + "\"foodType\": \"meat\""
         + "}";
     when(ctx.bodyValidator(Request.class))
@@ -445,7 +446,7 @@ class ClientRequestControllerSpec {
     //Verify that the request was added to the database with the correct ID
     Document addedRequest = db.getCollection("requests")
       .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
-    verify(ctx).json(Request.class);
+    verify(ctx).bodyValidator(Request.class);
 
     // Successfully adding the request should return the newly generated, non-empty MongoDB ID for that request.
     assertNotEquals("", addedRequest.get("_id"));
@@ -547,17 +548,12 @@ class ClientRequestControllerSpec {
 
     clientRequestController.setPriority(ctx);
     verify(ctx).json(requestCaptor.capture());
-
-    Document requestSet = db.getCollection("requests")
-    .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
-
-    System.out.println(requestCaptor.getValue()._id + " and " + requestSet.get("priority"));
     verify(ctx).status(HttpStatus.OK);
 
     //Verify that the correct priority was assigned
     // Unsure why the request captor is having issues with doing this properly...
     // it only seems to think the priority is 0 no matter what.
-    assertEquals(3, requestSet.get("priority"));
+    assertEquals(3, requestCaptor.getValue().priority);
   }
 
   @Test
