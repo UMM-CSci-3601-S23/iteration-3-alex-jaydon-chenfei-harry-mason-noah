@@ -104,10 +104,12 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     console.log(request);
     this.request = request;
 
-    // this.newPledgeForm.setValue({
-    //   comment: this.request.comment,
-    //   timeSlot: this.request.timeSlot,
-    // });
+    this.newPledgeForm.setValue({
+      comment: '',
+      timeSlot: '',
+      name: '',
+      amount: ''
+    });
   }
 
 
@@ -117,7 +119,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
       //Map the paramMap into the id
       map((paramMap: ParamMap) => paramMap.get('id')),
       //maps the id string to the Observable<Request>
-      switchMap((id: string) => this.requestService.getRequestById(id)),
+      switchMap((id: string) => this.requestService.getDonorRequestById(id)),
       //Allows the pipeline to continue until 'this.ngUnsubscribe' emits a value
       //It then destroys the pipeline
       takeUntil(this.ngUnsubscribe)

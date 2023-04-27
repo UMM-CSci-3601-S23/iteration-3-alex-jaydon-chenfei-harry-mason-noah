@@ -46,6 +46,10 @@ export class RequestService {
     return this.httpClient.get<Request>(this.requestClientUrl + '/' + id);
   }
 
+  getDonorRequestById(id: string): Observable<Request> {
+    return this.httpClient.get<Request>(this.requestDonorUrl + '/' + id);
+  }
+
 
   getDonorRequests(filters?: {itemType?: ItemType; foodType?: FoodType; description?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
