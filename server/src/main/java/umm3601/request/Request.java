@@ -12,10 +12,12 @@ public class Request {
 
   public String _id;
 
+  public String requesterName;
   public String itemType;
   public String description;
   public String foodType;
   public String dateAdded;
+  public int priority;
 
   @Override
   public boolean equals(Object obj) {
