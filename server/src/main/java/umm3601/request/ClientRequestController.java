@@ -143,7 +143,7 @@ public class ClientRequestController {
     // as the field to sort by, and the query param `sortorder` (default
     // "asc") to specify the sort order.
     String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "priority");
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "desc");
     Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
     return sortingOrder;
   }
