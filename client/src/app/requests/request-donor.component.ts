@@ -18,9 +18,7 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
   public requestDescription: string;
   public readableRequests: Request[];
 
-
   authHypothesis: boolean;
-
 
   private ngUnsubscribe = new Subject<void>();
 

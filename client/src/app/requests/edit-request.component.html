@@ -13,8 +13,8 @@
         </mat-card-subtitle>
       </mat-card-header>
     <mat-card-content>
-      <mat-form-field appearance="fill">
-          <input matInput placeholder="Name/Nombre" formControlName="clientName" required>
+      <mat-form-field>
+          <input class="name" matInput placeholder="Name/Nombre" formControlName="clientName" required>
             <mat-error *ngIf="formControlHasError('clientName')" data-test="nameDescriptionError">
             {{getErrorMessage('clientName')}}
             </mat-error>
@@ -56,7 +56,7 @@
         type="submit"
         data-test="confirmNewRequestButton"
       >
-        SUBMIT REQUEST
+        SUBMIT REVISION
       </button>
     </mat-card-actions>
   </div>

@@ -38,7 +38,7 @@ export class RequestService {
     ['dicedTomatoes','Diced tomatoes'],
     ['spaghettiSauce','Spaghetti sauce'],
     ['groundBeef','Ground beef'],
-    ['groundPorkBeefBlend','Ground beef/pork blend'],
+    ['groundBeefPorkBlend','Ground beef/pork blend'],
     ['plantBasedBurgers','Plant based burgers'],
     ['pizzaRanchPizza','Pizza ranch pizza'],
     ['veggieRavioli','Veggie ravioli'],
@@ -197,7 +197,8 @@ export class RequestService {
 
   public getReadableItem(camelCase: string, diaperSize?: string): string{
     const mappedValue = this.itemMap.get(camelCase);
-    if (camelCase === 'diapers'){
+    if (camelCase === 'diapers' && diaperSize){
+      console.log(diaperSize);
       return mappedValue +' (size: ' + diaperSize + ')';
     }
     else if (mappedValue === undefined) {
@@ -217,8 +218,8 @@ export class RequestService {
     let stringSelections = '';
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i =0; i < selections.length; i++){
-      stringSelections = stringSelections + this.getReadableItem(selections[i]);
+      stringSelections = stringSelections + this.getReadableItem(selections[i], diaperSize) + ', ';
     }
-    return stringSelections;
+    return stringSelections.substring(0,stringSelections.length - 2);
   }
 }

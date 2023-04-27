@@ -27,11 +27,12 @@
       <mat-card-content>
         <mat-nav-list class="volunteer-nav-list">
           <h3 mat-subheader>Requests</h3>
-          <div mat-list-item *ngFor="let request of this.readableRequests" [routerLink]="['/requests/donor', request._id]" class="volunteer-list-item edit-request">
+          <div mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/requests/donor', request._id]" class="volunteer-list-item edit-request">
             <mat-card class="example-card">
               <mat-card-header>
-                <mat-card-title class="volunteer-list-name">{{request.name}} {{request.dateAdded}}</mat-card-title>
-                <mat-card-subtitle class="volunteer-list-selections">{{request.selections}}</mat-card-subtitle>
+                <mat-card-title class="volunteer-list-name">{{request.name}} {{this.requestService.getReadableDate(request.dateAdded)}}</mat-card-title>
+                <mat-card-subtitle class="donor-list-selections" *ngIf="request.diaperSize">{{this.requestService.getReadableSelections(request.selections, request.diaperSize)}}</mat-card-subtitle>
+              <mat-card-subtitle class="donor-list-selections" *ngIf="!request.diaperSize">{{this.requestService.getReadableSelections(request.selections)}}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 <p matListItemBody class="volunteer-list-description"> {{request.description}} </p>
