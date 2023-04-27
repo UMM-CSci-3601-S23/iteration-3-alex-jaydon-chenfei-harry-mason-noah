@@ -40,7 +40,7 @@ export class EditRequestComponent implements OnInit, OnDestroy{
 
 
 
-  constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, private requestService: RequestService,
+  constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, public requestService: RequestService,
     private formBuilder: FormBuilder) {
   }
 

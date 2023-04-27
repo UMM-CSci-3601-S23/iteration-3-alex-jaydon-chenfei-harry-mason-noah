@@ -1,10 +1,26 @@
 <div class="flex-row">
   <div class="flex-1">
     <form [formGroup]="editRequestForm" (ngSubmit)="submitForm();">
+      <div class="formRow">
+        <mat-card-content>
+          <div style="display:inline-block">
+            <mat-form-field>
+              <div class="mat-mdc-text-field-wrapper">
+                <input class="name mat-mdc-form-field-input-control" matInput placeholder="Name" formControlName="clientName" required>
+                  <mat-error *ngIf="formControlHasError('clientName')" data-test="nameDescriptionError">
+                  {{getErrorMessage('clientName')}}
+                  </mat-error>
+              </div>
+            </mat-form-field>
+          </div>
+          <div style="display: inline-block;">
+            <mat-card-title class = "new-request-title">
+              {{this.requestService.getReadableDate(request.dateAdded)}}
+            </mat-card-title>
+          </div>
+        </mat-card-content>
+      </div>
       <mat-card-header>
-        <mat-card-title class = "new-request-title">
-          Request submitted on: {{this.request.dateAdded}}
-        </mat-card-title>
         <mat-card-subtitle *ngIf="request.incomeValid";else="higher">
           This person's household income is below the guidelines
         </mat-card-subtitle>
@@ -12,20 +28,11 @@
           This person's household income is above the guidelines
         </mat-card-subtitle>
       </mat-card-header>
-    <mat-card-content>
-      <mat-form-field>
-          <input class="name" matInput placeholder="Name/Nombre" formControlName="clientName" required>
-            <mat-error *ngIf="formControlHasError('clientName')" data-test="nameDescriptionError">
-            {{getErrorMessage('clientName')}}
-            </mat-error>
-      </mat-form-field><br /><br />
-    </mat-card-content>
     <div mat-list-item *ngFor="let item of this.request.selections"  class="volunteer-list-item edit-request">
       <mat-card class="example-card">
-        <mat-card-header>
-          <mat-card-title class="volunteer-list-name">{{item}}</mat-card-title>
-        </mat-card-header>
         <mat-card-actions align="end">
+          <mat-card-title class="itemName" *ngIf="request.diaperSize">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
+          <mat-card-title class="itemName" *ngIf="!request.diaperSize">{{this.requestService.getReadableItem(item)}}</mat-card-title>
           <button>
             Post
           </button>
@@ -34,11 +41,11 @@
       </mat-card>
       <br />
     </div>
-    <br /><br />
+    <br />
     <div>
-      <mat-form-field class = "desc" fxFill="true">
+      <mat-form-field class = "mat-mdc-text-field-wrapper">
         <mat-label>Item description</mat-label>
-        <textarea matInput formControlName="description"
+        <textarea class="mat-mdc-form-field-infix" matInput formControlName="description"
         required>
         </textarea>
         <mat-error *ngIf="formControlHasError('description')" data-test="descriptionError">
