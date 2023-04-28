@@ -12,13 +12,12 @@ import { SignInPageComponent } from './sign-in-page/sign-in-page.component';
 // 'users/new'; the router would just think that the string 'new' is a user ID.
 const routes: Routes = [
   {path: '', component: HomeComponent, title: 'Home'},
+  {path: 'sign-in-page/sign-in-page', component: SignInPageComponent, title: 'SignIn View'},
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/volunteer', component: RequestVolunteerComponent, title: 'Volunteer View'},
   {path: 'requests/client', component: NewRequestComponent, title: 'New Request'},
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/volunteer/:id', component: EditRequestComponent, title: 'Edit Request'},
-  {path: 'LoginWithGoogle', component: SignInPageComponent, title: 'SignIn View'}
-
 ];
 
 @NgModule({

@@ -1,5 +1,7 @@
 package umm3601;
 
+import umm3601.GoogleAuthenticationController;
+
 import java.util.Arrays;
 
 import com.mongodb.MongoClientSettings;
@@ -11,6 +13,7 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.UuidRepresentation;
 
 import io.javalin.Javalin;
+import io.javalin.plugin.bundled.CorsUtils;
 import io.javalin.plugin.bundled.RouteOverviewPlugin;
 import umm3601.request.ClientRequestController;
 import umm3601.request.DonorRequestController;
@@ -18,10 +21,10 @@ import umm3601.user.UserController;
 
 public class Server {
 
-  private static final int SERVER_PORT = 4577;
+  public static final int CLIENT_PORT = 36355;
+  public static final int SERVER_PORT = 4568;
 
   public static void main(String[] args) {
-
     // Check for the presence of the `--no-auth` command line flag if this flag
     // is present, authorization will require the dummy `TOKEN` token instead
     // of the proper auth tokens.
@@ -53,12 +56,20 @@ public class Server {
     UserController userController = new UserController(database);
     ClientRequestController clientRequestController = new ClientRequestController(database, auth);
     DonorRequestController donorRequestController = new DonorRequestController(database, auth);
-    //DonorRequestController donorRequestController = new DonorRequestController(database, auth);
+    GoogleAuthenticationController googleAuth = new GoogleAuthenticationController();
 
-    Javalin server = Javalin.create(config ->
-      config.plugins.register(new RouteOverviewPlugin("/api"))
-    );
-    /*
+    Javalin server = Javalin.create(config -> {
+      config.plugins.enableCors(cors -> {
+          cors.add(it -> {
+              it.allowHost("accounts.google.com");
+              it.allowCredentials = true;
+              it.exposeHeader("*");
+          });
+      });
+      config.plugins.register(new RouteOverviewPlugin("/api"));
+    });
+
+  /*
      * We want to shut the `mongoClient` down if the server either
      * fails to start, or when it's shutting down for whatever reason.
      * Since the mongClient needs to be available throughout the
@@ -102,6 +113,31 @@ public class Server {
     server.delete("/api/clientRequests/{id}", clientRequestController::deleteRequest);
     server.delete("/api/donorRequests/{id}", donorRequestController::deleteRequest);
 
+    // Magically grant authorization for the demo
+    // DO NOT USE THIS! THIS IS A TERRIBLE IDEA AND NOT THE WAY SECURITY SHOULD EVER WORK, THIS IS FOR THE DEMO ONLY
+    server.get("/api/auth", auth::grant);
+
+    /*
+
+    Needed Headers
+
+    ctx.header("Content-type", "application/json");
+    ctx.header("credentials", "include");
+    ctx.header("Access-Control-Allow-Origin", "*");
+
+    */
+
+
+    server.options("accounts.google.com", ctx -> {
+      ctx.header("Access-Control-Allow-Origin", "*");
+      ctx.header("Access-Control-Allow-Headers", "Access-Control-Allow-Origin");
+    });
+
+    server.post("/api/LoginWithGoogle", googleAuth::handle);
+
+    server.get("/api/LoginWithGoogle", googleAuth::handleGoogleAuthCallback);
+
+
 
     // This catches any uncaught exceptions thrown in the server
     // code and turns them into a 500 response ("Internal Server
@@ -117,7 +153,5 @@ public class Server {
       throw new InternalServerErrorResponse(e.toString());
     });
   */
-
-
   }
 }

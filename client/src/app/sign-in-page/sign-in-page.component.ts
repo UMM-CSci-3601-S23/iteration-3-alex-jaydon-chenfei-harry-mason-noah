@@ -38,14 +38,15 @@ export class SignInPageComponent implements OnInit {
         google.accounts.id.prompt((notification: PromptMomentNotification) => {});
       };
     }
+
     async handleCredentialResponse(response: CredentialResponse) {
       await this.service.LoginWithGoogle(response.credential).subscribe(
         (x: any) => {
           this.ngZone.run(() => {
-            this.router.navigate(['/']);
+            this.router.navigate(['*']);
           });},
         (error: any) => {
-            console.log(error);
+            console.log(error.url);
           }
         );
     }

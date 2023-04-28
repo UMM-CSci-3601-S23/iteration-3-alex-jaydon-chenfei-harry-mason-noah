@@ -9,7 +9,7 @@ import { AuthService } from '../services/auth.service';
   providers: []
 })
 export class HomeComponent implements OnInit {
-  public userRole: 'client' | 'donor' | 'volunteer';
+  public userRole: 'client' | 'donor' | 'volunteer' ;
 
   constructor(private router: Router,
     private service: AuthService,
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   public logout(){
     this.service.signOutExternal();
     this.ngZone.run(() => {
-      this.router.navigate(['/']).then(() => window.location.reload());
+      this.router.navigate(['sign-in-page/sign-in-page']).then(() => window.location.reload());
     });
   }
 

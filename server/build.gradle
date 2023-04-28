@@ -30,6 +30,13 @@ repositories {
 // External dependencies that our application utilizes
 dependencies {
   implementation 'com.google.api-client:google-api-client:1.33.0'
+
+  implementation 'com.jayway.jsonpath:json-path:2.6.0'
+
+  ext {
+        discoveryUrl = 'https://accounts.google.com/.well-known/openid-configuration'
+
+  }
   // Javalin, a simple web framework for Java
   implementation 'io.javalin:javalin:5.3.2'
 
