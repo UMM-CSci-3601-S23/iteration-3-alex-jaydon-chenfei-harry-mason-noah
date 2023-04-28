@@ -18,7 +18,7 @@ export class NewRequestComponent implements OnInit{
       Validators.minLength(2),
       Validators.maxLength(50),
     ])],
-    clientHouseholdSize: [1, Validators.compose([
+    clientHouseholdSize: ['1', Validators.compose([
       Validators.required,
       Validators.min(1),
       Validators.pattern('^(\\d*)$'),
@@ -67,21 +67,21 @@ export class NewRequestComponent implements OnInit{
 
   calculateHouseholdIncome(): string{
     const pop = this.newRequestForm.get('clientHouseholdSize').getRawValue();
-    if (pop === 1) {
+    if (pop === '1') {
       return '$40770';
-    } else if (pop === 2) {
+    } else if (pop === '2') {
       return '$54930';
-    } else if (pop === 3) {
+    } else if (pop === '3') {
       return '$69090';
-    } else if (pop === 4) {
+    } else if (pop === '4') {
       return '$83250';
-    } else if (pop === 5) {
+    } else if (pop === '5') {
       return '$97410';
-    } else if (pop === 6) {
+    } else if (pop === '6') {
       return '$111570';
-    } else if (pop === 7) {
+    } else if (pop === '7') {
       return '$125730';
-    } else if (pop === 8) {
+    } else if (pop === '8') {
       return '$139890';
     } else {
       return '$' + (139890 + (pop - 8) * 4720).toString();
