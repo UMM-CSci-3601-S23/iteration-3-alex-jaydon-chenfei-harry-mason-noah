@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Request, ItemType, FoodType } from './request';
 import { map } from 'rxjs/operators';
+import { Pledge } from '../donor-pledge/pledge';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class RequestService {
   readonly newRequestClientUrl: string = `${environment.apiUrl}clientRequests`;
   readonly requestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newRequestDonorUrl: string = `${environment.apiUrl}donorRequests`;
+  readonly newPledgeDonorUrl: string = `${environment.apiUrl}donorRequests`;
 
   private readonly itemTypeKey = 'itemType';
   private readonly foodTypeKey = 'foodType';
@@ -86,6 +88,11 @@ export class RequestService {
   addDonorRequest(newRequest: Partial<Request>): Observable<string> {
     // Send post request to add a new Request with the Request data as the body.
     return this.httpClient.post<{id: string}>(this.newRequestDonorUrl, newRequest).pipe(map(res => res.id));
+  }
+
+  addDonorPledge(newPledge: Partial<Pledge>): Observable<string> {
+    // Send post request to add a new Pledge with the Pledge data as the body.
+    return this.httpClient.post<{id: string}>(this.newPledgeDonorUrl, newPledge).pipe(map(res => res.id));
   }
 
   deleteClientRequest(request: Partial<Request>): Observable<object> {

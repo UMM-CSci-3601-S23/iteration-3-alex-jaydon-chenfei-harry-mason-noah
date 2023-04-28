@@ -34,7 +34,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
       Validators.pattern('^[A-Za-z ]+$'),
     ])),
 
-    amount: new FormControl('', Validators.compose([
+    amount: new FormControl<number>(0, Validators.compose([
       Validators.required,
       Validators.min(1),
       Validators.max(5),
@@ -82,10 +82,12 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
   }
 
   submitForm() {
-    this.requestService.addDonorRequest(this.newPledgeForm.value).subscribe({
+    this.requestService.addDonorPledge(this.newPledgeForm.value).subscribe({
       next: (newId) => {
+        const name = this.newPledgeForm.get('name').value;
+        const timeSlot = this.newPledgeForm.get('timeSlot').value;
         this.snackBar.open(
-          `Request successfully submitted`,
+          `Pledge successfully submitted by ${name} for ${timeSlot}`,
           null,
           { duration: 2000 }
         );
@@ -106,12 +108,12 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     console.log(request);
     this.request = request;
 
-    this.newPledgeForm.setValue({
-      comment: '',
-      timeSlot: '',
-      name: '',
-      amount: ''
-    });
+    // this.newPledgeForm.setValue({
+    //   comment: '',
+    //   timeSlot: '',
+    //   name: '',
+    //   amount:0,
+    // });
   }
 
 
