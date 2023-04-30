@@ -14,6 +14,7 @@ import io.javalin.Javalin;
 import io.javalin.plugin.bundled.RouteOverviewPlugin;
 import umm3601.request.ClientRequestController;
 import umm3601.request.DonorRequestController;
+import umm3601.pledge.DonorPledgeController;
 import umm3601.user.UserController;
 
 public class Server {
@@ -52,6 +53,7 @@ public class Server {
     UserController userController = new UserController(database);
     ClientRequestController clientRequestController = new ClientRequestController(database, auth);
     DonorRequestController donorRequestController = new DonorRequestController(database, auth);
+    DonorPledgeController donorPledgeController = new DonorPledgeController(database, auth);
 
     Javalin server = Javalin.create(config ->
       config.plugins.register(new RouteOverviewPlugin("/api"))
@@ -96,6 +98,8 @@ public class Server {
     // Add a new request
     server.post("/api/clientRequests", clientRequestController::addNewRequest);
     server.post("/api/donorRequests", donorRequestController::addNewRequest);
+    //Add a new pledge
+    server.post("/api/donorPledges", donorPledgeController::addNewPledge);
 
     //Deleting requests
     server.delete("/api/clientRequests/{id}", clientRequestController::deleteRequest);
