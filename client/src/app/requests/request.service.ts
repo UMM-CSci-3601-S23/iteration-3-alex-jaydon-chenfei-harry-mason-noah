@@ -15,7 +15,7 @@ export class RequestService {
   readonly newRequestClientUrl: string = `${environment.apiUrl}clientRequests`;
   readonly requestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newRequestDonorUrl: string = `${environment.apiUrl}donorRequests`;
-  readonly newPledgeDonorUrl: string = `${environment.apiUrl}donorRequests`;
+  readonly newPledgeDonorUrl: string = `${environment.apiUrl}donorPledges`;
 
   private readonly itemTypeKey = 'itemType';
   private readonly foodTypeKey = 'foodType';
