@@ -48,11 +48,11 @@
         data-test="timeSlotSelect"
         >
           <mat-option value ="--">--</mat-option>
-          <mat-option value="Mon">Monday: 2:30-3:30 PM</mat-option>
-          <mat-option value="Tue">Tuesday: 5:30-6:30 PM</mat-option>
-          <mat-option value="Wed">Wednesday: 10:30-11:30 AM</mat-option>
-          <mat-option value="Thu">Thursday: 5:30-6:30 PM</mat-option>
-          <mat-option value="Fri">Friday: 10:30-11:30 AM</mat-option>
+          <mat-option value="Monday">Monday: 2:30-3:30 PM</mat-option>
+          <mat-option value="Tuesday">Tuesday: 5:30-6:30 PM</mat-option>
+          <mat-option value="Wednesday">Wednesday: 10:30-11:30 AM</mat-option>
+          <mat-option value="Thursday">Thursday: 5:30-6:30 PM</mat-option>
+          <mat-option value="Friday">Friday: 10:30-11:30 AM</mat-option>
         </mat-select>
         <mat-error *ngIf="formControlHasError('timeSlot')" data-test="timeSlotError">
           {{getErrorMessage('timeSlot')}}

@@ -30,5 +30,5 @@ public class Pledge {
   public int hashCode() {
     return _id.hashCode();
   }
-
 }
+

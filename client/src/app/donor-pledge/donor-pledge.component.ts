@@ -3,8 +3,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
-import { TimeSlot, Request } from '../requests/request';
+import { Request } from '../requests/request';
 import { RequestService } from '../requests/request.service';
+import { TimeSlot } from './pledge';
+
 
 @Component({
   selector: 'app-donor-pledge',
@@ -26,7 +28,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
 
     timeSlot: new FormControl<TimeSlot>('',Validators.compose([
       Validators.required,
-      Validators.pattern('^(Mon|Tue|Wed|Thu|Fri)$'),
+      Validators.pattern('^(Monday|Tuesday|Wednesday|Thursday|Friday)$'),
     ])),
 
     name: new FormControl('', Validators.compose([
@@ -87,9 +89,10 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
         const name = this.newPledgeForm.get('name').value;
         const timeSlot = this.newPledgeForm.get('timeSlot').value;
         this.snackBar.open(
-          `Pledge successfully submitted by ${name} for ${timeSlot}`,
+          `Dear ${name}, thank you so much for your generous pledge!
+          We truly appreciate your support and can't wait to welcome you on ${timeSlot}.`,
           null,
-          { duration: 2000 }
+          { duration: 10000 }
         );
       },
       error: err => {
