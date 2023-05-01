@@ -32,7 +32,8 @@
     },
     "itemType": "food",
     "description": "Milk",
-    "foodType": "dairy"
+    "foodType": "dairy",
+    "amount":9
   },
   {
     "_id": {
@@ -40,7 +41,8 @@
     },
     "itemType": "food",
     "description": "Bread",
-    "foodType": "grain"
+    "foodType": "grain",
+    "amount":7
   },
   {
     "_id": {
@@ -48,7 +50,8 @@
     },
     "itemType": "food",
     "description": "Ground beef",
-    "foodType": "meat"
+    "foodType": "meat",
+    "amount":5
   },
   {
     "_id": {
@@ -56,7 +59,8 @@
     },
     "itemType": "food",
     "description": "Assorted Vegetables",
-    "foodType": "vegetable"
+    "foodType": "vegetable",
+    "amount":6
   },
 
   {
@@ -65,7 +69,8 @@
     },
     "itemType": "food",
     "description": "I want ground vegetables",
-    "foodType": "vegetable"
+    "foodType": "vegetable",
+    "amount":1
   },
 
   {
@@ -74,7 +79,8 @@
     },
     "itemType": "toiletries",
     "description": "I want toothpaste",
-    "foodType": ""
+    "foodType": "",
+    "amount":6
   },
 
   {
@@ -83,7 +89,8 @@
     },
     "itemType": "food",
     "description": "I want pasta",
-    "foodType": "grain"
+    "foodType": "grain",
+    "amount":6
   }
 
 ]
