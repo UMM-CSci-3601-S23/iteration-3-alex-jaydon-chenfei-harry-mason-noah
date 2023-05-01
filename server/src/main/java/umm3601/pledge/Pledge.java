@@ -1,11 +1,11 @@
-package umm3601.request;
+package umm3601.pledge;
 
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
 @SuppressWarnings({"VisibilityModifier"})
 
-public class Request {
+public class Pledge {
   @ObjectId @Id
 
   @SuppressWarnings({"MemberName"})
@@ -13,19 +13,17 @@ public class Request {
   public String _id;
 
   public String name;
-  public String[] selections;
-  public String[] fulfilled;
-  public String description;
-  public String dateAdded;
-  public String diaperSize;
-  public Boolean incomeValid;
+  public int amount;
+  public String timeSlot;
+  public String comment;
+  public String requestId;
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Request)) {
+    if (!(obj instanceof Pledge)) {
       return false;
     }
-    Request other = (Request) obj;
+    Pledge other = (Pledge) obj;
     return _id.equals((other._id));
   }
 
@@ -33,5 +31,4 @@ public class Request {
   public int hashCode() {
     return _id.hashCode();
   }
-
 }

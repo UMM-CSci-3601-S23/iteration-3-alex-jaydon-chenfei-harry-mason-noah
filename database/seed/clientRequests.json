@@ -25,6 +25,9 @@
       "sweetPotatoes",
       "peaches"
     ],
+    "fulfilled": [
+      "almonds"
+    ],
     "incomeValid": false
   },
   {

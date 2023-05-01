@@ -31,12 +31,15 @@
     <div mat-list-item *ngFor="let item of this.request.selections"  class="volunteer-list-item edit-request">
       <mat-card class="example-card">
         <mat-card-actions align="end">
-          <mat-card-title class="itemName" *ngIf="request.diaperSize">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
-          <mat-card-title class="itemName" *ngIf="!request.diaperSize">{{this.requestService.getReadableItem(item)}}</mat-card-title>
+          <mat-card-title [ngStyle]="{'color': 'green'}" class="itemName" *ngIf="request.diaperSize && this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
+          <mat-card-title [ngStyle]="{'color': 'green'}" class="itemName" *ngIf="!request.diaperSize && this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item)}}</mat-card-title>
+          <mat-card-title [ngStyle]="{'color': 'black'}" class="itemName" *ngIf="request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
+          <mat-card-title [ngStyle]="{'color': 'black'}" class="itemName" *ngIf="!request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item)}}</mat-card-title>
           <button>
             Post
           </button>
-          <mat-checkbox></mat-checkbox>
+          <mat-checkbox *ngIf="this.request.fulfilled.includes(item)" checked="true" (change)="updateFulfilled(item)"></mat-checkbox>
+          <mat-checkbox *ngIf="!this.request.fulfilled.includes(item)" checked="false" (change)="updateFulfilled(item)"></mat-checkbox>
         </mat-card-actions>
       </mat-card>
       <br />

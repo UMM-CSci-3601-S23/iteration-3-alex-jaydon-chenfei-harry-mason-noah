@@ -1,4 +1,4 @@
-package umm3601.request;
+package umm3601.pledge;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -6,43 +6,42 @@ import static com.mongodb.client.model.Filters.regex;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
-
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.mongojack.DBUpdate;
 import org.mongojack.JacksonMongoCollection;
 import java.util.Map;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
-import umm3601.Authentication;
 
-import java.security.NoSuchAlgorithmException;
-
+import java.util.regex.Pattern;
 
 
-public class ClientRequestController {
-  static final String SORT_ORDER_KEY = "sortorder";
+
+public class PledgeController {
   static final String DESCRIPTION_KEY = "description";
+  static final String SORT_ORDER_KEY = "sortorder";
 
+  private final JacksonMongoCollection<PledgedItem> itemCollection;
+  private final JacksonMongoCollection<Pledge> pledgeCollection;
 
-  private final JacksonMongoCollection<Request> requestCollection;
-  private Authentication auth;
-
-  public ClientRequestController(MongoDatabase database, Authentication auth) {
-    this.auth = auth;
-    requestCollection = JacksonMongoCollection.builder().build(
+  public PledgeController(MongoDatabase database) {
+    itemCollection = JacksonMongoCollection.builder().build(
       database,
-      "clientRequests",
-      Request.class,
+      "pledgedItems",
+      PledgedItem.class,
+      UuidRepresentation.STANDARD);
+
+      pledgeCollection = JacksonMongoCollection.builder().build(
+      database,
+      "pledges",
+      Pledge.class,
       UuidRepresentation.STANDARD);
   }
 
@@ -52,19 +51,18 @@ public class ClientRequestController {
    *
    * @param ctx a Javalin HTTP context
    */
-  public void getRequest(Context ctx) {
+  public void getPledgedItem(Context ctx) {
     String id = ctx.pathParam("id");
-    Request request;
-
+    PledgedItem item;
     try {
-      request = requestCollection.find(eq("_id", new ObjectId(id))).first();
+      item = itemCollection.find(eq("_id", new ObjectId(id))).first();
     } catch (IllegalArgumentException e) {
       throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID.");
     }
-    if (request == null) {
+    if (item == null) {
       throw new NotFoundResponse("The desired request was not found");
     } else {
-      ctx.json(request);
+      ctx.json(item);;
       ctx.status(HttpStatus.OK);
     }
   }
@@ -75,9 +73,7 @@ public class ClientRequestController {
    *
    * @param ctx a Javalin HTTP context
    */
-  public void getRequests(Context ctx) {
-    auth.authenticate(ctx);
-
+  public void getPledgedItems(Context ctx) {
     Bson combinedFilter = constructFilter(ctx);
     Bson sortingOrder = constructSortingOrder(ctx);
 
@@ -85,7 +81,7 @@ public class ClientRequestController {
     // database system. So MongoDB is going to find the requests with the specified
     // properties, return those sorted in the specified manner, and put the
     // results into an initially empty ArrayList.
-    ArrayList<Request> matchingRequests = requestCollection
+    ArrayList<PledgedItem> matchingPledgedItems = itemCollection
       .find(combinedFilter)
       .sort(sortingOrder)
       .into(new ArrayList<>());
@@ -93,7 +89,8 @@ public class ClientRequestController {
     // Set the JSON body of the response to be the list of requests returned by the database.
     // According to the Javalin documentation (https://javalin.io/documentation#context),
     // this calls result(jsonString), and also sets content type to json
-    ctx.json(matchingRequests);
+    System.out.println(matchingPledgedItems);
+    ctx.json(matchingPledgedItems);
 
     // Explicitly set the context status to OK
     ctx.status(HttpStatus.OK);
@@ -118,13 +115,27 @@ public class ClientRequestController {
     // Sort the results. Use the `sortby` query param (default "name")
     // as the field to sort by, and the query param `sortorder` (default
     // "asc") to specify the sort order.
-    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "name");
+    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "itemName");
     String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
     Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
     return sortingOrder;
   }
 
-  public void addNewRequest(Context ctx) {
+  public void updatePledgedItem(Context ctx){
+    String id = ctx.pathParam("id");
+    String action = ctx.pathParam("action");
+    PledgedItem item;
+    if (action.equals("post")){
+      try {
+        item = itemCollection.find(eq("_id", new ObjectId(id))).first();
+      } catch (IllegalArgumentException e) {
+      throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID.");
+      }
+    } else {
+
+    }
+  }
+  public void addNewPledgedItem(Context ctx) {
     /*
      * The follow chain of statements uses the Javalin validator system
      * to verify that instance of `User` provided in this context is
@@ -132,15 +143,15 @@ public class ClientRequestController {
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Request newRequest = ctx.bodyValidator(Request.class).get();
-      /*.check(req -> req.itemType.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-      .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
-      */
+    PledgedItem newPledgedItem = ctx.bodyValidator(PledgedItem.class).get();
 
-    // Insert the newRequest into the requestCollection
-    requestCollection.insertOne(newRequest);
+    // Add the date to the request formatted as an ISO 8601 string
+    newPledgedItem.amountNeeded = 1;
 
-    ctx.json(Map.of("id", newRequest._id));
+    // Insert the newPledgedItem into the itemCollection
+    itemCollection.insertOne(newPledgedItem);
+
+    ctx.json(Map.of("id", newPledgedItem._id));
     // 201 is the HTTP code for when we successfully
     // create a new resource (a request in this case).
     // See, e.g., https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
@@ -148,40 +159,4 @@ public class ClientRequestController {
     ctx.status(HttpStatus.CREATED);
   }
 
-  /**
-   * Delete the user specified by the `id` parameter in the request.
-   *
-   * @param ctx a Javalin HTTP context
-   */
-  public void deleteRequest(Context ctx) {
-    auth.authenticate(ctx);
-    String id = ctx.pathParam("id");
-    DeleteResult deleteResult = requestCollection.deleteOne(eq("_id", new ObjectId(id)));
-    if (deleteResult.getDeletedCount() != 1) {
-      ctx.status(HttpStatus.NOT_FOUND);
-      throw new NotFoundResponse(
-        "Was unable to delete ID "
-          + id
-          + "; perhaps illegal ID or an ID for an item not in the system?");
-    }
-    ctx.status(HttpStatus.OK);
-  }
-
-
-  /**
-   * Utility function to generate the md5 hash for a given string
-   *
-   * @param str the string to generate a md5 for
-   */
-  @SuppressWarnings("lgtm[java/weak-cryptographic-algorithm]")
-  public String md5(String str) throws NoSuchAlgorithmException {
-    MessageDigest md = MessageDigest.getInstance("MD5");
-    byte[] hashInBytes = md.digest(str.toLowerCase().getBytes(StandardCharsets.UTF_8));
-
-    StringBuilder result = new StringBuilder();
-    for (byte b : hashInBytes) {
-      result.append(String.format("%02x", b));
-    }
-    return result.toString();
-  }
 }

@@ -18,7 +18,8 @@ export class EditRequestComponent implements OnInit, OnDestroy{
   request: Request;
   router: any;
   itemType: any;
-
+  fulfilled: string[];
+  checked: true;
   editRequestForm = this.formBuilder.group({
     clientName:['', Validators.compose([
       Validators.required,
@@ -107,12 +108,23 @@ export class EditRequestComponent implements OnInit, OnDestroy{
         }); */
       }
     });
-
-
+    this.fulfilled = [''];
+    console.log(this.request.fulfilled);
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  updateFulfilled(item: string): void {
+    console.log(this.request.fulfilled);
+    if (!this.request.fulfilled.includes(item)){
+      this.request.fulfilled.push(item);
+    }
+    else{
+      this.request.fulfilled.splice(this.request.fulfilled.indexOf(item), 1);
+    }
+    console.log(this.request.fulfilled);
   }
 }

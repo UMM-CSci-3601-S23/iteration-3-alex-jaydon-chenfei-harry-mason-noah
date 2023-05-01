@@ -1,31 +1,26 @@
-package umm3601.request;
+package umm3601.pledge;
 
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
 @SuppressWarnings({"VisibilityModifier"})
 
-public class Request {
+public class PledgedItem {
   @ObjectId @Id
 
   @SuppressWarnings({"MemberName"})
 
   public String _id;
 
-  public String name;
-  public String[] selections;
-  public String[] fulfilled;
-  public String description;
-  public String dateAdded;
-  public String diaperSize;
-  public Boolean incomeValid;
+  public String itemName;
+  public int amountNeeded;
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Request)) {
+    if (!(obj instanceof PledgedItem)) {
       return false;
     }
-    Request other = (Request) obj;
+    PledgedItem other = (PledgedItem) obj;
     return _id.equals((other._id));
   }
 
