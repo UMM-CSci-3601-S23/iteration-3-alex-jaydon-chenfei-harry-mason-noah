@@ -35,6 +35,9 @@ public class DonorRequestController {
   static final String FOOD_TYPE_KEY = "foodType";
   static final String DESCRIPTION_KEY = "description";
   static final String SORT_ORDER_KEY = "sortorder";
+  static final String PRIORITY_KEY = "priority";
+  static final int LOWER_PRIORITY_BOUND = 1;
+  static final int UPPER_PRIORITY_BOUND = 5;
 
   private static final String ITEM_TYPE_REGEX = "^(food|toiletries|other|FOOD)$";
   private static final String FOOD_TYPE_REGEX = "^(|dairy|grain|meat|fruit|vegetable)$";
@@ -150,7 +153,9 @@ public class DonorRequestController {
      */
     Request newRequest = ctx.bodyValidator(Request.class)
       .check(req -> req.itemType.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-      .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type").get();
+      .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
+      .check(req -> req.priority <= UPPER_PRIORITY_BOUND && req.priority >= LOWER_PRIORITY_BOUND,
+      "Request priority must be a number between 1 and 5").get();
 
     // Add the date to the request formatted as an ISO 8601 string
     newRequest.dateAdded = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
@@ -164,6 +169,39 @@ public class DonorRequestController {
     // See, e.g., https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
     // for a description of the various response codes.
     ctx.status(HttpStatus.CREATED);
+  }
+
+  public void setPriority(Context ctx) {
+    Integer priority = ctx.queryParamAsClass(PRIORITY_KEY, Integer.class)
+      .check(it -> it >= LOWER_PRIORITY_BOUND && it <= UPPER_PRIORITY_BOUND,
+    "Priority must be a number between 1 and 5 inclusive")
+      .get();
+    String id = ctx.pathParam("id");
+    Request request;
+    try {
+      // ctx requires an _id path parameter.
+      // We should make sure this is a real request id before continuing.
+      request = requestCollection
+        .find(eq("_id", new ObjectId(id))).first();
+    } catch (IllegalArgumentException e) {
+      throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID");
+    } catch (NotFoundResponse e) {
+      throw new NotFoundResponse("The desired request was not found");
+    }
+
+    List<Bson> toSet = new ArrayList<>();
+    toSet.add(eq("_id", new ObjectId(id))); // filter
+
+    toSet.add(set("priority", priority)); // update
+
+    requestCollection.updateOne(
+        toSet.get(0) /* filter */,
+        toSet.get(1) /* update */
+    );
+    request.priority = priority;
+    // Send a JSON response with the request whose priority was changed.
+    ctx.json(request);
+    ctx.status(HttpStatus.OK);
   }
 
   /**

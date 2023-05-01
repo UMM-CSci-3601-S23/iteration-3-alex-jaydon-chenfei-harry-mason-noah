@@ -52,7 +52,7 @@ public class ClientRequestController {
     this.auth = auth;
     requestCollection = JacksonMongoCollection.builder().build(
       database,
-      "requests",
+      "clientRequests",
       Request.class,
       UuidRepresentation.STANDARD);
   }

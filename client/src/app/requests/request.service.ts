@@ -14,7 +14,7 @@ export class RequestService {
   readonly newRequestClientUrl: string = `${environment.apiUrl}clientRequests`;
   readonly requestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newRequestDonorUrl: string = `${environment.apiUrl}donorRequests`;
-  readonly priorityUrl: string = `${environment.apiUrl}requests/set-priority`;
+  readonly priorityUrl: string = `${environment.apiUrl}clientRequests/set-priority`;
 
   private readonly itemTypeKey = 'itemType';
   private readonly foodTypeKey = 'foodType';
@@ -82,9 +82,11 @@ export class RequestService {
   }
 
   addDonorRequest(newRequest: Partial<Request>): Observable<string> {
+    // Set a default value for newPriority if not provided
     // Send post request to add a new Request with the Request data as the body.
-    return this.httpClient.post<{id: string}>(this.newRequestDonorUrl, newRequest).pipe(map(res => res.id));
+    return this.httpClient.post<{id: string}>(this.newRequestDonorUrl, {...newRequest}).pipe(map(res => res.id));
   }
+
 
   deleteClientRequest(request: Partial<Request>): Observable<object> {
     // Send delete request to delete a request

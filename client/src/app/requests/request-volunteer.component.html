@@ -51,13 +51,12 @@
           <p>{{ request.description }}</p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-icon-button (click)="increaseCardPriority(request)" data-test="increasePriorityButton" matTooltip="Move up to increase priority">
-            <mat-icon>arrow_upward</mat-icon>
-          </button>
-          <button mat-icon-button (click)="decreaseCardPriority(request)" data-test="decreasePriorityButton" matTooltip="Move down to decrease priority">
-            <mat-icon>arrow_downward</mat-icon>
-          </button>
-
+          <mat-form-field class="input-field">
+            <mat-label>Priority</mat-label>
+            <mat-select [(ngModel)]="request.priority" (selectionChange)="setRequestPriority(request, request.priority)">
+              <mat-option *ngFor="let priority of [1, 2, 3, 4, 5]" [value]="priority">{{priority}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </mat-card-actions>
       </mat-card>
     </div>
@@ -83,23 +82,22 @@
                 <p matListItemBody class="volunteer-list-description"> {{request.description}} </p>
               </mat-card-content>
               <mat-card-actions>
-
-                <button mat-icon-button (click)="increaseCardPriority(request)" data-test="increasePriorityButton" matTooltip="Move up to increase priority">
-                  <mat-icon>arrow_upward</mat-icon>
-                </button>
-                <button mat-icon-button (click)="decreaseCardPriority(request)" data-test="decreasePriorityButton" matTooltip="Move down to decrease priority">
-                  <mat-icon>arrow_downward</mat-icon>
-                </button>
-
                 <button mat-button matToolTip="Edit Request" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
                   Edit Request
                 </button>
-                <button mat-button data-test="postRequestButton" (click)="postRequest(request)">
+                <button mat-button data-test="postRequestButton" (click)="postRequest(request, priority)">
                   Post
                 </button>
                 <button mat-icon-button data-test="deleteRequestButton" (click)="deleteRequest(request)">
                   <mat-icon>delete</mat-icon>
                 </button>
+                <!-- Add this priority input field to the list view -->
+                <mat-form-field class="input-field">
+                  <mat-label>Priority</mat-label>
+                  <mat-select [(ngModel)]="request.priority" (selectionChange)="setRequestPriority(request, request.priority)">
+                    <mat-option *ngFor="let priority of [1, 2, 3, 4, 5]" [value]="priority">{{priority}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
               </mat-card-actions>
             </mat-card>
           </div>
