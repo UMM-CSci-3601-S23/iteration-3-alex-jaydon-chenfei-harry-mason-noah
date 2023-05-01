@@ -76,7 +76,16 @@
     <mat-card-actions align="end">
       <button
         mat-button
-        class = "submit_button"
+        class="cancel_button custom_button"
+        type="button"
+        routerLink="/requests/donor"
+        data-test="backtoDonorPageButton"
+      >
+        BACK TO DONOR PAGE
+      </button>
+      <button
+        mat-button
+        class="submit_button custom_button"
         type="button"
         [disabled]="!newPledgeForm.valid"
         type="submit"
@@ -84,6 +93,7 @@
       >
         CONFIRM PLEDGE
       </button>
+
     </mat-card-actions>
     </div>
   </form>
