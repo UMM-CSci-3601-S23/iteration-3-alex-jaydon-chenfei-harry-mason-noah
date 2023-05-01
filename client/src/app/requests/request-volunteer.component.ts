@@ -84,31 +84,6 @@ priority: number;
     });
   }
 
-  increaseCardPriority(request: Request): void {
-    const index = this.filteredRequests.findIndex((r) => r === request);
-    if (index > 0) {
-      const targetIndex = index - 1;
-      const targetRequest = this.filteredRequests[targetIndex];
-      this.filteredRequests[targetIndex] = request;
-      this.filteredRequests[index] = targetRequest;
-      this.updatePriorities();
-    }
-  }
-
-  decreaseCardPriority(request: Request): void {
-    const index = this.filteredRequests.findIndex((r) => r === request);
-    if (index < this.filteredRequests.length - 1) {
-      const targetIndex = index + 1;
-      const targetRequest = this.filteredRequests[targetIndex];
-      this.filteredRequests[targetIndex] = request;
-      this.filteredRequests[index] = targetRequest;
-      this.updatePriorities();
-    }
-
-  }
-
-
-
 
   setRequestPriority(request: Request, priority: number): void {
     this.requestService.addRequestPriority(request, priority).pipe(
@@ -124,6 +99,10 @@ priority: number;
           {duration: 5000});
       },
     });
+  }
+  // MAY NOT BE NECESSARY
+  sortRequestsByPriority(): void {
+    this.filteredRequests.sort((a, b) => a.priority - b.priority);
   }
 
   ngOnInit(): void {
@@ -151,7 +130,7 @@ priority: number;
       },
     });
   }
-  public postRequest(request: Request): void {
+  public postRequest(request: Request, priority: number): void {
     const strippedRequest: Partial<Request> = {...request};
     delete strippedRequest._id;
     this.requestService.addDonorRequest(strippedRequest).pipe(
