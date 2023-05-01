@@ -13,6 +13,7 @@ import { TimeSlot } from './pledge';
   templateUrl: './donor-pledge.component.html',
   styleUrls: ['./donor-pledge.component.scss']
 })
+
 export class DonorPledgeComponent implements OnInit, OnDestroy{
   request: Request;
   timeSlot: any;
@@ -39,9 +40,8 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     amount: new FormControl<number>(0, Validators.compose([
       Validators.required,
       Validators.min(1),
-      Validators.max(5),
     ])),
-
+    requestId: new FormControl('', Validators.required),
   });
 
   readonly newRequestValidationMessages = {
@@ -58,8 +58,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     ],
     amount:[
       { type: 'required', message: 'The amount is required' },
-      { type: 'min', message: 'The amount can not be less than 1' },
-      { type: 'max', message: 'The amount can not be more than 5' },
+      { type: 'min', message: 'The amount can not be less than 1' }
     ]
   };
   private ngUnsubscribe = new Subject<void>();
@@ -110,7 +109,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     console.log('THIS IS THE REQUEST:');
     console.log(request);
     this.request = request;
-
+    this.newPledgeForm.get('requestId').setValue(request._id);
     // this.newPledgeForm.setValue({
     //   comment: '',
     //   timeSlot: '',

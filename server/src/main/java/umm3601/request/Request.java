@@ -16,6 +16,7 @@ public class Request {
   public String description;
   public String foodType;
   public String dateAdded;
+  public int amount;
 
   @Override
   public boolean equals(Object obj) {
