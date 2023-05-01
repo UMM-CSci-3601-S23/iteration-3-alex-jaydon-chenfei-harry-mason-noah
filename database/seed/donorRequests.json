@@ -5,7 +5,8 @@
     },
     "itemType": "food",
     "description": "Fresh Apples",
-    "foodType": "fruit"
+    "foodType": "fruit",
+    "amount": 6
   },
   {
     "_id": {
@@ -13,7 +14,8 @@
     },
     "itemType": "toiletries",
     "description": "Toothpaste",
-    "foodType": ""
+    "foodType": "",
+    "amount": 35
   },
   {
     "_id": {
@@ -21,7 +23,8 @@
     },
     "itemType": "other",
     "description": "Plates",
-    "foodType": ""
+    "foodType": "",
+    "amount":108
   },
   {
     "_id": {
