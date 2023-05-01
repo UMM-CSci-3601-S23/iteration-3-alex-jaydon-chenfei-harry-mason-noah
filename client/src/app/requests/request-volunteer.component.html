@@ -85,7 +85,7 @@
                 <button mat-button matToolTip="Edit Request" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
                   Edit Request
                 </button>
-                <button mat-button data-test="postRequestButton" (click)="postRequest(request, priority)">
+                <button mat-button data-test="postRequestButton" (click)="postRequest(request)">
                   Post
                 </button>
                 <button mat-icon-button data-test="deleteRequestButton" (click)="deleteRequest(request)">

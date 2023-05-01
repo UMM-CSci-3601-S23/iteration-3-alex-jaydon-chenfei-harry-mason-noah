@@ -4,7 +4,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { Request, ItemType, FoodType } from './request';
 import { RequestService } from './request.service';
 
-
 @Component({
   selector: 'app-request-donor',
   templateUrl: './request-donor.component.html',
@@ -22,12 +21,12 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
 
   authHypothesis: boolean;
 
-
   private ngUnsubscribe = new Subject<void>();
 
   constructor(private requestService: RequestService, private snackBar: MatSnackBar) {
   }
-  //Gets the requests from the server with the correct filters
+
+  // Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getDonorRequests({
       itemType: this.requestItemType,
@@ -37,6 +36,7 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: (returnedRequests) => {
         this.serverFilteredRequests = returnedRequests;
+        this.updateFilter();
       },
 
       error: (err) => {
@@ -47,10 +47,11 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
       },
     });
   }
-  //
+
   public updateFilter(): void {
-    this.filteredRequests = this.serverFilteredRequests;
+    this.filteredRequests = this.serverFilteredRequests.sort((a, b) => b.priority - a.priority);
   }
+
   ngOnInit(): void {
       this.getRequestsFromServer();
       this.authHypothesis = document.cookie.includes('auth_token');
@@ -77,5 +78,4 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
       },
     });
   }
-  }
-
+}
