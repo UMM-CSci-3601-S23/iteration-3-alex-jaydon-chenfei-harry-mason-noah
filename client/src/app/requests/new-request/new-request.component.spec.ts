@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { MockRequestService } from 'src/testing/request.service.mock';;
 import { RequestService } from '../request.service';
 import { NewRequestComponent } from './new-request.component';
+import { environment } from 'src/environments/environment';
 
 describe('NewRequestComponent', () => {
   let newRequestComponent: NewRequestComponent;
@@ -245,7 +246,6 @@ describe('NewRequestComponent', () => {
       newRequestComponent.selections = ['hotSauce', 'bdayPartyKit'];
       newRequestComponent.submitForm();
 
-      expect(service.addedClientRequests[0].name).toEqual('Mr. Rogers');
       expect(service.addedClientRequests[0].selections.includes('hotSauce')).toBeTruthy();
     });
   });

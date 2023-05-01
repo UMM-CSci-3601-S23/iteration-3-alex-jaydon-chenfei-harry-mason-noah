@@ -73,14 +73,18 @@ describe('RequestService', () => {
     });
   });
 
-  describe('The getReadableDSelections Method', () => {
+  describe('The getReadableSelections Method', () => {
     const testSelections = ['hotSauce', 'tomatoSoup', 'yellowSplitPeas'];
     const testSelectionsBroken = ['hotSauce', 'tomatoSoup', 'yellowSplitPeas', 'le3emeLien'];
     it('should properly format all elements of the list', () => {
       const returnedString = requestService.getReadableSelections(testSelections);
       expect(returnedString.substring(0, 9)).toEqual('Hot sauce');
-      expect(returnedString.substring(9, 20)).toEqual('Tomato soup');
-      expect(returnedString.substring(20, 37)).toEqual('Yellow split peas');
+      expect(returnedString.substring(11, 22)).toEqual('Tomato soup');
+      expect(returnedString.substring(24, 41)).toEqual('Yellow split peas');
+    });
+    it('should properly handle items not in the item map', () => {
+      const returnedString = requestService.getReadableSelections(testSelectionsBroken);
+      expect(returnedString.substring(43, 53)).toEqual('le3emeLien');
     });
   });
 

@@ -17,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ActivatedRouteStub } from 'src/testing/activated-route-stub';
 import { Request } from './request';
 
-fdescribe('EditRequestComponent', () => {
+describe('EditRequestComponent', () => {
   let editRequestComponent: EditRequestComponent;
   let editRequestForm: FormGroup;
   let fixture: ComponentFixture<EditRequestComponent>;
@@ -125,15 +125,13 @@ fdescribe('EditRequestComponent', () => {
       editRequestComponent.setRequestValues({
         _id: '588935f57546a2daea44de7c',
         name: 'joe',
-        dateAdded: '20230423',
-      //   itemType: 'food',
-      //   foodType: 'meat',
-        description: 'This is a test edit'
+        dateAdded: '13980507',
+        description: 'This is a test edit',
       });
 
       // expect(itemTypeControl.value === 'food').toBeTrue();
       // expect(foodTypeControl.value === 'fruit').toBeTrue();
-      expect(descControl.value === 'Description').toBeTrue();
+      expect(descControl.value === 'This is a test edit').toBeTrue();
     });
   });
 /*
@@ -215,9 +213,6 @@ describe('Misbehaving request service', () => {
       editRequestForm = editRequestComponent.editRequestForm;
       expect(editRequestForm).toBeDefined();
       expect(editRequestForm.controls).toBeDefined();
-
-      // itemTypeControl = editRequestForm.controls.itemType;
-      // foodTypeControl = editRequestForm.controls.foodType;
       descControl = editRequestComponent.editRequestForm.controls.description;
     });
   }));

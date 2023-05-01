@@ -15,7 +15,7 @@ export class MockRequestService extends RequestService {
       dateAdded: '20210213',
       selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'food',
-      description: 'I would like some ground beef',
+      description: 'I would like some ground beef'
       // foodType: 'meat'
     },
     {
@@ -24,7 +24,7 @@ export class MockRequestService extends RequestService {
       dateAdded: '20220618',
       selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'toiletries',
-      description: 'I need more toothpaste',
+      description: 'I need more toothpaste'
       // foodType: ''
     },
     {
@@ -33,7 +33,7 @@ export class MockRequestService extends RequestService {
       dateAdded: '20180401',
       selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'other',
-      description: 'I need more paper plates',
+      description: 'I need more paper plates'
       // foodType: ''
     },
     {
@@ -43,7 +43,7 @@ export class MockRequestService extends RequestService {
       selections: ['hotSauce', 'tomatoSoup', 'vegOil', 'diapers'],
       diaperSize: 'newborn',
       // itemType: 'food',
-      description: 'I would like some milk',
+      description: 'I would like some milk'
       // foodType: 'dairy'
     }
   ];

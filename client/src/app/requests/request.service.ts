@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Request } from './request';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class RequestService {
   readonly newRequestClientUrl: string = `${environment.apiUrl}clientRequests`;
   readonly requestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newRequestDonorUrl: string = `${environment.apiUrl}donorRequests`;
+  readonly authUrl: string = `http://localhost:4568/api/auth`;
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
     ['lowSugar','Low Sugar'],
@@ -214,7 +216,7 @@ export class RequestService {
       + '-'+ date.substring(0, 4);
   }
 
-  public getReadableSelections(selections: string[]): string{
+  public getReadableSelections(selections: string[], diaperSize?: string): string{
     let stringSelections = '';
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i =0; i < selections.length; i++){
@@ -222,4 +224,5 @@ export class RequestService {
     }
     return stringSelections.substring(0,stringSelections.length - 2);
   }
+
 }

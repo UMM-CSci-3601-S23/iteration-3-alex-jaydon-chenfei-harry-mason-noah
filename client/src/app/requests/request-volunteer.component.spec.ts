@@ -66,17 +66,21 @@ describe('Volunteer Request View', () => {
     expect(volunteerList.serverFilteredRequests.length).toBe(4);
   });
 
-  it('contains a request for food', () => {
-  //   expect(volunteerList.serverFilteredRequests.some((request: Request) => request.itemType === 'food')).toBe(true);
+  it('contains a request for noah', () => {
+    expect(volunteerList.serverFilteredRequests.some((request: Request) => request.name === 'noah')).toBe(true);
   });
 
-  it('contains a request for toiletries', () => {
-  //   expect(volunteerList.serverFilteredRequests.some((request: Request) => request.itemType === 'toiletries')).toBe(true);
+  it('contains a request added on 04-01-2018', () => {
+     expect(volunteerList.serverFilteredRequests.some((request: Request) => request.dateAdded === '20180401')).toBe(true);
   });
 
-  it('contains a request for other', () => {
-  //   expect(volunteerList.serverFilteredRequests.some((request: Request) => request.itemType === 'other')).toBe(true);
+  it('contains a request that includes hotSauce', () => {
+     expect(volunteerList.serverFilteredRequests.some((request: Request) => request.selections[0] === 'hotSauce')).toBe(true);
   });
+
+  it('contains a request that asks for paper plates', () => {
+    expect(volunteerList.serverFilteredRequests.some((request: Request) => request.description === 'I need more paper plates')).toBe(true);
+ });
 
   /*it('contains a request for itemType food and foodType meat', () => {
     expect(volunteerList.serverFilteredRequests.some((request: Request) => request.itemType === 'food'
@@ -170,7 +174,6 @@ describe('Misbehaving Volunteer view', () => {
     volunteerList.deleteRequest(null);
     expect(snackbarModuleStub.called).toBeTrue();
   });
-
   it('does not call delete if the post failed when calling `postRequest`', () => {
     hasCalledDelete = false;
     hasCalledAddDonor = false;
