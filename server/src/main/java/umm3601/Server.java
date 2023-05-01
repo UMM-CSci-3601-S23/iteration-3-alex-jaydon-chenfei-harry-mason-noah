@@ -91,6 +91,8 @@ public class Server {
     //List requests, filtered using query parameters
     server.get("/api/clientRequests", clientRequestController::getRequests);
     server.get("/api/donorRequests", donorRequestController::getRequests);
+    server.get("/api/donorRequests/priorities", donorRequestController::getRequestsPriorities);
+
 
     // Add a new request
     server.post("/api/clientRequests", clientRequestController::addNewRequest);

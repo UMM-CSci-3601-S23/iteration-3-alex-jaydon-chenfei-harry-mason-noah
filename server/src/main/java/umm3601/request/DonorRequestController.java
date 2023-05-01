@@ -1,4 +1,6 @@
 package umm3601.request;
+import static com.mongodb.client.model.Updates.set;
+
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -138,9 +140,13 @@ public class DonorRequestController {
     // "asc") to specify the sort order.
     String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "name");
     String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
-    Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
+    Bson primarySortingOrder = sortOrder.equals("desc") ? Sorts.descending(sortBy) : Sorts.ascending(sortBy);
+    // Add the priority sorting as a secondary sorting order.
+    Bson sortingOrder = Sorts.orderBy(primarySortingOrder, Sorts.ascending(PRIORITY_KEY));
+
     return sortingOrder;
   }
+
 
   public void addNewRequest(Context ctx) {
     auth.authenticate(ctx);
@@ -170,6 +176,28 @@ public class DonorRequestController {
     // for a description of the various response codes.
     ctx.status(HttpStatus.CREATED);
   }
+
+  public void getRequestsPriorities(Context ctx) {
+    List<Document> priorities = new ArrayList<>();
+
+    // Fetch all requests
+    ArrayList<Request> matchingRequests = requestCollection
+      .find()
+      .into(new ArrayList<>());
+
+    // Extract the priorities
+    for (Request request : matchingRequests) {
+      Document priorityInfo = new Document();
+      priorityInfo.put("_id", request._id);
+      priorityInfo.put("priority", request.priority);
+      priorities.add(priorityInfo);
+    }
+
+    // Set the JSON body of the response to be the list of priorities returned.
+    ctx.json(priorities);
+    ctx.status(HttpStatus.OK);
+  }
+
 
   public void setPriority(Context ctx) {
     Integer priority = ctx.queryParamAsClass(PRIORITY_KEY, Integer.class)
