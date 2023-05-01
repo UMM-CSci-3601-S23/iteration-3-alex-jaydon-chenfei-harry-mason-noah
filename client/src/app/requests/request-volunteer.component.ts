@@ -28,7 +28,6 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject<void>();
 // eslint-disable-next-line @typescript-eslint/member-ordering
-priority: number;
 
 
   constructor(private requestService: RequestService, private snackBar: MatSnackBar) {
@@ -130,7 +129,7 @@ priority: number;
       },
     });
   }
-  public postRequest(request: Request, priority: number): void {
+  public postRequest(request: Request): void {
     const strippedRequest: Partial<Request> = {...request};
     delete strippedRequest._id;
     this.requestService.addDonorRequest(strippedRequest).pipe(
