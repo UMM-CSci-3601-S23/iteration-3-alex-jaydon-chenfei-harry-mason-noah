@@ -16,6 +16,7 @@ public class Pledge {
   public int amount;
   public String timeSlot;
   public String comment;
+  public String requestId;
 
   @Override
   public boolean equals(Object obj) {

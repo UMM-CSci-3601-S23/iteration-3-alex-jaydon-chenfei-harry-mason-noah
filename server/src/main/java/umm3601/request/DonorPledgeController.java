@@ -1,5 +1,7 @@
 package umm3601.request;
 
+import com.mongodb.client.model.Updates;
+import umm3601.request.Request;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.regex;
@@ -27,6 +29,7 @@ public class DonorPledgeController {
 
   private static final String TIMESLOT_REGEX = "^(Monday|Tuesday|Wednesday|Thursday|Friday)$";
 
+  private final JacksonMongoCollection<Request> requestCollection;
   private final JacksonMongoCollection<Pledge> pledgeCollection;
   private Authentication auth;
 
@@ -36,6 +39,11 @@ public class DonorPledgeController {
       database,
       "donorPledges",
       Pledge.class,
+      UuidRepresentation.STANDARD);
+    requestCollection = JacksonMongoCollection.builder().build(
+      database,
+      "donorRequests",
+      Request.class,
       UuidRepresentation.STANDARD);
   }
 
@@ -47,6 +55,13 @@ public class DonorPledgeController {
     .get();
 
     pledgeCollection.insertOne(newPledge);
+
+    // Find the request by its ID and update the amount needed
+    ObjectId requestId = new ObjectId(newPledge.requestId);
+    Bson filter = eq("_id", requestId);
+    Bson updateOperation = Updates.inc("amount", -newPledge.amount);
+    requestCollection.updateOne(filter, updateOperation);
+
     ctx.json(Map.of("id", newPledge._id));
     ctx.status(HttpStatus.CREATED);
   }

@@ -19,6 +19,7 @@ public class Request {
   public String dateAdded;
   public String diaperSize;
   public Boolean incomeValid;
+  public int amount;
 
   @Override
   public boolean equals(Object obj) {

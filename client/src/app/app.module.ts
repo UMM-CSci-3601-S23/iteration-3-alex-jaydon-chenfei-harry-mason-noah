@@ -24,6 +24,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatStepperModule } from '@angular/material/stepper' ;
 import { MatCheckboxModule } from '@angular/material/checkbox' ;
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -55,6 +56,7 @@ const MATERIAL_MODULES: any[] = [
   MatTooltipModule,
   MatStepperModule,
   MatCheckboxModule
+  MatBadgeModule
 ];
 
 @NgModule({
