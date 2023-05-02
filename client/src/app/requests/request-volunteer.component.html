@@ -27,7 +27,7 @@
       <mat-card-content>
         <mat-nav-list class="volunteer-nav-list">
           <h3 mat-subheader>Requests</h3>
-          <div mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/requests/donor', request._id]" class="volunteer-list-item edit-request">
+          <div mat-list-item *ngFor="let request of this.serverFilteredRequests" class="volunteer-list-item edit-request">
             <mat-card class="example-card">
               <mat-card-header>
                 <mat-card-title class="volunteer-list-name">{{request.name}} {{this.requestService.getReadableDate(request.dateAdded)}}</mat-card-title>
@@ -39,13 +39,13 @@
                 <p class = "income-warning" *ngIf="!request.incomeValid">!Income is more than guideline for a family of this size!</p>
               </mat-card-content>
               <mat-card-actions>
-                <button mat-button matToolTip="Edit Request" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
-                  Edit Request
+                <button mat-mini-fab matTooltip="Post" color="accent" data-test="postRequestButton" (click)="postRequest(request)">
+                  <mat-icon>send</mat-icon>
                 </button>
-                <button mat-button data-test="postRequestButton" (click)="postRequest(request)">
-                  Post
+                <button mat-mini-fab matTooltip="Edit Request" color="warn" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
+                  <mat-icon>more_vert</mat-icon>
                 </button>
-                <button mat-icon-button data-test="deleteRequestButton" (click)="deleteRequest(request)">
+                <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
                   <mat-icon>delete</mat-icon>
                 </button>
               </mat-card-actions>

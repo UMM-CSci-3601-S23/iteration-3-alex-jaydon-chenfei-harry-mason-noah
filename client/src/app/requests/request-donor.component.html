@@ -31,7 +31,7 @@
     <mat-card-content>
       <mat-nav-list class="donor-nav-list">
         <h2 mat-subheader>Requests</h2>
-        <div mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/requests/donor', request._id]" class="donor-list-item">
+        <div mat-list-item *ngFor="let request of this.serverFilteredRequests" class="donor-list-item">
           <mat-card class="example-card">
             <mat-card-header>
               <mat-card-title class="donor-list-name">{{request.name}} {{this.requestService.getReadableDate(request.dateAdded)}}</mat-card-title>
@@ -42,7 +42,10 @@
               <p matListItemBody class="donor-list-description"> {{request.description}} </p>
             </mat-card-content>
             <mat-card-actions *ngIf="this.authHypothesis">
-              <button mat-icon-button data-test="deleteRequestButton" (click)="deleteRequest(request)">
+              <button mat-mini-fab matTooltip="Pledge" color="accent" data-test="pledgeRequestButton" [routerLink]="['/requests/donor', request._id]">
+                <mat-icon>favorite</mat-icon>
+              </button>
+              <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-card-actions>
@@ -64,3 +67,4 @@
     </div>
   </ng-template>
 </div>
+

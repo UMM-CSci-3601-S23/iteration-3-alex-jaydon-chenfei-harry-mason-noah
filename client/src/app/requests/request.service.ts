@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Request } from './request';
 import { map } from 'rxjs/operators';
+import { Pledge } from '../donor-pledge/pledge';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -15,6 +16,7 @@ export class RequestService {
   readonly newRequestClientUrl: string = `${environment.apiUrl}clientRequests`;
   readonly requestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newRequestDonorUrl: string = `${environment.apiUrl}donorRequests`;
+  readonly newPledgeDonorUrl: string = `${environment.apiUrl}donorPledges`;
   readonly authUrl: string = `http://localhost:4568/api/auth`;
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
@@ -155,6 +157,9 @@ export class RequestService {
     return this.httpClient.get<Request>(this.requestClientUrl + '/' + id);
   }
 
+  getDonorRequestById(id: string): Observable<Request> {
+    return this.httpClient.get<Request>(this.requestDonorUrl + '/' + id);
+  }
 
   getDonorRequests(filters?: {description?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
@@ -185,6 +190,11 @@ export class RequestService {
   addDonorRequest(newRequest: Partial<Request>): Observable<string> {
     // Send post request to add a new Request with the Request data as the body.
     return this.httpClient.post<{id: string}>(this.newRequestDonorUrl, newRequest).pipe(map(res => res.id));
+  }
+
+  addDonorPledge(newPledge: Partial<Pledge>): Observable<string> {
+    // Send post request to add a new Pledge with the Pledge data as the body.
+    return this.httpClient.post<{id: string}>(this.newPledgeDonorUrl, newPledge).pipe(map(res => res.id));
   }
 
   deleteClientRequest(request: Partial<Request>): Observable<object> {

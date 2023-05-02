@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { Request } from './request';
@@ -13,6 +13,8 @@ import { RequestService } from './request.service';
 })
 
 export class RequestDonorComponent implements OnInit, OnDestroy {
+  @Input() simple?: boolean = false;
+
   public serverFilteredRequests: Request[];
   public filteredRequests: Request[];
   public requestDescription: string;

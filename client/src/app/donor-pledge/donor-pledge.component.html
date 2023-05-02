@@ -1,0 +1,102 @@
+<div class="flex-row">
+  <div class="flex-1">
+    <form [formGroup]="newPledgeForm" (ngSubmit)="submitForm();">
+      <mat-card-header>
+        <mat-card-title class = "donor-pledge-title">
+          Pledge Form
+        </mat-card-title>
+        <mat-card-subtitle>
+          <div>
+            <p>Itemtype: <span class="donor-pledge-itemType">{{ this.request.itemType }}</span></p>
+            <p *ngIf="this.request.itemType === 'food'">FoodType: <span class="donor-pledge-foodType">{{ this.request.foodType }}</span></p>
+            <p>Description: <span class="donor-pledge-description">{{ this.request.description }}</span></p>
+          </div>
+        </mat-card-subtitle>
+      </mat-card-header>
+    <mat-card-content>
+
+      <div>
+        <mat-form-field class="input-field">
+          <mat-label>Preferred Name</mat-label>
+          <input matInput formControlName="name"
+          required data-test="donorNameInput" placeholder="Ex.Alex">
+        </mat-form-field>
+        <mat-error *ngIf="formControlHasError('name')" data-test="nameError">
+          {{getErrorMessage('name')}}
+        </mat-error>
+      </div>
+
+      <div>
+        <mat-form-field class="input-field">
+          <mat-label>Amount to Donate</mat-label>
+          <input matInput formControlName="amount"
+          required data-test="donateAmount" type="number" placeholder="Ex.3"
+          min="1" max="5">
+       </mat-form-field>
+       <mat-error *ngIf="formControlHasError('amount')" data-test="amountError">
+        {{getErrorMessage('amount')}}
+      </mat-error>
+      </div>
+
+    <div class = "drop-downs">
+      <mat-form-field>
+        <mat-label>Schedule a Timeslot</mat-label>
+        <mat-select
+        required
+        [(ngModel)]="timeSlot"
+        formControlName="timeSlot"
+        data-test="timeSlotSelect"
+        >
+          <mat-option value ="--">--</mat-option>
+          <mat-option value="Monday">Monday: 2:30-3:30 PM</mat-option>
+          <mat-option value="Tuesday">Tuesday: 5:30-6:30 PM</mat-option>
+          <mat-option value="Wednesday">Wednesday: 10:30-11:30 AM</mat-option>
+          <mat-option value="Thursday">Thursday: 5:30-6:30 PM</mat-option>
+          <mat-option value="Friday">Friday: 10:30-11:30 AM</mat-option>
+        </mat-select>
+        <mat-error *ngIf="formControlHasError('timeSlot')" data-test="timeSlotError">
+          {{getErrorMessage('timeSlot')}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class = "desc">
+        <mat-label>Any Comments</mat-label>
+        <textarea matInput formControlName="comment">
+        </textarea>
+        <mat-error *ngIf="formControlHasError('comment')" data-test="commentError">
+          {{getErrorMessage('comment')}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    </mat-card-content>
+
+    <div>
+    <mat-card-actions align="end">
+      <button
+        mat-button
+        class="cancel_button custom_button"
+        type="button"
+        routerLink="/requests/donor"
+        data-test="backtoDonorPageButton"
+      >
+        BACK TO DONOR PAGE
+      </button>
+      <button
+        mat-button
+        class="submit_button custom_button"
+        type="button"
+        [disabled]="!newPledgeForm.valid"
+        type="submit"
+        data-test="confirmNewPledgeButton"
+      >
+        CONFIRM PLEDGE
+      </button>
+
+    </mat-card-actions>
+    </div>
+  </form>
+</div>
+</div>
+
