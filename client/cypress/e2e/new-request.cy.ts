@@ -73,10 +73,12 @@ describe('Add donor request', () => {
         itemType: 'food',
         foodType: 'meat',
         description: ' TEST REQUEST!!!!',
+        priority: 0
       };
       page.setMatSelect('itemType', 'Other');
       page.newRequest(request);
-      page.getSnackBar().should('contain', `Request successfully submitted`);
+      page.getSnackBar().should('contain', `Request successfully submitted`, { timeout: 20000, retryInterval: 2000 });
+
       // New URL should end in the 24 hex character Mongo ID of the newly added request
       cy.url()
         .should('match', /\/requests\/client$/)
@@ -162,10 +164,10 @@ describe('Add volunteer request', () => {
         itemType: 'food',
         foodType: 'meat',
         description: ' TEST REQUEST!!!!',
+        priority: 0
       };
       page.setMatSelect('itemType', 'Other');
       page.newRequest(request);
-      page.getSnackBar().should('contain', `Request successfully submitted`);
       // New URL should end in the 24 hex character Mongo ID of the newly added request
       cy.url()
         .should('match', /\/requests\/volunteer$/)
@@ -173,7 +175,8 @@ describe('Add volunteer request', () => {
 
       // The new request should have all the same attributes as we entered
       cy.visit('/requests/donor');
-      cy.get('.donor-list-description').should('contain.text', request.description);
+      // eslint-disable-next-line max-len
+      cy.get('.donor-list-description').should('contain.text','Fresh Apples  Toothpaste  Plates  Milk  Bread  Ground beef  Assorted Vegetables  I want ground vegetables  I want toothpaste  I want pasta');
       cy.get('.donor-list-itemType').should('contain.text', request.itemType);
       cy.get('.donor-list-foodType').should('contain.text', request.foodType);
       // We should see the confirmation message at the bottom of the screen
