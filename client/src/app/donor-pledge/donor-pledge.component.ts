@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
@@ -40,7 +40,9 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     amount: new FormControl<number>(0, Validators.compose([
       Validators.required,
       Validators.min(1),
+      this.maxAmountValidator(0),
     ])),
+
     requestId: new FormControl('', Validators.required),
   });
 
@@ -58,7 +60,8 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     ],
     amount:[
       { type: 'required', message: 'The amount is required' },
-      { type: 'min', message: 'The amount can not be less than 1' }
+      { type: 'min', message: 'The amount can not be less than 1' },
+      { type: 'maxAmount', message: 'The amount cannot be greater than the current amount needed' },
     ]
   };
   private ngUnsubscribe = new Subject<void>();
@@ -72,7 +75,6 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     return this.newPledgeForm.get(controlName).invalid &&
       (this.newPledgeForm.get(controlName).dirty || this.newPledgeForm.get(controlName).touched);
   }
-
   getErrorMessage(name: string): string {
     for (const { type, message } of this.newRequestValidationMessages[name]) {
       if (this.newPledgeForm.get(name).hasError(type)) {
@@ -80,6 +82,15 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
       }
     }
     return 'Unknown error';
+  }
+
+  maxAmountValidator(maxAmount: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value > maxAmount) {
+        return { maxAmount: true };
+      }
+      return null;
+    };
   }
 
   submitForm() {
@@ -110,12 +121,15 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     console.log(request);
     this.request = request;
     this.newPledgeForm.get('requestId').setValue(request._id);
-    // this.newPledgeForm.setValue({
-    //   comment: '',
-    //   timeSlot: '',
-    //   name: '',
-    //   amount:0,
-    // });
+
+    // Update the max amount for the amount FormControl
+    const currentAmount = request.amount;
+    this.newPledgeForm.get('amount').setValidators([
+      Validators.required,
+      Validators.min(1),
+      this.maxAmountValidator(currentAmount),
+    ]);
+    this.newPledgeForm.get('amount').updateValueAndValidity();
   }
 
 
