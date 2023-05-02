@@ -1,4 +1,4 @@
-package umm3601.pledge;
+package umm3601.request;
 
 import org.mongojack.Id;
 import org.mongojack.ObjectId;

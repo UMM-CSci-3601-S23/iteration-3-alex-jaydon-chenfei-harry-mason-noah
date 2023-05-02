@@ -167,6 +167,12 @@ public class ClientRequestController {
     ctx.status(HttpStatus.OK);
   }
 
+  public void editRequest(Context ctx) {
+    String RequestID = ctx.queryParam("id");
+    Request incomingRequest = ctx.bodyValidator(Request.class).get();
+    Bson filter = eq("_id", RequestID);
+    //Bson updateOp = Updates.inc("");
+  }
 
   /**
    * Utility function to generate the md5 hash for a given string
