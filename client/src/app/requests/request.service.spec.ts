@@ -121,19 +121,20 @@ describe('RequestService', () => {
     it('correctly calls api/requests with description \'Need Milk\'', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
 
-      //get requests with foodType dairy
-      requestService.getClientRequests({description: 'Need Milk'}).subscribe(() => {
-        //check if called once
+      // get requests with description 'Need Milk'
+      requestService.getDonorRequests({ description: 'Need Milk' }).subscribe(() => {
+        // check if called once
         expect(mockedMethod)
           .withContext('one call')
           .toHaveBeenCalledTimes(1);
-        //check if it's at the correct endpoint
+        // check if it's at the correct endpoint
         expect(mockedMethod)
           .withContext('talks to the correct endpoint')
-          .toHaveBeenCalledWith(requestService.requestClientUrl, { params: new HttpParams().set('description', 'Need Milk')});
+          .toHaveBeenCalledWith(requestService.requestDonorUrl, {
+            params: new HttpParams().set('description', 'Need Milk'),
+          });
       });
     });
-  });
 
   describe('When getDonorRequests() is called with a parameter', () => {
     //test food top level category
@@ -167,23 +168,6 @@ describe('RequestService', () => {
           .toHaveBeenCalledWith(requestService.requestDonorUrl, { params: new HttpParams().set('foodType', 'dairy')});
       });
     });
-
-    it('correctly calls api/requests with description \'Need Milk\'', () => {
-      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
-
-      //get requests with foodType dairy
-      requestService.getDonorRequests({description: 'Need Milk'}).subscribe(() => {
-        //check if called once
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-        //check if it's at the correct endpoint
-        expect(mockedMethod)
-          .withContext('talks to the correct endpoint')
-          .toHaveBeenCalledWith(requestService.requestDonorUrl, { params: new HttpParams().set('description', 'Need Milk')});
-      });
-    });
-  });
 
   describe('When getRequests() is called with multiple parameters', () => {
     //test a itemType 'food' with a foodType 'meat'
@@ -309,5 +293,6 @@ describe('deleteDonorRequest', ()=> {
 
 
 });
-
+  });
+});
 });

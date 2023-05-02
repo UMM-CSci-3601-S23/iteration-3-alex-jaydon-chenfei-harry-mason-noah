@@ -13,25 +13,29 @@ export class MockRequestService extends RequestService {
       _id: '1_id',
       itemType: 'food',
       description: 'I would like some ground beef',
-      foodType: 'meat'
+      foodType: 'meat',
+      priority: 3
     },
     {
       _id: '2_id',
       itemType: 'toiletries',
       description: 'I need more toothpaste',
-      foodType: ''
+      foodType: '',
+      priority: 4
     },
     {
       _id: '3_id',
       itemType: 'other',
       description: 'I need more paper plates',
-      foodType: ''
+      foodType: '',
+      priority: 1
     },
     {
       _id: '4_id',
       itemType: 'food',
       description: 'I would like some milk',
-      foodType: 'dairy'
+      foodType: 'dairy',
+      priority: 2
     }
   ];
 

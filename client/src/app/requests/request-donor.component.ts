@@ -49,7 +49,11 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
   }
 
   public updateFilter(): void {
-    this.filteredRequests = this.serverFilteredRequests.sort((a, b) => b.priority - a.priority);
+    if (this.serverFilteredRequests) {
+      this.filteredRequests = this.serverFilteredRequests.sort((a, b) => b.priority - a.priority);
+    } else {
+      this.filteredRequests = [];
+    }
   }
 
   ngOnInit(): void {

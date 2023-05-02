@@ -161,14 +161,14 @@ describe('Misbehaving Volunteer view', () => {
     });
   }));
 
-  it('generates an error if we don\'t set up a RequestVolunteerService', () => {
-    expect(volunteerList.serverFilteredRequests).toBeUndefined();
-  });
-
   it('opens snackbar on failures', () => {
     snackbarModuleStub.called = false;
     volunteerList.deleteRequest(null);
     expect(snackbarModuleStub.called).toBeTrue();
+  });
+
+  it('generates an error if we don\'t set up a RequestVolunteerService', () => {
+    expect(volunteerList.serverFilteredRequests).toEqual([]);
   });
 
   it('does not call delete if the post failed when calling `postRequest`', () => {

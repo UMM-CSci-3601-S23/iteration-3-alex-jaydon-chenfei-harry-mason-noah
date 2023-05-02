@@ -51,7 +51,7 @@ export class RequestService {
   }
 
 
-  getDonorRequests(filters?: {itemType?: ItemType; foodType?: FoodType}): Observable<Request[]> {
+  getDonorRequests(filters?: { itemType?: ItemType; foodType?: FoodType; description?: string }): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
       if (filters.itemType) {
@@ -60,13 +60,15 @@ export class RequestService {
       if (filters.foodType) {
         httpParams = httpParams.set(this.foodTypeKey, filters.foodType);
       }
+      if (filters.description) {
+        httpParams = httpParams.set('description', filters.description);
+      }
     }
-// We'll need to add a conditional in here that handles a donor get request as well
     return this.httpClient.get<Request[]>(this.requestDonorUrl, {
       params: httpParams,
     });
-
   }
+
   descriptionKey(descriptionKey: any, description: string): HttpParams {
     throw new Error('Method not implemented.');
   }

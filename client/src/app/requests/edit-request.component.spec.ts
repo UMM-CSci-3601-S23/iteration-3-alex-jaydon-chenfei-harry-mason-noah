@@ -116,7 +116,8 @@ describe('EditRequestComponent', () => {
         _id: '134',
         itemType: 'food',
         description: 'Description',
-        foodType: 'fruit'
+        foodType: 'fruit',
+        priority: 1
       });
 
       expect(itemTypeControl.value === 'food').toBeTrue();
@@ -315,7 +316,8 @@ describe('Partially Misbehaving request service', () => {
       _id: '134',
       itemType: 'food',
       description: 'Description',
-      foodType: 'fruit'
+      foodType: 'fruit',
+      priority: 1
     });
 
 
