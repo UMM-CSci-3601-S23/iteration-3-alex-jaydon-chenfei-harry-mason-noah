@@ -106,9 +106,9 @@ export class NewRequestComponent implements OnInit{
       dateAdded: this.formatDate((this.date.getMonth() + 1).toString(), this.date.getDate().toString()),
       description: this.newRequestForm.get('misc').getRawValue(),
       selections: this.selections,
+      fulfilled: [],
       diaperSize: (this.diapers ? this.newRequestForm.controls.diaperSize.getRawValue() : undefined)
     };
-    console.log(newRequest);
     if (this.destination === 'client') {
       this.requestService.addClientRequest(newRequest).subscribe({
         next: (newId) => {
@@ -125,7 +125,6 @@ export class NewRequestComponent implements OnInit{
             { duration: 5000 }
           );
         },
-        // complete: () => console.log('Add user completes!')
       });
     }
 //this if statement checks if destination is set to donor. Destination is set in the
@@ -146,7 +145,6 @@ export class NewRequestComponent implements OnInit{
             { duration: 5000 }
           );
         },
-        // complete: () => console.log('Add user completes!')
       });
     }
   }
