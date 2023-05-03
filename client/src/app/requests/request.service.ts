@@ -6,6 +6,7 @@ import { Request } from './request';
 import { map } from 'rxjs/operators';
 import { Pledge } from '../donor-pledge/pledge';
 import { Router } from '@angular/router';
+import { RequestedItem } from './requestedItem';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,10 @@ export class RequestService {
   readonly requestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newRequestDonorUrl: string = `${environment.apiUrl}donorRequests`;
   readonly newPledgeDonorUrl: string = `${environment.apiUrl}donorPledges`;
+  readonly updateRequestUrl: string = `${environment.apiUrl}editRequest`;
+  readonly addNewRequestedItem: string = `${environment.apiUrl}addNewRequestedItem`;
+  readonly requestedItem: string = `${environment.apiUrl}getRequestedItems`;
+  readonly getRequestedItem: string = `${environment.apiUrl}requestedItem`;
   readonly authUrl: string = `http://localhost:4568/api/auth`;
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
@@ -161,15 +166,20 @@ export class RequestService {
     return this.httpClient.get<Request>(this.requestDonorUrl + '/' + id);
   }
 
-  getDonorRequests(filters?: {description?: string}): Observable<Request[]> {
+
+  getRequestedItemById(id: string): Observable<RequestedItem> {
+    return this.httpClient.get<RequestedItem>(this.getRequestedItem + '/' + id);
+  }
+
+  getDonorRequests(filters?: {name?: string}): Observable<RequestedItem[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-      if (filters.description) {
-        httpParams = httpParams.set(this.descriptionKey, filters.description);
+      if (filters.name) {
+        httpParams = httpParams.set(this.descriptionKey, filters.name);
       }
     }
 // We'll need to add a conditional in here that handles a donor get request as well
-    return this.httpClient.get<Request[]>(this.requestDonorUrl, {
+    return this.httpClient.get<RequestedItem[]>(this.requestedItem, {
       params: httpParams,
     });
 
@@ -192,6 +202,10 @@ export class RequestService {
     return this.httpClient.post<{id: string}>(this.newRequestDonorUrl, newRequest).pipe(map(res => res.id));
   }
 
+  addDonorItem(newItem: Partial<RequestedItem>): Observable<string> {
+    return this.httpClient.post<{id: string}>(this.addNewRequestedItem, newItem).pipe(map(res => res.id));
+  }
+
   addDonorPledge(newPledge: Partial<Pledge>): Observable<string> {
     // Send post request to add a new Pledge with the Pledge data as the body.
     return this.httpClient.post<{id: string}>(this.newPledgeDonorUrl, newPledge).pipe(map(res => res.id));
@@ -207,10 +221,13 @@ export class RequestService {
     return this.httpClient.delete(this.requestDonorUrl + '/' + request._id).pipe(map(res => res));
   }
 
+  updateRequest(request: Partial<Request>): Observable<object> {
+    return this.httpClient.post(this.updateRequestUrl, request).pipe(map(res=> res));
+  }
+
   public getReadableItem(camelCase: string, diaperSize?: string): string{
     const mappedValue = this.itemMap.get(camelCase);
     if (camelCase === 'diapers' && diaperSize){
-      console.log(diaperSize);
       return mappedValue +' (size: ' + diaperSize + ')';
     }
     else if (mappedValue === undefined) {
