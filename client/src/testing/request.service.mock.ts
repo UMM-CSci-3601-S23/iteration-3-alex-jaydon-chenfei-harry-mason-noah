@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
-import { Request, ItemType, FoodType } from 'src/app/requests/request';
+import { Request } from 'src/app/requests/request';
 import { RequestService } from 'src/app/requests/request.service';
+import { RequestedItem } from 'src/app/requests/requestedItem';
+
 
 @Injectable({
   providedIn: AppComponent
@@ -11,31 +13,62 @@ export class MockRequestService extends RequestService {
   public static testRequests: Request[] = [
     {
       _id: '1_id',
-      itemType: 'food',
-      description: 'I would like some ground beef',
-      foodType: 'meat',
+
+      name: 'noah',
+      dateAdded: '20210213',
+      fulfilled: [],
+      incomeValid: 'true',
+      selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
+      // itemType: 'food',
+      description: 'I would like some ground beef'
+      // foodType: 'meat',
       priority: 3
     },
     {
       _id: '2_id',
-      itemType: 'toiletries',
-      description: 'I need more toothpaste',
-      foodType: '',
-      priority: 4
+      name: 'mason',
+      dateAdded: '20220618',
+      fulfilled: [],
+      incomeValid: 'true',
+      selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
+      // itemType: 'toiletries',
+      description: 'I need more toothpaste'
+      // foodType: '',
+      priority: 3
     },
     {
       _id: '3_id',
-      itemType: 'other',
-      description: 'I need more paper plates',
-      foodType: '',
-      priority: 1
+      name: 'harry',
+      dateAdded: '20180401',
+      fulfilled: [],
+      incomeValid: 'true',
+      selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
+      // itemType: 'other',
+      description: 'I need more paper plates'
+      // foodType: '',
+      priority: 3
     },
     {
       _id: '4_id',
-      itemType: 'food',
-      description: 'I would like some milk',
-      foodType: 'dairy',
-      priority: 2
+      name: 'jaydon',
+      dateAdded: '20140817',
+      fulfilled: [],
+      incomeValid: 'true',
+      selections: ['hotSauce', 'tomatoSoup', 'vegOil', 'diapers'],
+      diaperSize: 'newborn',
+      // itemType: 'food',
+      description: 'I would like some milk'
+      // foodType: 'dairy',
+      priority: 3
+    }
+  ];
+
+  public static testItems: RequestedItem[] = [
+    {
+      _id: 'item_1',
+      name: 'hotSauce',
+      amount: 3
+
     }
   ];
 
@@ -49,12 +82,12 @@ export class MockRequestService extends RequestService {
     super(null);
   }
 
-  getClientRequests(filters?: { itemType?: ItemType; foodType?: FoodType }): Observable<Request[]> {
+  getClientRequests(): Observable<Request[]> {
       return of(MockRequestService.testRequests);
   }
 
-  getDonorRequests(filters?: { itemType?: ItemType; foodType?: FoodType }): Observable<Request[]> {
-    return of(MockRequestService.testRequests);
+  getDonorRequests(): Observable<RequestedItem[]> {
+    return of(MockRequestService.testItems);
   }
   deleteClientRequest(request: Partial<Request>): Observable<object> {
     this.deletedClientRequests.push(request);

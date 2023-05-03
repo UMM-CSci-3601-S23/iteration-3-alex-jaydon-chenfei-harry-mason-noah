@@ -19,7 +19,7 @@ describe('Add donor request', () => {
     // are filled. Once the last (`#emailField`) is filled, then the button should
     // become enabled.
     page.newRequestButton().should('be.disabled');
-    page.setMatSelect('itemType', 'Food');
+    // page.setMatSelect('itemType', 'Food');
     page.newRequestButton().should('be.disabled');
     page.getFormField('description').type('test');
     page.newRequestButton().should('be.disabled');
@@ -54,10 +54,10 @@ describe('Add donor request', () => {
     page.getFormField('description').clear().type('Old dutch chips').blur();
     cy.get('[data-test=descriptionError]').should('not.exist');
 
-    page.setMatSelect('itemType', '--');
-    cy.get('[data-test=itemTypeError]').should('exist').and('be.visible');
-    page.setMatSelect('itemType', 'Other');
-    cy.get('[data-test=itemTypeError]').should('not.exist');
+    // page.setMatSelect('itemType', '--');
+    // cy.get('[data-test=itemTypeError]').should('exist').and('be.visible');
+    // page.setMatSelect('itemType', 'Other');
+    // cy.get('[data-test=itemTypeError]').should('not.exist');
   });
 
   describe('Adding a new request', () => {
@@ -69,13 +69,17 @@ describe('Add donor request', () => {
 
     it('Should go to the right page, and have the right info', () => {
       const request: Request = {
-        _id: null,
-        itemType: 'food',
-        foodType: 'meat',
-        description: ' TEST REQUEST!!!!',
+
+        _id: '588935f57546a2daea44de7c',
+        name: 'joe',
+        dateAdded: '20230423',
+      //   itemType: 'food',
+      //   foodType: 'meat',
+        description: 'This is a test request',
         priority: 0
+
       };
-      page.setMatSelect('itemType', 'Other');
+      // page.setMatSelect('itemType', 'Other');
       page.newRequest(request);
       page.getSnackBar().should('contain', `Request successfully submitted`, { timeout: 20000, retryInterval: 2000 });
 
@@ -87,8 +91,8 @@ describe('Add donor request', () => {
       // The new request should have all the same attributes as we entered
       cy.visit('/requests/volunteer');
       cy.get('.volunteer-list-description').should('contain.text', request.description);
-      cy.get('.volunteer-list-itemType').should('contain.text', request.itemType);
-      cy.get('.volunteer-list-foodType').should('contain.text', request.foodType);
+      // cy.get('.volunteer-list-itemType').should('contain.text', request.itemType);
+      // cy.get('.volunteer-list-foodType').should('contain.text', request.foodType);
       // We should see the confirmation message at the bottom of the screen
     });
   });
@@ -111,7 +115,7 @@ describe('Add volunteer request', () => {
     // are filled. Once the last (`#emailField`) is filled, then the button should
     // become enabled.
     page.newRequestButton().should('be.disabled');
-    page.setMatSelect('itemType', 'Food');
+    // page.setMatSelect('itemType', 'Food');
     page.newRequestButton().should('be.disabled');
     page.getFormField('description').type('test');
     page.newRequestButton().should('be.disabled');
@@ -146,10 +150,10 @@ describe('Add volunteer request', () => {
     page.getFormField('description').clear().type('Old dutch chips').blur();
     cy.get('[data-test=descriptionError]').should('not.exist');
 
-    page.setMatSelect('itemType', '--');
-    cy.get('[data-test=itemTypeError]').should('exist').and('be.visible');
-    page.setMatSelect('itemType', 'Other');
-    cy.get('[data-test=itemTypeError]').should('not.exist');
+    // page.setMatSelect('itemType', '--');
+    // cy.get('[data-test=itemTypeError]').should('exist').and('be.visible');
+    // page.setMatSelect('itemType', 'Other');
+    // cy.get('[data-test=itemTypeError]').should('not.exist');
   });
 
   describe('Adding a new request', () => {
@@ -160,13 +164,15 @@ describe('Add volunteer request', () => {
 
     it('Should go to the right page, and have the right info', () => {
       const request: Request = {
-        _id: null,
-        itemType: 'food',
-        foodType: 'meat',
-        description: ' TEST REQUEST!!!!',
+        _id: '588935f57546a2daea44de7c',
+        name: 'joe',
+        dateAdded: '20230423',
+      //   itemType: 'food',
+      //   foodType: 'meat',
+        description: 'This is a test edit',
         priority: 0
       };
-      page.setMatSelect('itemType', 'Other');
+      // page.setMatSelect('itemType', 'Other');
       page.newRequest(request);
       // New URL should end in the 24 hex character Mongo ID of the newly added request
       cy.url()
@@ -175,10 +181,11 @@ describe('Add volunteer request', () => {
 
       // The new request should have all the same attributes as we entered
       cy.visit('/requests/donor');
-      // eslint-disable-next-line max-len
-      cy.get('.donor-list-description').should('contain.text','Fresh Apples  Toothpaste  Plates  Milk  Bread  Ground beef  Assorted Vegetables  I want ground vegetables  I want toothpaste  I want pasta');
-      cy.get('.donor-list-itemType').should('contain.text', request.itemType);
-      cy.get('.donor-list-foodType').should('contain.text', request.foodType);
+
+      cy.get('.donor-list-description').should('contain.text', request.description);
+      // cy.get('.donor-list-itemType').should('contain.text', request.itemType);
+      // cy.get('.donor-list-foodType').should('contain.text', request.foodType);
+
       // We should see the confirmation message at the bottom of the screen
     });
   });

@@ -13,21 +13,25 @@ describe('Edit a request', ()=> {
   it('Should edit the request', ()=> {
     const request: Request = {
       _id: '588935f57546a2daea44de7c',
-      itemType: 'food',
-      foodType: 'meat',
+      name: 'joe',
+      dateAdded: '20230423',
+    //   itemType: 'food',
+    //   foodType: 'meat',
       description: 'This is a test edit',
       priority: 0
     };
 
     page.navigateToDonor();
 
-    page.selectItemType('food');
-    page.selectFoodType('meat');
+    // page.selectItemType('food');
+    // page.selectFoodType('meat');
     page.filterDescription('This is a test edit');
 
-    cy.get('.donor-list-description').should('contain.text', 'Ground beef');
-    cy.get('.donor-list-itemType').should('contain.text', request.itemType);
-    cy.get('.donor-list-foodType').should('contain.text', request.foodType);
+
+    cy.get('.donor-list-description').should('contain.text', request.description);
+    // cy.get('.donor-list-itemType').should('contain.text', request.itemType);
+    // cy.get('.donor-list-foodType').should('contain.text', request.foodType);
+
   });
 
 });

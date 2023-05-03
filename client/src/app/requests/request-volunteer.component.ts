@@ -1,9 +1,7 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Request, ItemType, FoodType } from './request';
+import { Request } from './request';
 import { RequestService } from './request.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -16,21 +14,19 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 
 export class RequestVolunteerComponent implements OnInit, OnDestroy {
-  @Input() request: Request;
-  public serverFilteredRequests: Request[] = [];
+  public serverFilteredRequests: Request[];
   public filteredRequests: Request[];
-  public requestItemType: ItemType;
   public requestDescription: string;
-  public requestFoodType: FoodType;
+  public readableRequests: Request[];
   public sortedRequests: Request[];
+
 
   authHypothesis: boolean;
 
   private ngUnsubscribe = new Subject<void>();
 // eslint-disable-next-line @typescript-eslint/member-ordering
 
-
-  constructor(private requestService: RequestService, private snackBar: MatSnackBar) {
+  constructor(public requestService: RequestService, private snackBar: MatSnackBar) {
   }
 
   drop(event: CdkDragDrop<string[]>): void {
@@ -51,8 +47,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getClientRequests({
-      itemType: this.requestItemType,
-      foodType: this.requestFoodType
+      description: this.requestDescription
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
@@ -68,6 +63,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
       },
     });
   }
+
   //
   public updateFilter(): void {
     this.filteredRequests = this.serverFilteredRequests;
@@ -124,33 +120,6 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.snackBar.open(
           `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
-          'OK',
-          {duration: 5000});
-      },
-    });
-  }
-  public postRequest(request: Request): void {
-    const strippedRequest: Partial<Request> = {...request};
-    delete strippedRequest._id;
-    this.requestService.addDonorRequest(strippedRequest).pipe(
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe({
-      next: (returnedRequests) => {
-        this.requestService.deleteClientRequest(request).subscribe({
-          next: (_) => { this.getRequestsFromServer(); },
-          error: (err) => {
-            this.snackBar.open(
-              `Problem contacting the server to delete request – Error Code: ${err.status}\nMessage: ${err.message}`,
-              'OK',
-              {duration: 5000});
-          },
-        });
-
-      },
-
-      error: (err) => {
-        this.snackBar.open(
-          `Problem contacting the server to add request – Error Code: ${err.status}\nMessage: ${err.message}`,
           'OK',
           {duration: 5000});
       },

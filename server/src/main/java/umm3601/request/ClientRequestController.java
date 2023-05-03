@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.Updates;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import com.mongodb.client.result.DeleteResult;
@@ -27,14 +29,10 @@ import io.javalin.http.NotFoundResponse;
 import umm3601.Authentication;
 
 import java.security.NoSuchAlgorithmException;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+
 
 
 public class ClientRequestController {
-  static final String ITEM_TYPE_KEY = "itemType";
-  static final String FOOD_TYPE_KEY = "foodType";
   static final String SORT_ORDER_KEY = "sortorder";
   static final String DESCRIPTION_KEY = "description";
   static final String PRIORITY_KEY = "priority";
@@ -42,8 +40,6 @@ public class ClientRequestController {
   static final int LOWER_PRIORITY_BOUND = 1; // highest possible request priority (#1 most important)
   static final int UPPER_PRIORITY_BOUND = 5; // lowest possible (#5)
 
-  private static final String ITEM_TYPE_REGEX = "^(food|toiletries|other|FOOD)$";
-  private static final String FOOD_TYPE_REGEX = "^(|dairy|grain|meat|fruit|vegetable)$";
 
   private final JacksonMongoCollection<Request> requestCollection;
   private Authentication auth;
@@ -113,18 +109,6 @@ public class ClientRequestController {
 
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>(); // start with a blank document
-    if (ctx.queryParamMap().containsKey(ITEM_TYPE_KEY)) {
-      String itemType = ctx.queryParamAsClass(ITEM_TYPE_KEY, String.class)
-        .check(it -> it.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-        .get();
-      filters.add(eq(ITEM_TYPE_KEY, itemType));
-    }
-    if (ctx.queryParamMap().containsKey(FOOD_TYPE_KEY)) {
-      String foodType = ctx.queryParamAsClass(FOOD_TYPE_KEY, String.class)
-        .check(it -> it.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
-        .get();
-      filters.add(eq(FOOD_TYPE_KEY, foodType));
-    }
     if (ctx.queryParamMap().containsKey(DESCRIPTION_KEY)) {
       Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(DESCRIPTION_KEY)),
       Pattern.CASE_INSENSITIVE);
@@ -156,12 +140,10 @@ public class ClientRequestController {
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Request newRequest = ctx.bodyValidator(Request.class)
-      .check(req -> req.itemType.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-      .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type").get();
-
-    // Add the date to the request formatted as an ISO 8601 string
-    newRequest.dateAdded = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+    Request newRequest = ctx.bodyValidator(Request.class).get();
+      /*.check(req -> req.itemType.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
+      .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
+      */
 
     // Insert the newRequest into the requestCollection
     requestCollection.insertOne(newRequest);
@@ -226,6 +208,15 @@ public class ClientRequestController {
     ctx.status(HttpStatus.OK);
   }
 
+  public void editRequest(Context ctx) {
+    Request incomingRequest = ctx.bodyValidator(Request.class).get();
+    ObjectId requestId = new ObjectId(incomingRequest._id);
+    System.out.println(incomingRequest.fulfilled);
+    Bson filter = eq("_id", requestId);
+    requestCollection.updateOne(filter, Updates.set("fulfilled", incomingRequest.fulfilled));
+    requestCollection.updateOne(filter, Updates.set("name", incomingRequest.name));
+    requestCollection.updateOne(filter, Updates.set("description", incomingRequest.description));
+  }
 
   /**
    * Utility function to generate the md5 hash for a given string

@@ -33,16 +33,11 @@ import java.time.format.DateTimeFormatter;
 
 
 public class DonorRequestController {
-  static final String ITEM_TYPE_KEY = "itemType";
-  static final String FOOD_TYPE_KEY = "foodType";
   static final String DESCRIPTION_KEY = "description";
   static final String SORT_ORDER_KEY = "sortorder";
   static final String PRIORITY_KEY = "priority";
   static final int LOWER_PRIORITY_BOUND = 1;
   static final int UPPER_PRIORITY_BOUND = 5;
-
-  private static final String ITEM_TYPE_REGEX = "^(food|toiletries|other|FOOD)$";
-  private static final String FOOD_TYPE_REGEX = "^(|dairy|grain|meat|fruit|vegetable)$";
 
   private final JacksonMongoCollection<Request> requestCollection;
   private Authentication auth;
@@ -97,10 +92,10 @@ public class DonorRequestController {
       .find(combinedFilter)
       .sort(sortingOrder)
       .into(new ArrayList<>());
-
     // Set the JSON body of the response to be the list of requests returned by the database.
     // According to the Javalin documentation (https://javalin.io/documentation#context),
     // this calls result(jsonString), and also sets content type to json
+    System.out.println(matchingRequests);
     ctx.json(matchingRequests);
 
     // Explicitly set the context status to OK
@@ -109,18 +104,6 @@ public class DonorRequestController {
 
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>(); // start with a blank document
-    if (ctx.queryParamMap().containsKey(ITEM_TYPE_KEY)) {
-      String itemType = ctx.queryParamAsClass(ITEM_TYPE_KEY, String.class)
-        .check(it -> it.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-        .get();
-      filters.add(eq(ITEM_TYPE_KEY, itemType));
-    }
-    if (ctx.queryParamMap().containsKey(FOOD_TYPE_KEY)) {
-      String foodType = ctx.queryParamAsClass(FOOD_TYPE_KEY, String.class)
-        .check(it -> it.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
-        .get();
-      filters.add(eq(FOOD_TYPE_KEY, foodType));
-    }
     if (ctx.queryParamMap().containsKey(DESCRIPTION_KEY)) {
       Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(DESCRIPTION_KEY)),
       Pattern.CASE_INSENSITIVE);
@@ -157,14 +140,16 @@ public class DonorRequestController {
      *    - itemType is valid
      *    - foodType is Valid
      */
+
+    Request newRequest = ctx.bodyValidator(Request.class).get();
+
     Request newRequest = ctx.bodyValidator(Request.class)
       .check(req -> req.itemType.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
       .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
       .check(req -> req.priority <= UPPER_PRIORITY_BOUND && req.priority >= LOWER_PRIORITY_BOUND,
       "Request priority must be a number between 1 and 5").get();
 
-    // Add the date to the request formatted as an ISO 8601 string
-    newRequest.dateAdded = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+
 
     // Insert the newRequest into the requestCollection
     requestCollection.insertOne(newRequest);
@@ -251,21 +236,4 @@ public class DonorRequestController {
     ctx.status(HttpStatus.OK);
   }
 
-
-  /**
-   * Utility function to generate the md5 hash for a given string
-   *
-   * @param str the string to generate a md5 for
-   */
-  @SuppressWarnings("lgtm[java/weak-cryptographic-algorithm]")
-  public String md5(String str) throws NoSuchAlgorithmException {
-    MessageDigest md = MessageDigest.getInstance("MD5");
-    byte[] hashInBytes = md.digest(str.toLowerCase().getBytes(StandardCharsets.UTF_8));
-
-    StringBuilder result = new StringBuilder();
-    for (byte b : hashInBytes) {
-      result.append(String.format("%02x", b));
-    }
-    return result.toString();
-  }
 }

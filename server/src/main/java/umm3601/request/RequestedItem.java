@@ -5,34 +5,22 @@ import org.mongojack.ObjectId;
 
 @SuppressWarnings({"VisibilityModifier"})
 
-public class Request {
+public class RequestedItem {
   @ObjectId @Id
 
   @SuppressWarnings({"MemberName"})
 
   public String _id;
 
-
   public String name;
-  public String[] selections;
-  public String[] fulfilled;
-
-  public String description;
-  public String dateAdded;
-
-  public String diaperSize;
-  public Boolean incomeValid;
   public int amount;
-
-  public int priority;
-
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Request)) {
+    if (!(obj instanceof RequestedItem)) {
       return false;
     }
-    Request other = (Request) obj;
+    RequestedItem other = (RequestedItem) obj;
     return _id.equals((other._id));
   }
 

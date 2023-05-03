@@ -3,84 +3,97 @@
     "_id": {
       "$oid": "588935f57546a2daea44de7c"
     },
-    "itemType": "food",
+    "name": "Harry Potter",
+    "dateAdded": "20141001",
     "description": "Fresh Apples",
-    "foodType": "fruit"
+
+    "selections": [
+      "corn",
+      "crackers",
+      "ranchDressing"
+    ]
   },
   {
     "_id": {
       "$oid": "588935f5597715f06f3e8f6c"
     },
-    "itemType": "toiletries",
-    "description": "Toothpaste",
-    "foodType": ""
+
+    "name": "Percy Jackson",
+    "dateAdded": "20131001",
+    "description": "Fresh Bananas",
+    "selections": [
+      "bread",
+      "shampoo",
+      "tomatoSoup"
+    ]
   },
   {
     "_id": {
       "$oid": "588935f51c55b55c75a84848"
     },
-    "itemType": "other",
-    "description": "Plates",
-    "foodType": ""
+
+    "name": "Katniss Everdeen",
+    "dateAdded": "20160101",
+    "description": "Fresh Carrots",
+    "selections": [
+      "vegCurry",
+      "glutenFree",
+      "hotSauce"
+    ]
   },
   {
     "_id": {
       "$oid": "588935f52787254123f71fed"
     },
-    "itemType": "food",
-    "description": "Milk",
-    "foodType": "dairy"
+
+    "name": "Jeff Bezos",
+    "dateAdded": "20170915",
+    "description": "Fresh Durians",
+    "selections": [
+      "seasonings",
+      "bakedGoods",
+      "lowSugar"
+    ]
   },
   {
     "_id": {
       "$oid": "588935f5de613130e931ffd5"
     },
-    "itemType": "food",
-    "description": "Bread",
-    "foodType": "grain"
+
+    "name": "Joseph R. Biden",
+    "dateAdded": "20171001",
+    "description": "Fresh Broccoli",
+    "selections": [
+      "miscSoups",
+      "greenBeans",
+      "vegetableOil"
+    ]
   },
   {
     "_id": {
       "$oid": "588935f55b432bb2ff322160"
     },
-    "itemType": "food",
-    "description": "Ground beef",
-    "foodType": "meat"
+
+    "name": "Edward Cullen",
+    "dateAdded": "20170908",
+    "description": "Fresh Oranges",
+    "selections": [
+      "hotDogSauce",
+      "almonds",
+      "chickenNoodle"
+    ]
   },
   {
     "_id": {
       "$oid": "588935f5556f992bf8f37c01"
     },
-    "itemType": "food",
-    "description": "Assorted Vegetables",
-    "foodType": "vegetable"
-  },
-
-  {
-    "_id": {
-      "$oid": "588935f5556f992bf8f37c02"
-    },
-    "itemType": "food",
-    "description": "I want ground vegetables",
-    "foodType": "vegetable"
-  },
-
-  {
-    "_id": {
-      "$oid": "588935f5556f992bf8f37c03"
-    },
-    "itemType": "toiletries",
-    "description": "I want toothpaste",
-    "foodType": ""
-  },
-
-  {
-    "_id": {
-      "$oid": "588935f5556f992bf8f37c04"
-    },
-    "itemType": "food",
-    "description": "I want pasta",
-    "foodType": "grain"
+    "name": "Jack Frost",
+    "dateAdded": "20151001",
+    "description": "Fresh Grapes",
+    "selections": [
+      "bread",
+      "walnuts",
+      "misc"
+    ]
   }
-
 ]

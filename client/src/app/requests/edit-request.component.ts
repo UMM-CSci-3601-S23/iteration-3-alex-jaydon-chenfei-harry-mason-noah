@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
-import { FoodType, ItemType, Request } from './request';
+import { Request } from './request';
 import { RequestVolunteerComponent } from './request-volunteer.component';
 import { RequestService } from './request.service';
-import { ɵparseCookieValue } from '@angular/common';
 
 @Component({
   selector: 'app-edit-request',
@@ -17,57 +16,42 @@ import { ɵparseCookieValue } from '@angular/common';
 
 export class EditRequestComponent implements OnInit, OnDestroy{
   request: Request;
-  router: any;
   itemType: any;
-
-  newRequestForm = new FormGroup({
-    // We want descriptions to be short and sweet, yet still required so we have at least some idea what
-    // the client wants
-    description: new FormControl('', Validators.compose([
+  fulfilled: string[];
+  checked: true;
+  editRequestForm = this.formBuilder.group({
+    clientName:['', Validators.compose([
       Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(200),
-    ])),
-
-    itemType: new FormControl<ItemType>('food',Validators.compose([
-      Validators.required,
-      Validators.pattern('^(food|toiletries|other)$'),
-    ])),
-
-    foodType: new FormControl<FoodType>('',Validators.compose([
-      Validators.pattern('^(dairy|grain|meat|fruit|vegetable|)$'),
-    ])),
+      Validators.minLength(2),
+      Validators.maxLength(50),
+    ])],
+    diaperSize: new FormControl({value: '0', disabled: true}),
+    description: ''
   });
 
-  readonly newRequestValidationMessages = {
-    description: [
-      {type: 'required', message: 'Description is required'},
-      {type: 'minlength', message: 'Description must be at least 5 characters long'},
-      {type: 'maxlength', message: 'Description cannot be more than 200 characters long'},
-    ],
-    itemType: [
-      { type: 'required', message: 'Item type is required' },
-      { type: 'pattern', message: 'Item type must be food, toiletries, or other' },
-    ],
-    foodType: [
-      {type: 'pattern', message: 'Food type must be one of dairy, grain, meat, fruit, or vegetable'},
+  readonly editRequestValidationMessages = {
+    clientName: [
+      { type: 'required', message: 'Name is required' },
+      { type: 'minlength', message: 'Name must be at least 2 characters long' },
+      { type: 'maxlength', message: 'Name cannot be more than 50 characters long' },
     ]
   };
   private ngUnsubscribe = new Subject<void>();
 
 
 
-  constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, private requestService: RequestService ) {
+  constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, public requestService: RequestService,
+    private formBuilder: FormBuilder, private router: Router) {
   }
 
   formControlHasError(controlName: string): boolean {
-    return this.newRequestForm.get(controlName).invalid &&
-      (this.newRequestForm.get(controlName).dirty || this.newRequestForm.get(controlName).touched);
+    return this.editRequestForm.get(controlName).invalid &&
+      (this.editRequestForm.get(controlName).dirty || this.editRequestForm.get(controlName).touched);
   }
 
   getErrorMessage(name: string): string {
-    for (const { type, message } of this.newRequestValidationMessages[name]) {
-      if (this.newRequestForm.get(name).hasError(type)) {
+    for (const { type, message } of this.editRequestValidationMessages[name]) {
+      if (this.editRequestForm.get(name).hasError(type)) {
         return message;
       }
     }
@@ -75,13 +59,24 @@ export class EditRequestComponent implements OnInit, OnDestroy{
   }
 
   submitForm() {
-    this.requestService.addDonorRequest(this.newRequestForm.value).subscribe({
+    const newRequest = {
+      _id: this.request._id,
+      name: this.editRequestForm.get('clientName').getRawValue(),
+      incomeValid: this.request.incomeValid,
+      dateAdded: this.request.dateAdded,
+      description: this.editRequestForm.get('description').getRawValue(),
+      selections: this.request.selections,
+      fulfilled: this.request.fulfilled,
+      diaperSize: (this.request.selections.includes('diapers') ? this.request.diaperSize : undefined)
+    };
+    this.requestService.updateRequest(newRequest).subscribe({
       next: (newId) => {
         this.snackBar.open(
-          `Request successfully submitted`,
+          `Request successfully saved`,
           null,
           { duration: 2000 }
         );
+        this.router.navigate(['/requests/volunteer']);
       },
       error: err => {
         this.snackBar.open(
@@ -90,17 +85,13 @@ export class EditRequestComponent implements OnInit, OnDestroy{
           { duration: 5000 }
         );
       },
-      // complete: () => console.log('Add user completes!')
     });
   }
 
   setRequestValues(request: Request): void {
-    console.log('THIS IS THE REQUEST:');
-    console.log(request);
     this.request = request;
-
-    this.newRequestForm.setValue({description: this.request.description,
-      foodType: this.request.foodType, itemType: this.request.itemType});
+    this.editRequestForm.get('clientName').setValue(this.request.name);
+    this.editRequestForm.get('description').setValue(this.request.description);
   }
 
 
@@ -124,12 +115,44 @@ export class EditRequestComponent implements OnInit, OnDestroy{
         }); */
       }
     });
-
-
+    this.fulfilled = [''];
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+
+  updateFulfilled(item: string): void {
+    if (!this.request.fulfilled.includes(item)){
+      this.request.fulfilled.push(item);
+    }
+    else{
+      this.request.fulfilled.splice(this.request.fulfilled.indexOf(item), 1);
+    }
+  }
+
+  postRequest(itemName: string): void {
+    const newItem = {
+      name: itemName,
+      amount: 1,
+    };
+    this.requestService.addDonorItem(newItem).subscribe({
+      next: (newId) => {
+        this.snackBar.open(
+          `Item successfully posted to donor`,
+          null,
+          { duration: 2000 }
+        );
+      },
+      error: err => {
+        this.snackBar.open(
+          `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          { duration: 5000 }
+        );
+      },
+    });
+  }
+
 }

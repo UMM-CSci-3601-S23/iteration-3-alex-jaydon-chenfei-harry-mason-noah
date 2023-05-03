@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { MockRequestService } from 'src/testing/request.service.mock';;
 import { RequestService } from '../request.service';
 import { NewRequestComponent } from './new-request.component';
+import { environment } from 'src/environments/environment';
 
 describe('NewRequestComponent', () => {
   let newRequestComponent: NewRequestComponent;
@@ -64,37 +65,112 @@ describe('NewRequestComponent', () => {
     expect(newRequestForm.valid).toBeFalsy();
   });
 
+  describe('The calculateHouseholdIncome method', ()=>{
+    let houseSize: AbstractControl;
+    beforeEach(() => {
+      houseSize = newRequestForm.get('clientHouseholdSize');
+    });
+
+    it('should work with a household size of 1', ()=> {
+      houseSize.setValue(1);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$40770');
+    });
+
+    it('should work with a household size of 2', ()=> {
+      houseSize.setValue(2);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$54930');
+    });
+
+    it('should work with a household size of 3', ()=> {
+      houseSize.setValue(3);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$69090');
+    });
+
+    it('should work with a household size of 4', ()=> {
+      houseSize.setValue(4);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$83250');
+    });
+
+    it('should work with a household size of 5', ()=> {
+      houseSize.setValue(5);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$97410');
+    });
+
+    it('should work with a household size of 6', ()=> {
+      houseSize.setValue(6);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$111570');
+    });
+
+    it('should work with a household size of 7', ()=> {
+      houseSize.setValue(7);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$125730');
+    });
+
+    it('should work with a household size of 8', ()=> {
+      houseSize.setValue(8);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$139890');
+    });
+
+    it('should work with a household size of >8', ()=> {
+      houseSize.setValue(10);
+      expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$149330');
+    });
+
+  });
+
+  describe('The updateDiapers method', ()=>{
+    it('should switch diapers from false to true', ()=> {
+      newRequestComponent.diapers = false;
+      newRequestComponent.updateDiapers();
+      expect(newRequestComponent.diapers).toBeTrue();
+    });
+
+    it('should switch diapers from true to false', ()=> {
+      newRequestComponent.diapers = true;
+      newRequestComponent.updateDiapers();
+      expect(newRequestComponent.diapers).toBeFalse();
+    });
+  });
+
+  describe('The updateList method', ()=>{
+    let testSelections = [];
+    beforeEach(() => {
+      testSelections = ['hotSauce', 'pintoBeans', 'tomatoSoup'];
+      newRequestComponent.selections = testSelections;
+    });
+    it('should remove items already present in the list', ()=> {
+      newRequestComponent.updateList('hotSauce');
+      expect(newRequestComponent.selections.includes('hotSauce')).toBeFalse();
+    });
+
+    it('should add items not already in the list', ()=> {
+      newRequestComponent.updateList('chicken');
+      expect(newRequestComponent.selections.includes('chicken')).toBeTrue();
+    });
+
+    it('should behave properly when passed \'diapers\'', ()=> {
+      newRequestComponent.updateList('diapers');
+      expect(newRequestComponent.selections.includes('diapers')).toBeTrue();
+      expect(newRequestComponent.diapers).toBeTrue();
+    });
+  });
+
+
   describe('The description field', () => {
     let descControl: AbstractControl;
 
     beforeEach(() => {
-      descControl = newRequestComponent.newRequestForm.controls.description;
+      descControl = newRequestComponent.newRequestForm.controls.misc;
     });
 
-    it('should not allow empty descriptions', () => {
+    it('should allow empty descriptions', () => {
       descControl.setValue('');
-      expect(descControl.valid).toBeFalsy();
-    });
-
-    it('should not descriptions with less than 5 chars', () => {
-      descControl.setValue('tysm');
-      expect(descControl.valid).toBeFalsy();
-    });
-
-    it('should be fine with "Nature valley bars"', () => {
-      descControl.setValue('Nature valley bars');
       expect(descControl.valid).toBeTruthy();
     });
 
-    // In the real world, you'd want to be pretty careful about
-    // setting upper limits on things like name lengths just
-    // because there are people with really long names.
-    it('should fail on really long descriptions', () => {
-      descControl.setValue('x'.repeat(400));
-      expect(descControl.valid).toBeFalsy();
-      // Annoyingly, Angular uses lowercase 'l' here
-      // when it's an upper case 'L' in `Validators.maxLength(2)`.
-      expect(descControl.hasError('maxlength')).toBeTruthy();
+    it('should allow descriptions with less than 5 chars', () => {
+      descControl.setValue('tysm');
+      expect(descControl.valid).toBeTruthy();
     });
 
     it('should allow digits in the description', () => {
@@ -103,153 +179,98 @@ describe('NewRequestComponent', () => {
     });
   });
 
-  describe('The itemType field', () => {
-    let itemTypeControl: AbstractControl;
+  describe('The name field', () =>{
+    let nameControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
+      nameControl = newRequestComponent.newRequestForm.controls.clientName;
     });
 
-    it('should not allow empty values', () => {
-      itemTypeControl.setValue('');
-      expect(itemTypeControl.valid).toBeFalsy();
-      expect(itemTypeControl.hasError('required')).toBeTruthy();
+    it ('should not allow blank names', () =>{
+      nameControl.setValue('');
+      expect(nameControl.valid).toBeFalsy();
     });
 
-    it('should allow "food"', () => {
-      itemTypeControl.setValue('food');
-      expect(itemTypeControl.valid).toBeTruthy();
+    it ('should not allow really short names', () =>{
+      nameControl.setValue('M');
+      expect(nameControl.valid).toBeFalsy();
     });
 
-    it('should allow "toiletries"', () => {
-      itemTypeControl.setValue('toiletries');
-      expect(itemTypeControl.valid).toBeTruthy();
+    it ('should allow names between 2 and 50 characters', () =>{
+      nameControl.setValue('Mason Eischens');
+      expect(nameControl.valid).toBeTruthy();
     });
 
-    it('should allow "other"', () => {
-      itemTypeControl.setValue('other');
-      expect(itemTypeControl.valid).toBeTruthy();
-    });
-
-    it('should not allow "cars"', () => {
-      itemTypeControl.setValue('cars');
-      expect(itemTypeControl.valid).toBeFalsy();
-    });
-  });
-
-  describe('The foodType field', () => {
-    let foodTypeControl: AbstractControl;
-
-    beforeEach(() => {
-      foodTypeControl = newRequestForm.controls.foodType;
-    });
-
-    it('should allow empty values', () => {
-      foodTypeControl.setValue('');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "dairy"', () => {
-      foodTypeControl.setValue('dairy');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "grain"', () => {
-      foodTypeControl.setValue('grain');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "meat"', () => {
-      foodTypeControl.setValue('meat');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "fruit"', () => {
-      foodTypeControl.setValue('fruit');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should allow "vegetable"', () => {
-      foodTypeControl.setValue('vegetable');
-      expect(foodTypeControl.valid).toBeTruthy();
-    });
-
-    it('should not allow "cars"', () => {
-      foodTypeControl.setValue('cars');
-      expect(foodTypeControl.valid).toBeFalsy();
+    it ('should not allow really long names', () =>{
+      nameControl.setValue('MASON EISCHENS TO THE MOON, I LOVE DOGECOIN AND ELON MUSK WOOOOOOOO TAKE MY MONEY TESLA');
+      expect(nameControl.valid).toBeFalsy();
     });
   });
   describe('The getErrorMessage method', ()=>{
-    let itemTypeControl: AbstractControl;
+    let nameControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
+      nameControl = newRequestComponent.newRequestForm.controls.clientName;
     });
 
-    it('should return "unknown error" when passed an invalid error code', ()=> {
-      expect(newRequestComponent.getErrorMessage('foodType') === 'Unknown error');
+    it('should return "unknown error" when there is not an error', ()=> {
+      nameControl.setValue('Mason Eischens');
+      expect(newRequestComponent.getErrorMessage('clientName') === 'Unknown error');
     });
 
-    it('should return "required" error when itemType is empty', ()=> {
-      itemTypeControl.setValue('--');
-      expect(newRequestComponent.getErrorMessage('itemType')).toBeTruthy();
+    it('should return "required" error when name is empty', ()=> {
+      nameControl.setValue('');
+      expect(newRequestComponent.getErrorMessage('clientName')).toBeTruthy();
+    });
+
+    it('should return "minlength" error when name too short', ()=> {
+      nameControl.setValue('A');
+      expect(newRequestComponent.getErrorMessage('clientName')).toBeTruthy();
+    });
+
+    it('should return "maxlength" error when name is too long', ()=> {
+      nameControl.setValue('MASON EISCHENS TO THE MOON, I LOVE DOGECOIN AND ELON MUSK WOOOOOOOO TAKE MY MONEY TESLA');
+      expect(newRequestComponent.getErrorMessage('clientName')).toBeTruthy();
     });
   });
 
   describe('Can we submit stuff to the client database?', ()=>{
-    let itemTypeControl: AbstractControl;
-    let foodTypeControl: AbstractControl;
-    let descControl: AbstractControl;
+    let nameControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
-      foodTypeControl = newRequestForm.controls.foodType;
-      descControl = newRequestComponent.newRequestForm.controls.description;
+      nameControl = newRequestForm.controls.clientName;
     });
 
     it('should not get angy', ()=> {
-      foodTypeControl.setValue('dairy');
-      itemTypeControl.setValue('food');
-      descControl.setValue('this is a description I guess');
-
+      nameControl.setValue('Mr. Rogers');
+      newRequestComponent.selections = ['hotSauce', 'bdayPartyKit'];
       newRequestComponent.submitForm();
 
-      expect(service.addedClientRequests[0].itemType).toEqual('food');
-      expect(service.addedClientRequests[0].foodType).toEqual('dairy');
-      expect(service.addedClientRequests[0].description).toEqual('this is a description I guess');
+      expect(service.addedClientRequests[0].selections.includes('hotSauce')).toBeTruthy();
     });
   });
 
   describe('Can we submit stuff to the donor database?', ()=>{
-    let itemTypeControl: AbstractControl;
-    let foodTypeControl: AbstractControl;
-    let descControl: AbstractControl;
+    let nameControl: AbstractControl;
 
     beforeEach(() => {
-      itemTypeControl = newRequestForm.controls.itemType;
-      foodTypeControl = newRequestForm.controls.foodType;
-      descControl = newRequestComponent.newRequestForm.controls.description;
+      nameControl = newRequestForm.controls.clientName;
     });
 
     it('should not get angy', ()=> {
       newRequestComponent.destination = 'donor';
 
-      foodTypeControl.setValue('dairy');
-      itemTypeControl.setValue('food');
-      descControl.setValue('this is a description I guess');
-
+      nameControl.setValue('Mr. Rogers');
+      newRequestComponent.selections = ['hotSauce', 'bdayPartyKit'];
       newRequestComponent.submitForm();
 
-      expect(service.addedDonorRequests[0].itemType).toEqual('food');
-      expect(service.addedDonorRequests[0].foodType).toEqual('dairy');
-      expect(service.addedDonorRequests[0].description).toEqual('this is a description I guess');
+      expect(service.addedClientRequests[0].name).toEqual('Mr. Rogers');
+      expect(service.addedClientRequests[0].selections.includes('hotSauce')).toBeTruthy();
     });
   });
 });
 
 describe('Misbehaving request service', () => {
-  let itemTypeControl: AbstractControl;
-  let foodTypeControl: AbstractControl;
   let descControl: AbstractControl;
   let newRequestComponent: NewRequestComponent;
   let newRequestForm: FormGroup;
@@ -307,9 +328,7 @@ describe('Misbehaving request service', () => {
       expect(newRequestForm).toBeDefined();
       expect(newRequestForm.controls).toBeDefined();
 
-      itemTypeControl = newRequestForm.controls.itemType;
-      foodTypeControl = newRequestForm.controls.foodType;
-      descControl = newRequestComponent.newRequestForm.controls.description;
+      descControl = newRequestComponent.newRequestForm.controls.misc;
     });
   }));
 
@@ -325,8 +344,7 @@ describe('Misbehaving request service', () => {
   it('should get angy when talking with the donor database', ()=> {
     newRequestComponent.destination = 'donor';
 
-    foodTypeControl.setValue('dairy');
-    itemTypeControl.setValue('food');
+
     descControl.setValue('this is a description I guess');
 
     newRequestComponent.submitForm();
@@ -335,12 +353,83 @@ describe('Misbehaving request service', () => {
   it('should get angy when talking with the client database', ()=> {
     newRequestComponent.destination = 'client';
 
-    foodTypeControl.setValue('dairy');
-    itemTypeControl.setValue('food');
+
     descControl.setValue('this is a description I guess');
 
     newRequestComponent.submitForm();
   });
+
+
+  describe('The updateDiapers method', ()=>{
+
+    beforeEach(() => {
+      newRequestComponent.diapers = false;
+    });
+
+    it('correctly changes diapers to true when it\'s false', ()=> {
+      newRequestComponent.updateDiapers();
+      expect(newRequestComponent.diapers).toBeTruthy();
+    });
+
+    it('correctly changes diapers to false when it\'s true', ()=> {
+      newRequestComponent.diapers = true;
+      newRequestComponent.updateDiapers();
+      expect(newRequestComponent.diapers).toBeFalsy();
+    });
+
+  });
+
+  describe('The updateList method', ()=>{
+
+    beforeEach(() => {
+      newRequestComponent.selections = ['hotSauce', 'rice', 'bread'];
+    });
+
+    it('correctly adds items to selections', ()=> {
+      newRequestComponent.updateList('tomatoSoup');
+      expect(newRequestComponent.selections.includes('tomatoSoup')).toBeTruthy();
+    });
+
+    it('correctly removes items from selections', ()=> {
+      newRequestComponent.updateList('hotSauce');
+      expect(newRequestComponent.selections.includes('hotSauce')).toBeFalsy();
+    });
+
+    it('behaves correctly when newItem = diapers', ()=> {
+      newRequestComponent.updateList('diapers');
+      expect(newRequestComponent.diapers).toBeTruthy();
+    });
+
+  });
+
+  describe('The formatDate method', ()=>{
+
+    beforeEach(() => {
+      newRequestComponent.selections = ['hotSauce', 'rice', 'bread'];
+    });
+
+    it('should work with a long month and a long day', ()=> {
+      const output = newRequestComponent.formatDate('12', '12').substring(4, 8);
+      expect(output === '1212').toBeTruthy();
+    });
+
+    it('should work with a long month and a short day', ()=> {
+      const output = newRequestComponent.formatDate('12', '2').substring(4, 8);
+      expect(output === '1202').toBeTruthy();
+    });
+
+    it('should work with a short month and a long day', ()=> {
+      const output = newRequestComponent.formatDate('4', '12').substring(4, 8);
+      expect(output === '0412').toBeTruthy();
+    });
+
+    it('should work with a short month and a short day', ()=> {
+      const output = newRequestComponent.formatDate('2', '2').substring(4, 8);
+      expect(output === '0202').toBeTruthy();
+    });
+
+  });
+
 
 });
 

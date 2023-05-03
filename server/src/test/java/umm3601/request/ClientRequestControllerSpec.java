@@ -3,13 +3,12 @@ package umm3601.request;
 
 
 import static com.mongodb.client.model.Filters.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -21,6 +20,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerAddress;
@@ -29,28 +38,16 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import org.bson.Document;
-import org.bson.types.ObjectId;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import io.javalin.validation.BodyValidator;
-import io.javalin.validation.ValidationException;
-import io.javalin.validation.Validator;
-import umm3601.Authentication;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.json.JavalinJackson;
+import io.javalin.validation.BodyValidator;
+import io.javalin.validation.ValidationException;
+import io.javalin.validation.Validator;
+import umm3601.Authentication;
 
 /**
  * Tests the logic of the ClientRequestController
@@ -136,26 +133,26 @@ class ClientRequestControllerSpec {
     List<Document> testRequests = new ArrayList<>();
     testRequests.add(
         new Document()
-            .append("itemType", "food")
-            .append("description", "apple")
-            .append("foodType", "fruit"));
+    //         .append("itemType", "food")
+            .append("description", "apple"));
+    //         .append("foodType", "fruit"));
     testRequests.add(
         new Document()
-            .append("itemType", "other")
-            .append("description", "Paper Plate")
-            .append("foodType", ""));
+    //         .append("itemType", "other")
+            .append("description", "Paper Plate"));
+    //         .append("foodType", ""));
     testRequests.add(
         new Document()
-            .append("itemType", "toiletries")
-            .append("description", "tooth paste")
-            .append("foodType", ""));
+    //         .append("itemType", "toiletries")
+            .append("description", "tooth paste"));
+    //         .append("foodType", ""));
 
     samsId = new ObjectId();
     Document sam = new Document()
         .append("_id", samsId)
-        .append("itemType", "food")
-        .append("description", "steak")
-        .append("foodType", "meat");
+    //     .append("itemType", "food")
+        .append("description", "steak");
+    //     .append("foodType", "meat");
 
     requestDocuments.insertMany(testRequests);
     requestDocuments.insertOne(sam);
@@ -223,12 +220,12 @@ class ClientRequestControllerSpec {
   @Test
   void canGetRequestsWithItemType() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
+    // queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
+    /*when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
       .thenReturn(Validator.create(String.class, "food", ClientRequestController.ITEM_TYPE_KEY));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
+    when(ctx.cookie("auth_token")).thenReturn("TOKEN");*/
 
     clientRequestController.getRequests(ctx);
 
@@ -237,18 +234,18 @@ class ClientRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("food", request.itemType);
+    //   assertEquals("food", request.itemType);
     }
   }
   @Test
   void canGetRequestsWithFoodType() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
+    //queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
+    /*when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
       .thenReturn(Validator.create(String.class, "meat", ClientRequestController.FOOD_TYPE_KEY));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
+    when(ctx.cookie("auth_token")).thenReturn("TOKEN");*/
 
     clientRequestController.getRequests(ctx);
 
@@ -257,19 +254,19 @@ class ClientRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("meat", request.foodType);
+    //   assertEquals("meat", request.foodType);
     }
   }
 
   @Test
   public void canGetRequestWithItemTypeUppercase() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"FOOD"}));
+    // queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"FOOD"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
+    /*when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
       .thenReturn(Validator.create(String.class, "FOOD", ClientRequestController.ITEM_TYPE_KEY));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
+    when(ctx.cookie("auth_token")).thenReturn("TOKEN");*/
 
     clientRequestController.getRequests(ctx);
 
@@ -278,21 +275,21 @@ class ClientRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("food", request.itemType);
+    //   assertEquals("food", request.itemType);
     }
   }
 
   @Test
   void getRequestsByItemTypeAndFoodType() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
-    queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"fruit"}));
+    // queryParams.put(ClientRequestController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
+    // queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"fruit"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
+    /*when(ctx.queryParamAsClass(ClientRequestController.ITEM_TYPE_KEY, String.class))
       .thenReturn(Validator.create(String.class, "food", ClientRequestController.ITEM_TYPE_KEY));
     when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
       .thenReturn(Validator.create(String.class, "fruit", ClientRequestController.FOOD_TYPE_KEY));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
+    when(ctx.cookie("auth_token")).thenReturn("TOKEN");*/
 
     clientRequestController.getRequests(ctx);
 
@@ -300,20 +297,20 @@ class ClientRequestControllerSpec {
     verify(ctx).status(HttpStatus.OK);
     assertEquals(1, requestArrayListCaptor.getValue().size());
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("food", request.itemType);
-      assertEquals("fruit", request.foodType);
+      // assertEquals("food", request.itemType);
+      // assertEquals("fruit", request.foodType);
     }
   }
 
   @Test
   void canSortAscending() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
+    // queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"asc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
+    /*when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
       .thenReturn(Validator.create(String.class, "meat", ClientRequestController.FOOD_TYPE_KEY));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
+    when(ctx.cookie("auth_token")).thenReturn("TOKEN");*/
 
     clientRequestController.getRequests(ctx);
 
@@ -322,19 +319,19 @@ class ClientRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("meat", request.foodType);
+    //   assertEquals("meat", request.foodType);
     }
   }
 
   @Test
   void canSortDescending() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
+    // queryParams.put(ClientRequestController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
     queryParams.put(ClientRequestController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
+    /*when(ctx.queryParamAsClass(ClientRequestController.FOOD_TYPE_KEY, String.class))
       .thenReturn(Validator.create(String.class, "meat", ClientRequestController.FOOD_TYPE_KEY));
-    when(ctx.cookie("auth_token")).thenReturn("TOKEN");
+    when(ctx.cookie("auth_token")).thenReturn("TOKEN");*/
 
     clientRequestController.getRequests(ctx);
 
@@ -343,7 +340,7 @@ class ClientRequestControllerSpec {
 
     // Confirm that all the requests passed to `json` work for food.
     for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("meat", request.foodType);
+    //   assertEquals("meat", request.foodType);
     }
   }
 
@@ -357,9 +354,9 @@ class ClientRequestControllerSpec {
 
     verify(ctx).json(requestCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
-    assertEquals("food", requestCaptor.getValue().itemType);
+    // assertEquals("food", requestCaptor.getValue().itemType);
     assertEquals("steak", requestCaptor.getValue().description);
-    assertEquals("meat", requestCaptor.getValue().foodType);
+    // assertEquals("meat", requestCaptor.getValue().foodType);
   }
 
   @Test
@@ -397,7 +394,7 @@ class ClientRequestControllerSpec {
 
     verify(ctx).json(requestCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
-    assertEquals("food", requestCaptor.getValue().itemType);
+    // assertEquals("food", requestCaptor.getValue().itemType);
     assertEquals(samsId.toHexString(), requestCaptor.getValue()._id);
   }
 
@@ -429,9 +426,9 @@ class ClientRequestControllerSpec {
   @Test
   void addRequest() throws IOException {
     String testNewRequest = "{"
-        + "\"itemType\": \"food\","
-        + "\"description\": \"test description\","
-        + "\"foodType\": \"meat\""
+
+        // + "\"itemType\": \"food\","
+        // + "\"foodType\": \"meat\""
         + "}";
     when(ctx.bodyValidator(Request.class))
       .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
@@ -450,9 +447,11 @@ class ClientRequestControllerSpec {
 
     // Successfully adding the request should return the newly generated, non-empty MongoDB ID for that request.
     assertNotEquals("", addedRequest.get("_id"));
-    assertEquals("food", addedRequest.get("itemType"));
-    assertEquals("meat", addedRequest.get("foodType"));
+
+    // assertEquals("food", addedRequest.get("itemType"));
+    // assertEquals("meat", addedRequest.get("foodType"));
   }
+
 
   @Test
   void addNullFoodTypeRequest() throws IOException {
@@ -497,11 +496,12 @@ class ClientRequestControllerSpec {
     });
   }
 
+
   @Test
   void addInvalidRoleUser() throws IOException {
     String testNewRequest = "{"
-    + "\"itemType\": \"food\","
-    + "\"foodType\": \"notRight\""
+    // + "\"itemType\": \"food\","
+    + "\"selections\": \"notRight\""
     + "}";
     when(ctx.bodyValidator(Request.class))
       .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
@@ -515,8 +515,8 @@ class ClientRequestControllerSpec {
   @Test
   void addRequestInsertsDateTime() throws IOException {
     String testNewRequest = "{"
-        + "\"itemType\": \"food\","
-        + "\"foodType\": \"meat\""
+        // + "\"itemType\": \"food\","
+        // + "\"foodType\": \"meat\""
         + "}";
     when(ctx.bodyValidator(Request.class))
       .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));

@@ -15,7 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable, of } from 'rxjs';
 import { MockRequestService } from 'src/testing/request.service.mock';
-import { ItemType, Request } from './request';
+import { Request } from './request';
 import { RequestVolunteerComponent } from './request-volunteer.component';
 import { RequestService } from './request.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -66,22 +66,26 @@ describe('Volunteer Request View', () => {
     expect(volunteerList.serverFilteredRequests.length).toBe(4);
   });
 
-  it('contains a request for food', () => {
-    expect(volunteerList.serverFilteredRequests.some((request: Request) => request.itemType === 'food')).toBe(true);
+  it('contains a request for noah', () => {
+    expect(volunteerList.serverFilteredRequests.some((request: Request) => request.name === 'noah')).toBe(true);
   });
 
-  it('contains a request for toiletries', () => {
-    expect(volunteerList.serverFilteredRequests.some((request: Request) => request.itemType === 'toiletries')).toBe(true);
+  it('contains a request added on 04-01-2018', () => {
+     expect(volunteerList.serverFilteredRequests.some((request: Request) => request.dateAdded === '20180401')).toBe(true);
   });
 
-  it('contains a request for other', () => {
-    expect(volunteerList.serverFilteredRequests.some((request: Request) => request.itemType === 'other')).toBe(true);
+  it('contains a request that includes hotSauce', () => {
+     expect(volunteerList.serverFilteredRequests.some((request: Request) => request.selections[0] === 'hotSauce')).toBe(true);
   });
 
-  it('contains a request for itemType food and foodType meat', () => {
+  it('contains a request that asks for paper plates', () => {
+    expect(volunteerList.serverFilteredRequests.some((request: Request) => request.description === 'I need more paper plates')).toBe(true);
+ });
+
+  /*it('contains a request for itemType food and foodType meat', () => {
     expect(volunteerList.serverFilteredRequests.some((request: Request) => request.itemType === 'food'
      && request.foodType === 'meat')).toBe(true);
-  });
+  });*/
 
   describe('Can we delete requests', ()=>{
     it('should not get angy', ()=> {
@@ -93,12 +97,12 @@ describe('Volunteer Request View', () => {
 
   describe('Can we post requests', ()=>{
     it('should not get angy', ()=> {
-      volunteerList.postRequest(MockRequestService.testRequests[0]);
+      //volunteerList.postRequest(MockRequestService.testRequests[0]);
 
       expect(service.deletedClientRequests[0]).toEqual(MockRequestService.testRequests[0]);
       expect(service.addedDonorRequests[0].description).toEqual(MockRequestService.testRequests[0].description);
-      expect(service.addedDonorRequests[0].foodType).toEqual(MockRequestService.testRequests[0].foodType);
-      expect(service.addedDonorRequests[0].itemType).toEqual(MockRequestService.testRequests[0].itemType);
+      // expect(service.addedDonorRequests[0].foodType).toEqual(MockRequestService.testRequests[0].foodType);
+      // expect(service.addedDonorRequests[0].itemType).toEqual(MockRequestService.testRequests[0].itemType);
     });
   });
 });
@@ -174,7 +178,7 @@ describe('Misbehaving Volunteer view', () => {
   it('does not call delete if the post failed when calling `postRequest`', () => {
     hasCalledDelete = false;
     hasCalledAddDonor = false;
-    volunteerList.postRequest(null);
+    //volunteerList.postRequest(null);
     expect(hasCalledDelete).toBeFalse();
     expect(hasCalledAddDonor).toBeTrue();
   });
@@ -235,7 +239,7 @@ describe('Partially misbehaving Volunteer view', () => {
   it('does call delete if the post succeeded when calling `postRequest`, even if the delete call fails too', () => {
     hasCalledDelete = false;
     hasCalledAddDonor = false;
-    volunteerList.postRequest(null);
+    //volunteerList.postRequest(null);
     expect(hasCalledDelete).toBeTrue();
     expect(hasCalledAddDonor).toBeTrue();
   });

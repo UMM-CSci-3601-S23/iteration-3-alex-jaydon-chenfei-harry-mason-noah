@@ -1,9 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { FoodType } from '../request';
-import { ItemType } from '../request';
 import { RequestService } from '../request.service';
 
 @Component({
@@ -11,46 +9,80 @@ import { RequestService } from '../request.service';
   templateUrl: './new-request.component.html',
   styleUrls: ['./new-request.component.scss']
 })
-export class NewRequestComponent {
+export class NewRequestComponent implements OnInit{
 
   @Input() destination: 'client' | 'donor' = 'client';
-  public type: ItemType = 'food';
-
-  newRequestForm = new FormGroup({
-    // We want descriptions to be short and sweet, yet still required so we have at least some idea what
-    // the client wants
-    description: new FormControl('', Validators.compose([
+  newRequestForm = this.formBuilder.group({
+    clientName:['', Validators.compose([
       Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(200),
-    ])),
-
-    itemType: new FormControl<ItemType>('food', Validators.compose([
+      Validators.minLength(2),
+      Validators.maxLength(50),
+    ])],
+    clientHouseholdSize: ['1', Validators.compose([
       Validators.required,
-      Validators.pattern('^(food|toiletries|other)$'),
-    ])),
-
-    foodType: new FormControl<FoodType>('', Validators.compose([
-      Validators.pattern('^(dairy|grain|meat|fruit|vegetable|)$'),
-    ])),
+      Validators.min(1),
+      Validators.pattern('^(\\d*)$'),
+      // need a validator for it being something thats not a number
+    ])],
+    incomeValid: ['--', Validators.compose([
+      Validators.pattern('True|False'),
+    ])],
+    diaperSize: ['0', Validators.compose([
+      Validators.required,
+    ])],
+    misc: ''
   });
 
   readonly newRequestValidationMessages = {
-    description: [
-      { type: 'required', message: 'Description is required' },
-      { type: 'minlength', message: 'Description must be at least 5 characters long' },
-      { type: 'maxlength', message: 'Description cannot be more than 200 characters long' },
+    clientName: [
+      { type: 'required', message: 'Name is required' },
+      { type: 'minlength', message: 'Name must be at least 2 characters long' },
+      { type: 'maxlength', message: 'Name cannot be more than 50 characters long' },
     ],
-    itemType: [
-      { type: 'required', message: 'Item type is required' },
-      { type: 'pattern', message: 'Item type must be food, toiletries, or other' },
+    clientHouseholdSize: [
+      { type: 'required', message: 'Household size is required' },
+      { type: 'min', message: 'Household size needs to be at least 1 ' },
+      { type: 'pattern', message: 'Household size must be a number'}
+      // need a validator message for it being something thats not a number
     ],
-    foodType: [
-      { type: 'pattern', message: 'Food type must be one of dairy, grain, meat, fruit, or vegetable' },
+    incomeValid:[
+      { type: 'pattern', message: 'Household income validity is required ' +
+      '\n **Note, you can still make a request even if you do not meet validity standards' },
     ]
   };
 
-  constructor(private requestService: RequestService, private snackBar: MatSnackBar, private router: Router) {
+  selections: string[] = new Array();
+  isLinear = false;
+  diapers = false;
+  diaperSize = '1';
+  date: Date = new Date();
+  done = false;
+
+  constructor(private formBuilder: FormBuilder, private requestService: RequestService, private snackBar: MatSnackBar,
+    private router: Router) {
+  }
+
+  calculateHouseholdIncome(): string{
+    const pop = this.newRequestForm.get('clientHouseholdSize').getRawValue();
+    if (pop === '1') {
+      return '$40770';
+    } else if (pop === '2') {
+      return '$54930';
+    } else if (pop === '3') {
+      return '$69090';
+    } else if (pop === '4') {
+      return '$83250';
+    } else if (pop === '5') {
+      return '$97410';
+    } else if (pop === '6') {
+      return '$111570';
+    } else if (pop === '7') {
+      return '$125730';
+    } else if (pop === '8') {
+      return '$139890';
+    } else {
+      return '$' + (139890 + (pop - 8) * 4720).toString();
+    }
   }
 
   formControlHasError(controlName: string): boolean {
@@ -68,8 +100,17 @@ export class NewRequestComponent {
   }
 
   submitForm() {
+    const newRequest = {
+      name: this.newRequestForm.get('clientName').getRawValue(),
+      incomeValid: this.newRequestForm.get('incomeValid').getRawValue(),
+      dateAdded: this.formatDate((this.date.getMonth() + 1).toString(), this.date.getDate().toString()),
+      description: this.newRequestForm.get('misc').getRawValue(),
+      selections: this.selections,
+      fulfilled: [],
+      diaperSize: (this.diapers ? this.newRequestForm.controls.diaperSize.getRawValue() : undefined)
+    };
     if (this.destination === 'client') {
-      this.requestService.addClientRequest(this.newRequestForm.value).subscribe({
+      this.requestService.addClientRequest(newRequest).subscribe({
         next: (newId) => {
           this.snackBar.open(
             `Request successfully submitted`,
@@ -84,13 +125,12 @@ export class NewRequestComponent {
             { duration: 5000 }
           );
         },
-        // complete: () => console.log('Add user completes!')
       });
     }
 //this if statement checks if destination is set to donor. Destination is set in the
 //html of the request-volunteer component.
     if (this.destination === 'donor') {
-      this.requestService.addDonorRequest(this.newRequestForm.value).subscribe({
+      this.requestService.addDonorRequest(newRequest).subscribe({
         next: (newId) => {
           this.snackBar.open(
             `Request successfully submitted`,
@@ -105,9 +145,44 @@ export class NewRequestComponent {
             { duration: 5000 }
           );
         },
-        // complete: () => console.log('Add user completes!')
       });
     }
   }
 
+
+
+  updateDiapers(): void{
+    if (this.diapers){
+      this.diapers = false;
+    }
+    else {
+      this.diapers = true;
+    }
+  }
+
+  updateList(newItem: string): void{
+    if (newItem === 'diapers'){
+      this.updateDiapers();
+    }
+    if (this.selections.length !== 0 && this.selections.includes(newItem)){
+      this.selections.splice(this.selections.indexOf(newItem));
+    }
+    else{
+      this.selections.push(newItem);
+    }
+  }
+
+  ngOnInit(): void {
+    this.newRequestForm.get('diaperSize').disable();
+  }
+
+  formatDate(month: string, day: string): string{
+    if (month.length !== 2){
+      month = '0' + month;
+    }
+    if (day.length !== 2){
+      day = '0' + day;
+    }
+    return this.date.getFullYear().toString()+  month + day;
+  }
 }

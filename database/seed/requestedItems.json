@@ -1,0 +1,30 @@
+[
+{
+  "_id": {
+    "$oid": "558935f5de613130e931ffd5"
+  },
+  "name": "tomatoSoup",
+  "amount": 900
+},
+{
+  "_id": {
+    "$oid": "588935f5de613130e931ffd5"
+  },
+  "name": "tuna",
+  "amount": 12
+},
+{
+  "_id": {
+    "$oid": "588935f55b432bb2ff322160"
+  },
+  "name": "chicken",
+  "amount": 3
+},
+{
+  "_id": {
+    "$oid": "588935f5556f992bf8f37c01"
+  },
+  "name": "hotSauce",
+  "amount": 7
+}
+]

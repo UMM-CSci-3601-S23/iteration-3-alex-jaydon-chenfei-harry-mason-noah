@@ -1,0 +1,11 @@
+[
+  {
+    "_id": {
+      "$oid": "588935f5556f992bf8f37c01"
+    },
+    "name": "john smith",
+    "amount": 12,
+    "comment": "I'll pull up in my kia soul",
+    "itemId": "hotSauce"
+  }
+  ]
