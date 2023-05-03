@@ -22,6 +22,7 @@ export class RequestService {
   readonly addNewRequestedItem: string = `${environment.apiUrl}addNewRequestedItem`;
   readonly requestedItem: string = `${environment.apiUrl}getRequestedItems`;
   readonly getRequestedItem: string = `${environment.apiUrl}requestedItem`;
+  readonly priorityUrl: string = `${environment.apiUrl}clientRequests/set-priority`;
   readonly authUrl: string = `http://localhost:4568/api/auth`;
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
