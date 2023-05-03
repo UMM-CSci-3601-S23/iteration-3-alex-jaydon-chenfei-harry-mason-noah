@@ -14,12 +14,13 @@ import io.javalin.Javalin;
 import io.javalin.plugin.bundled.RouteOverviewPlugin;
 import umm3601.request.ClientRequestController;
 import umm3601.request.DonorRequestController;
-import umm3601.pledge.DonorPledgeController;
+import umm3601.request.RequestedItemController;
+import umm3601.request.DonorPledgeController;
 import umm3601.user.UserController;
 
 public class Server {
 
-  private static final int SERVER_PORT = 4568;
+  private static final int SERVER_PORT = 4569;
 
   public static void main(String[] args) {
     // Check for the presence of the `--no-auth` command line flag if this flag
@@ -54,7 +55,7 @@ public class Server {
     ClientRequestController clientRequestController = new ClientRequestController(database, auth);
     DonorRequestController donorRequestController = new DonorRequestController(database, auth);
     DonorPledgeController donorPledgeController = new DonorPledgeController(database, auth);
-
+    RequestedItemController requestedItemController = new RequestedItemController(database, auth);
     Javalin server = Javalin.create(config ->
       config.plugins.register(new RouteOverviewPlugin("/api"))
     );
@@ -91,15 +92,24 @@ public class Server {
     //Get a request by a specific ID
     server.get("/api/clientRequests/{id}", clientRequestController::getRequest);
     server.get("/api/donorRequests/{id}", donorRequestController::getRequest);
+    server.get("/api/requestedItem/{id}", requestedItemController::getItem);
     //List requests, filtered using query parameters
     server.get("/api/clientRequests", clientRequestController::getRequests);
     server.get("/api/donorRequests", donorRequestController::getRequests);
+    server.get("/api/getRequestedItems", requestedItemController::getItems);
 
     // Add a new request
     server.post("/api/clientRequests", clientRequestController::addNewRequest);
     server.post("/api/donorRequests", donorRequestController::addNewRequest);
+
+    //Update a request
+    server.post("/api/editRequest", clientRequestController::editRequest);
+
     //Add a new pledge
     server.post("/api/donorPledges", donorPledgeController::addNewPledge);
+
+    //Add a new requested item
+    server.post("/api/addNewRequestedItem", requestedItemController::addNewItem);
 
     //Deleting requests
     server.delete("/api/clientRequests/{id}", clientRequestController::deleteRequest);
