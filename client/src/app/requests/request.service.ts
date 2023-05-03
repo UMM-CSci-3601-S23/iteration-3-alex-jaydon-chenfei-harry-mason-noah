@@ -139,6 +139,7 @@ export class RequestService {
   ]);
 
   private readonly descriptionKey = 'description';
+  private readonly priorityKey = 'priority';
 
   constructor(private httpClient: HttpClient) {
   }
