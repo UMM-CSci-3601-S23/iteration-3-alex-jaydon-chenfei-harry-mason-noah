@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 
 public class DonorRequestController {
-  static final String DESCRIPTION_KEY = "description";
+  static final String NAME_KEY = "name";
   static final String SORT_ORDER_KEY = "sortorder";
 
   private final JacksonMongoCollection<Request> requestCollection;
@@ -93,10 +93,10 @@ public class DonorRequestController {
 
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>(); // start with a blank document
-    if (ctx.queryParamMap().containsKey(DESCRIPTION_KEY)) {
-      Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(DESCRIPTION_KEY)),
+    if (ctx.queryParamMap().containsKey(NAME_KEY)) {
+      Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(NAME_KEY)),
       Pattern.CASE_INSENSITIVE);
-      filters.add(regex(DESCRIPTION_KEY, pattern));
+      filters.add(regex(NAME_KEY, pattern));
     }
 
 
