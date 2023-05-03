@@ -151,16 +151,16 @@ export class RequestService {
       if (filters.description) {
         httpParams = httpParams.set(this.descriptionKey, filters.description);
 
-  public getPriorityKey(): string{
-    return this.priorityKey;
-  }
-
       }
 // We'll need to add a conditional in here that handles a donor get request as well
     return this.httpClient.get<Request[]>(this.requestClientUrl, {
       params: httpParams,
     });
 
+  }
+
+  public getPriorityKey(): string{
+    return this.priorityKey;
   }
 
 
