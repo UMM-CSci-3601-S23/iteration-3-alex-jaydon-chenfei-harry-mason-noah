@@ -41,7 +41,7 @@
               <button mat-mini-fab matTooltip="Pledge" color="accent" data-test="pledgeRequestButton" [routerLink]="['/requests/donor', item._id]">
                 <mat-icon>favorite</mat-icon>
               </button>
-              <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton">
+              <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(item)">
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-card-actions>

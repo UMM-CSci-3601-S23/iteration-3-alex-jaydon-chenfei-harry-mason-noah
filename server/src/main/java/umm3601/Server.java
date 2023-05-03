@@ -114,6 +114,7 @@ public class Server {
     //Deleting requests
     server.delete("/api/clientRequests/{id}", clientRequestController::deleteRequest);
     server.delete("/api/donorRequests/{id}", donorRequestController::deleteRequest);
+    server.delete("/api/requestedItem/{id}", requestedItemController::deleteItem);
 
     // Magically grant authorization for the demo
     // DO NOT USE THIS! THIS IS A TERRIBLE IDEA AND NOT THE WAY SECURITY SHOULD EVER WORK, THIS IS FOR THE DEMO ONLY

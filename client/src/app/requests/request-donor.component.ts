@@ -61,8 +61,8 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
       this.ngUnsubscribe.complete();
   }
 
-  public deleteRequest(request: Request): void {
-    this.requestService.deleteDonorRequest(request).pipe(
+  public deleteRequest(item: RequestedItem): void {
+    this.requestService.deleteDonorItem(item).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
       next: (returnedRequests) => {

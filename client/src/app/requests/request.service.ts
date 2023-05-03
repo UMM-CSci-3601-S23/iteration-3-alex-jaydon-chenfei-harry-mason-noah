@@ -22,6 +22,7 @@ export class RequestService {
   readonly addNewRequestedItem: string = `${environment.apiUrl}addNewRequestedItem`;
   readonly requestedItem: string = `${environment.apiUrl}getRequestedItems`;
   readonly getRequestedItem: string = `${environment.apiUrl}requestedItem`;
+  readonly itemDonorUrl: string = `${environment.apiUrl}requestedItem`;
   readonly authUrl: string = `http://localhost:4568/api/auth`;
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
@@ -219,6 +220,11 @@ export class RequestService {
   deleteDonorRequest(request: Partial<Request>): Observable<object> {
     // Send delete request to delete a request
     return this.httpClient.delete(this.requestDonorUrl + '/' + request._id).pipe(map(res => res));
+  }
+
+  deleteDonorItem(item: Partial<RequestedItem>): Observable<object> {
+    // Send delete request to delete an item
+    return this.httpClient.delete(this.itemDonorUrl + '/' + item._id).pipe(map(res => res));
   }
 
   updateRequest(request: Partial<Request>): Observable<object> {
