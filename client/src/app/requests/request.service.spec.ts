@@ -16,7 +16,7 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'food',
       description: 'I would like to be able to get some spaghetti noodles',
-      // foodType: 'grain'
+      priority: 4
     },
     {
       _id: '2',
@@ -26,7 +26,7 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'toiletries',
       description: 'I need some toothpaste',
-      // foodType: ''
+      priority: 3
     },
     {
       _id: '3',
@@ -36,7 +36,7 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'other',
       description: 'Would it be possible for me to get some Advil?',
-      // foodType: ''
+      priority: 1
     }
   ];
 
@@ -150,6 +150,24 @@ describe('RequestService', () => {
     });
 
 
+    it('correctly calls api/requests with description \'Need Milk\'', () => {
+      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
+
+      // get requests with description 'Need Milk'
+      requestService.getDonorRequests({ description: 'Need Milk' }).subscribe(() => {
+        // check if called once
+        expect(mockedMethod)
+          .withContext('one call')
+          .toHaveBeenCalledTimes(1);
+        // check if it's at the correct endpoint
+        expect(mockedMethod)
+          .withContext('talks to the correct endpoint')
+          .toHaveBeenCalledWith(requestService.requestDonorUrl, {
+            params: new HttpParams().set('description', 'Need Milk'),
+          });
+      });
+    });
+
   describe('When getDonorRequests() is called with a parameter', () => {
     //test food top level category
     it('correctly calls api/requests with itemType \'food\'', () => {
@@ -186,8 +204,8 @@ describe('RequestService', () => {
     it('correctly calls api/requests with description \'Need Milk\'', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
 
-
-      requestService.getDonorRequests({name: 'Need Milk'}).subscribe(() => {
+      //get requests with foodType dairy
+      requestService.getDonorRequests({description: 'Need Milk'}).subscribe(() => {
         //check if called once
         expect(mockedMethod)
           .withContext('one call')
@@ -200,6 +218,10 @@ describe('RequestService', () => {
     });
   });
 
+  describe('When getRequests() is called with multiple parameters', () => {
+    //test a itemType 'food' with a foodType 'meat'
+    it('correctly calls api/requests with itemType \'food\' and foodType \'meat\'', () => {
+      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
 
   describe('filterRequests', ()=> {
     it('returns the correct array of requests', ()=>{
@@ -295,5 +317,6 @@ describe('deleteDonorRequest', ()=> {
 
 
 
+});
 });
 

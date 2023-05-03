@@ -1,4 +1,4 @@
-<div *ngIf="this.authHypothesis">
+<div *ngIf="this.authHypothesis" class="requests-container">
   <div class="flex-row">
     <div class="flex-1">
       <!--Filters-->
@@ -20,6 +20,34 @@
       </mat-card>
     </div>
   </div>
+
+ <!-- card view -->
+ <div class="flex-row">
+  <div class="flex-1" fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10" *ngIf="serverFilteredRequests">
+    <div class="request-cards-container flex-row gap-10 flew-wrap">
+      <mat-card *ngFor="let request of filteredRequests" class="priority-request-card">
+        <mat-card-header>
+          <mat-card-title>{{ request.itemType }}</mat-card-title>
+          <mat-card-subtitle>{{ request.foodType }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ request.description }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <mat-form-field class="input-field">
+            <mat-label>Priority</mat-label>
+            <mat-select [(ngModel)]="request.priority" (selectionChange)="setRequestPriority(request, request.priority)">
+              <mat-option *ngFor="let priority of [1, 2, 3, 4, 5]" [value]="priority">{{priority}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+
+
 
   <!--List View-->
   <div class="flex-row">
@@ -45,6 +73,13 @@
                 <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
                   <mat-icon>delete</mat-icon>
                 </button>
+                <!-- Add this priority input field to the list view -->
+                <mat-form-field class="input-field">
+                  <mat-label>Priority</mat-label>
+                  <mat-select [(ngModel)]="request.priority" (selectionChange)="setRequestPriority(request, request.priority)">
+                    <mat-option *ngFor="let priority of [1, 2, 3, 4, 5]" [value]="priority">{{priority}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
               </mat-card-actions>
             </mat-card>
           </div>
@@ -65,11 +100,11 @@
     </ng-template>
   </div>
 
+
   <!--app-new-request is the selector for the new-request component. By calling it here, we basically
   copy the whole new-request component found on the client page onto the volunteer page.-->
   <app-new-request [destination]="'donor'">
   </app-new-request>
-</div>
 <div *ngIf="!this.authHypothesis">
   <h2>
     Sorry, you don't have permission to view this page :(

@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, pipe } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Request } from './request';
 import { map } from 'rxjs/operators';
@@ -138,26 +138,34 @@ export class RequestService {
     ['laundryDetergent','Laundry detergent'],
     ['disinfectingWipes', 'Disinfecting wipes']
   ]);
+  readonly priorityUrl: string = `${environment.apiUrl}clientRequests/set-priority`;
 
   private readonly descriptionKey = 'description';
+  private readonly priorityKey = 'priority';
+
 
   constructor(private httpClient: HttpClient) {
   }
 
   getClientRequests(filters?: {description?: string}): Observable<Request[]> {
+  public getPriorityKey(): string{
+    return this.priorityKey;
+  }
+
+  getClientRequests(filters?: {itemType?: ItemType; foodType?: FoodType; description?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
 
       if (filters.description) {
         httpParams = httpParams.set(this.descriptionKey, filters.description);
       }
-    }
 // We'll need to add a conditional in here that handles a donor get request as well
     return this.httpClient.get<Request[]>(this.requestClientUrl, {
       params: httpParams,
     });
 
   }
+
 
   getRequestById(id: string): Observable<Request>{
     return this.httpClient.get<Request>(this.requestClientUrl + '/' + id);
@@ -183,12 +191,14 @@ export class RequestService {
     return this.httpClient.get<RequestedItem[]>(this.requestedItem, {
       params: httpParams,
     });
+  }
 
+  descriptionKey(descriptionKey: any, description: string): HttpParams {
+    throw new Error('Method not implemented.');
   }
 
   filterRequests(requests: Request[]): Request[] {
     const filteredRequests = requests;
-
     return filteredRequests;
   }
 // This is the method that submit form calls on the new request component.
@@ -199,8 +209,9 @@ export class RequestService {
   }
 
   addDonorRequest(newRequest: Partial<Request>): Observable<string> {
+    // Set a default value for newPriority if not provided
     // Send post request to add a new Request with the Request data as the body.
-    return this.httpClient.post<{id: string}>(this.newRequestDonorUrl, newRequest).pipe(map(res => res.id));
+    return this.httpClient.post<{id: string}>(this.newRequestDonorUrl, {...newRequest}).pipe(map(res => res.id));
   }
 
   addDonorItem(newItem: Partial<RequestedItem>): Observable<string> {
@@ -266,4 +277,13 @@ export class RequestService {
     return stringSelections.substring(0,stringSelections.length - 2);
   }
 
+
+  addRequestPriority(request: Request, priorityGiven: number): Observable<number>{
+    const putUrl = `${this.priorityUrl}/${request._id}`;
+    const priorityBody = new HttpParams().set(this.priorityKey, priorityGiven);
+
+    return this.httpClient.put<{priority: number}>(putUrl, priorityGiven,{
+      params:priorityBody,
+    }).pipe(map(res => res.priority));
+  }
 }

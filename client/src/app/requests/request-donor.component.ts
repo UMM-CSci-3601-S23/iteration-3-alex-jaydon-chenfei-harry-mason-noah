@@ -5,7 +5,6 @@ import { Request } from './request';
 import { RequestService } from './request.service';
 import { RequestedItem } from './requestedItem';
 
-
 @Component({
   selector: 'app-request-donor',
   templateUrl: './request-donor.component.html',
@@ -27,7 +26,8 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
 
   constructor(public requestService: RequestService, private snackBar: MatSnackBar) {
   }
-  //Gets the requests from the server with the correct filters
+
+  // Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getDonorRequests({
       name: this.itemName
@@ -47,10 +47,10 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
     });
   }
 
-  //
   public updateFilter(): void {
     this.filteredRequests = this.serverFilteredItems;
   }
+
   ngOnInit(): void {
       this.getRequestsFromServer();
       this.authHypothesis = document.cookie.includes('auth_token');
@@ -77,5 +77,4 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
       },
     });
   }
-  }
-
+}

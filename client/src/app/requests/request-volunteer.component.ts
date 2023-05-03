@@ -15,7 +15,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 export class RequestVolunteerComponent implements OnInit, OnDestroy {
   @Input() request: Request;
-  public serverFilteredRequests: Request[];
+  public serverFilteredRequests: Request[] = [];
   public filteredRequests: Request[];
   public requestDescription: string;
   public sortedRequests: Request[];
@@ -23,9 +23,25 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   authHypothesis: boolean;
 
   private ngUnsubscribe = new Subject<void>();
-;
+// eslint-disable-next-line @typescript-eslint/member-ordering
 
   constructor(public requestService: RequestService, private snackBar: MatSnackBar) {
+  }
+
+  drop(event: CdkDragDrop<string[]>): void {
+    moveItemInArray(this.filteredRequests, event.previousIndex, event.currentIndex);
+    this.updatePriorities();
+  }
+
+  // Add this method for updating priorities based on the new order of the cards
+  updatePriorities(): void {
+    this.filteredRequests.forEach((request, index) => {
+      const newPriority = index + 1;
+      if (request.priority !== newPriority) {
+        request.priority = newPriority;
+        this.updateRequestPriority(request, newPriority);
+      }
+    });
   }
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
@@ -101,6 +117,15 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     this.filteredRequests.sort((a, b) => a.priority - b.priority);
   }
 
+  updateRequestPriority(reqeust: Request, priority: number){
+    .addRequestPriority(this.request, priority)
+    this.requestService
+    .subscribe({
+      next: () => {
+        this.updateFilter();
+      }
+  }
+    });
   ngOnInit(): void {
     this.getRequestsFromServer();
     this.authHypothesis = document.cookie.includes('auth_token');

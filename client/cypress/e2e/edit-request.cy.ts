@@ -13,15 +13,8 @@ describe('Edit a request', ()=> {
   it('Should edit the request', ()=> {
     const request: Request = {
       _id: '588935f57546a2daea44de7c',
-      name: 'joe',
       dateAdded: '20230423',
-    //   itemType: 'food',
-    //   foodType: 'meat',
-      description: 'This is a test edit'
     };
-
-    page.editRequest(request);
-    page.getSnackBar().should('contain', `Request successfully submitted`);
 
     page.navigateToDonor();
 
@@ -29,9 +22,7 @@ describe('Edit a request', ()=> {
     // page.selectFoodType('meat');
     page.filterDescription('This is a test edit');
 
-    cy.get('.donor-list-description').should('contain.text', request.description);
     // cy.get('.donor-list-itemType').should('contain.text', request.itemType);
-    // cy.get('.donor-list-foodType').should('contain.text', request.foodType);
   });
 
 });

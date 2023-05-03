@@ -151,9 +151,15 @@ describe('Misbehaving Donor view', () => {
     expect(donorList.serverFilteredItems).toBeUndefined();
   });
 
-  it('updateFilter properly reassigns our request list', ()=>{
+  it('updateFilter properly reassigns our request list', () => {
+    donorList.serverFilteredRequests = [
+      { id: 1, priority: 2 },
+      { id: 2, priority: 1 },
+      { id: 3, priority: 3 }
+    ] as unknown as Request[];
     donorList.updateFilter();
     expect(donorList.filteredRequests === donorList.serverFilteredItems).toBeTruthy();
   });
+
 });
 

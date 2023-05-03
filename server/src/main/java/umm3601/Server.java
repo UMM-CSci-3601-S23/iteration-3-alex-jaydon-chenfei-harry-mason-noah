@@ -97,6 +97,8 @@ public class Server {
     server.get("/api/clientRequests", clientRequestController::getRequests);
     server.get("/api/donorRequests", donorRequestController::getRequests);
     server.get("/api/getRequestedItems", requestedItemController::getItems);
+    server.get("/api/donorRequests/priorities", donorRequestController::getRequestsPriorities);
+
 
     // Add a new request
     server.post("/api/clientRequests", clientRequestController::addNewRequest);
@@ -110,6 +112,9 @@ public class Server {
 
     //Add a new requested item
     server.post("/api/addNewRequestedItem", requestedItemController::addNewItem);
+
+    // Set priority of a request
+    server.put("/api/clientRequests/set-priority/{id}", clientRequestController::setPriority);
 
     //Deleting requests
     server.delete("/api/clientRequests/{id}", clientRequestController::deleteRequest);

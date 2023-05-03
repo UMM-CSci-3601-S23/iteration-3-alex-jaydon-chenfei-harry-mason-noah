@@ -1,4 +1,6 @@
 package umm3601.request;
+import static com.mongodb.client.model.Updates.set;
+
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -27,6 +29,9 @@ import java.util.regex.Pattern;
 public class DonorRequestController {
   static final String DESCRIPTION_KEY = "description";
   static final String SORT_ORDER_KEY = "sortorder";
+  static final String PRIORITY_KEY = "priority";
+  static final int LOWER_PRIORITY_BOUND = 1;
+  static final int UPPER_PRIORITY_BOUND = 5;
 
   private final JacksonMongoCollection<Request> requestCollection;
   private Authentication auth;
@@ -112,9 +117,13 @@ public class DonorRequestController {
     // "asc") to specify the sort order.
     String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "name");
     String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
-    Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
+    Bson primarySortingOrder = sortOrder.equals("desc") ? Sorts.descending(sortBy) : Sorts.ascending(sortBy);
+    // Add the priority sorting as a secondary sorting order.
+    Bson sortingOrder = Sorts.orderBy(primarySortingOrder, Sorts.ascending(PRIORITY_KEY));
+
     return sortingOrder;
   }
+
 
   public void addNewRequest(Context ctx) {
     auth.authenticate(ctx);
@@ -126,6 +135,8 @@ public class DonorRequestController {
      *    - foodType is Valid
      */
     Request newRequest = ctx.bodyValidator(Request.class).get();
+      .check(req -> req.priority <= UPPER_PRIORITY_BOUND && req.priority >= LOWER_PRIORITY_BOUND,
+      "Request priority must be a number between 1 and 5").get();
 
 
     // Insert the newRequest into the requestCollection
@@ -137,6 +148,61 @@ public class DonorRequestController {
     // See, e.g., https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
     // for a description of the various response codes.
     ctx.status(HttpStatus.CREATED);
+  }
+
+  public void getRequestsPriorities(Context ctx) {
+    List<Document> priorities = new ArrayList<>();
+
+    // Fetch all requests
+    ArrayList<Request> matchingRequests = requestCollection
+      .find()
+      .into(new ArrayList<>());
+
+    // Extract the priorities
+    for (Request request : matchingRequests) {
+      Document priorityInfo = new Document();
+      priorityInfo.put("_id", request._id);
+      priorityInfo.put("priority", request.priority);
+      priorities.add(priorityInfo);
+    }
+
+    // Set the JSON body of the response to be the list of priorities returned.
+    ctx.json(priorities);
+    ctx.status(HttpStatus.OK);
+  }
+
+
+  public void setPriority(Context ctx) {
+    Integer priority = ctx.queryParamAsClass(PRIORITY_KEY, Integer.class)
+      .check(it -> it >= LOWER_PRIORITY_BOUND && it <= UPPER_PRIORITY_BOUND,
+    "Priority must be a number between 1 and 5 inclusive")
+      .get();
+    String id = ctx.pathParam("id");
+    Request request;
+    try {
+      // ctx requires an _id path parameter.
+      // We should make sure this is a real request id before continuing.
+      request = requestCollection
+        .find(eq("_id", new ObjectId(id))).first();
+    } catch (IllegalArgumentException e) {
+      throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID");
+    } catch (NotFoundResponse e) {
+      throw new NotFoundResponse("The desired request was not found");
+    }
+
+    List<Bson> toSet = new ArrayList<>();
+    toSet.add(eq("_id", new ObjectId(id))); // filter
+
+    toSet.add(set("priority", priority)); // update
+
+    requestCollection.updateOne(
+        toSet.get(0) /* filter */,
+        toSet.get(1) /* update */
+    );
+    request.priority = priority;
+    // Send a JSON response with the request whose priority was changed.
+    ctx.json(request);
+    ctx.status(HttpStatus.OK);
   }
 
   /**

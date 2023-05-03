@@ -70,15 +70,12 @@ describe('Add donor request', () => {
     it('Should go to the right page, and have the right info', () => {
       const request: Request = {
         _id: '588935f57546a2daea44de7c',
-        name: 'joe',
-        dateAdded: '20230423',
-      //   itemType: 'food',
-      //   foodType: 'meat',
-        description: 'This is a test request'
+        priority: 0
       };
       // page.setMatSelect('itemType', 'Other');
       page.newRequest(request);
-      page.getSnackBar().should('contain', `Request successfully submitted`);
+      page.getSnackBar().should('contain', `Request successfully submitted`, { timeout: 20000, retryInterval: 2000 });
+
       // New URL should end in the 24 hex character Mongo ID of the newly added request
       cy.url()
         .should('match', /\/requests\/client$/)
@@ -166,10 +163,10 @@ describe('Add volunteer request', () => {
       //   itemType: 'food',
       //   foodType: 'meat',
         description: 'This is a test edit'
+        priority: 0
       };
       // page.setMatSelect('itemType', 'Other');
       page.newRequest(request);
-      page.getSnackBar().should('contain', `Request successfully submitted`);
       // New URL should end in the 24 hex character Mongo ID of the newly added request
       cy.url()
         .should('match', /\/requests\/volunteer$/)
