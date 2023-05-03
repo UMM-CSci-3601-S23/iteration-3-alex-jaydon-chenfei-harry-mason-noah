@@ -231,6 +231,14 @@ export class RequestService {
     return this.httpClient.post(this.updateRequestUrl, request).pipe(map(res=> res));
   }
 
+  addRequestPriority(request: Request, priorityGiven: number): Observable<number>{
+    const putUrl = `${this.priorityUrl}/${request._id}`;
+    const priorityBody = new HttpParams().set(this.priorityKey, priorityGiven);
+      return this.httpClient.put<{priority: number}>(putUrl, priorityGiven,{
+        params:priorityBody,
+      }).pipe(map(res => res.priority));
+  }
+
   public getReadableItem(camelCase: string, diaperSize?: string): string{
     const mappedValue = this.itemMap.get(camelCase);
     if (camelCase === 'diapers' && diaperSize){
