@@ -142,6 +142,7 @@ export class RequestService {
 
   private readonly descriptionKey = 'description';
   private readonly priorityKey = 'priority';
+  private readonly nameKey = 'name';
 
 
   constructor(private httpClient: HttpClient) {
@@ -181,7 +182,7 @@ export class RequestService {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
       if (filters.name) {
-        httpParams = httpParams.set(this.descriptionKey, filters.name);
+        httpParams = httpParams.set(this.nameKey, filters.name);
       }
     }
 // We'll need to add a conditional in here that handles a donor get request as well
@@ -235,8 +236,8 @@ export class RequestService {
     return this.httpClient.delete(this.itemDonorUrl + '/' + item._id).pipe(map(res => res));
   }
 
-  updateRequest(request: Partial<Request>): Observable<object> {
-    return this.httpClient.post(this.updateRequestUrl, request).pipe(map(res=> res));
+  updateRequest(request: Partial<Request>): Observable<string> {
+    return this.httpClient.post<{id: string}>(this.updateRequestUrl, request).pipe(map(res=> res.id));
   }
 
   addRequestPriority(request: Request, priorityGiven: number): Observable<number>{
