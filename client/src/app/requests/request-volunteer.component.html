@@ -39,9 +39,6 @@
                 <p class = "income-warning" *ngIf="!request.incomeValid">!Income is more than guideline for a family of this size!</p>
               </mat-card-content>
               <mat-card-actions>
-                <button mat-mini-fab matTooltip="Post" color="accent" data-test="postRequestButton" (click)="postRequest(request)">
-                  <mat-icon>send</mat-icon>
-                </button>
                 <button mat-mini-fab matTooltip="Edit Request" color="warn" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
                   <mat-icon>more_vert</mat-icon>
                 </button>

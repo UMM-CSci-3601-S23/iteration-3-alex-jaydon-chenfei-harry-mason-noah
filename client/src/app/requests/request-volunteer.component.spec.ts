@@ -97,7 +97,7 @@ describe('Volunteer Request View', () => {
 
   describe('Can we post requests', ()=>{
     it('should not get angy', ()=> {
-      volunteerList.postRequest(MockRequestService.testRequests[0]);
+      //volunteerList.postRequest(MockRequestService.testRequests[0]);
 
       expect(service.deletedClientRequests[0]).toEqual(MockRequestService.testRequests[0]);
       expect(service.addedDonorRequests[0].description).toEqual(MockRequestService.testRequests[0].description);
@@ -177,7 +177,7 @@ describe('Misbehaving Volunteer view', () => {
   it('does not call delete if the post failed when calling `postRequest`', () => {
     hasCalledDelete = false;
     hasCalledAddDonor = false;
-    volunteerList.postRequest(null);
+    //volunteerList.postRequest(null);
     expect(hasCalledDelete).toBeFalse();
     expect(hasCalledAddDonor).toBeTrue();
   });
@@ -238,7 +238,7 @@ describe('Partially misbehaving Volunteer view', () => {
   it('does call delete if the post succeeded when calling `postRequest`, even if the delete call fails too', () => {
     hasCalledDelete = false;
     hasCalledAddDonor = false;
-    volunteerList.postRequest(null);
+    //volunteerList.postRequest(null);
     expect(hasCalledDelete).toBeTrue();
     expect(hasCalledAddDonor).toBeTrue();
   });

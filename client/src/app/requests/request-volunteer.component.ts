@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { Request } from './request';
@@ -69,34 +69,6 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.snackBar.open(
           `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
-          'OK',
-          {duration: 5000});
-      },
-    });
-  }
-
-  public postRequest(request: Request): void {
-    const strippedRequest: Partial<Request> = {...request};
-    delete strippedRequest._id;
-    this.requestService.addDonorRequest(strippedRequest).pipe(
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe({
-      next: (returnedRequests) => {
-        this.requestService.deleteClientRequest(request).subscribe({
-          next: (_) => { this.getRequestsFromServer(); },
-          error: (err) => {
-            this.snackBar.open(
-              `Problem contacting the server to delete request – Error Code: ${err.status}\nMessage: ${err.message}`,
-              'OK',
-              {duration: 5000});
-          },
-        });
-
-      },
-
-      error: (err) => {
-        this.snackBar.open(
-          `Problem contacting the server to add request – Error Code: ${err.status}\nMessage: ${err.message}`,
           'OK',
           {duration: 5000});
       },
