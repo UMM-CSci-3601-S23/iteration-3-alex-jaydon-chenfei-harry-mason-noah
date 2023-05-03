@@ -6,5 +6,4 @@ export interface Pledge {
   amount: number;
 }
 
-
 export type TimeSlot = '' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday';

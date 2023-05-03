@@ -52,44 +52,40 @@
   <!--List View-->
   <div class="flex-row">
     <div class="flex-1" *ngIf="serverFilteredRequests; else requestsError">
-      <mat-card-content>
-        <mat-nav-list class="volunteer-nav-list">
-          <h3 mat-subheader>Requests</h3>
-          <div mat-list-item *ngFor="let request of this.serverFilteredRequests" class="volunteer-list-item edit-request">
-            <mat-card class="example-card">
-              <div class="priority-wrapper"> <!-- Added the priority-wrapper class -->
-                <mat-card-header>
-                  <mat-card-title class="volunteer-list-name">{{request.name}} {{this.requestService.getReadableDate(request.dateAdded)}}</mat-card-title>
-                  <mat-card-subtitle class="donor-list-selections" *ngIf="request.diaperSize">{{this.requestService.getReadableSelections(request.selections, request.diaperSize)}}</mat-card-subtitle>
-                  <mat-card-subtitle class="donor-list-selections" *ngIf="!request.diaperSize">{{this.requestService.getReadableSelections(request.selections)}}</mat-card-subtitle>
-                </mat-card-header>
-                <div class="priority-container"> <!-- Moved this div container here -->
-                  <mat-form-field class="priority-field">
-                    <mat-label>Priority</mat-label>
-                    <mat-select [(ngModel)]="request.priority" (selectionChange)="setRequestPriority(request, request.priority)">
-                      <mat-option *ngFor="let priority of [1, 2, 3, 4, 5]" [value]="priority">{{priority}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
+      <mat-nav-list class="volunteer-nav-list">
+        <h3 mat-subheader>Requests</h3>
+        <div mat-list-item *ngFor="let request of this.serverFilteredRequests" class="volunteer-list-item edit-request">
+          <mat-card class="example-card">
+            <div class="priority-wrapper"> <!-- Added the priority-wrapper class -->
+              <mat-card-header>
+                <mat-card-title class="volunteer-list-name">{{request.name}} {{this.requestService.getReadableDate(request.dateAdded)}}</mat-card-title>
+                <mat-card-subtitle class="donor-list-selections" *ngIf="request.diaperSize">{{this.requestService.getReadableSelections(request.selections, request.diaperSize)}}</mat-card-subtitle>
+                <mat-card-subtitle class="donor-list-selections" *ngIf="!request.diaperSize">{{this.requestService.getReadableSelections(request.selections)}}</mat-card-subtitle>
+              </mat-card-header>
+              <div class="priority-container"> <!-- Moved this div container here -->
+                <mat-form-field class="priority-field">
+                  <mat-label>Priority</mat-label>
+                  <mat-select [(ngModel)]="request.priority" (selectionChange)="setRequestPriority(request, request.priority)">
+                    <mat-option *ngFor="let priority of [1, 2, 3, 4, 5]" [value]="priority">{{priority}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
-              <mat-card-content>
-                <p matListItemBody class="volunteer-list-description"> {{request.description}} </p>
-                <p class="income-warning" *ngIf="!request.incomeValid">!Income is more than guideline for a family of this size!</p>
-              </mat-card-content>
-              <mat-card-actions>
-                <button mat-mini-fab matTooltip="Edit Request" color="warn" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </mat-card-actions>
-            </mat-card>
-          </div>
-        </mat-nav-list>
-      </mat-card-content>
+            </div>
+            <mat-card-actions>
+              <p matListItemBody class="itemName"> {{request.description}} </p>
+              <button mat-mini-fab class="deleteButton" matTooltip="Edit Request" color="warn" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+              <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-card-actions>
+            <p class="income-warning" *ngIf="!request.incomeValid">!Income is more than guideline for a family of this size!</p>
+          </mat-card>
+        </div>
+      </mat-nav-list>
     </div>
-</div>
+  </div>
 
     <ng-template #requestsError>
       <div class="flex-1" class="requests-error">

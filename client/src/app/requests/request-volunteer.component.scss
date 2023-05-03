@@ -7,6 +7,7 @@
 }
 
 .income-warning{
+  margin-left: 8px;
   color: red;
 }
 
@@ -24,4 +25,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.itemName{
+  margin-right: auto;
+}
+
+.pledgeButton{
+  margin-right: 6px;
+}
+
+.deleteButton{
+  margin-right: 6px;
 }

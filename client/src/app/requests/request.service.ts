@@ -48,7 +48,7 @@ export class RequestService {
     ['dicedTomatoes','Diced tomatoes'],
     ['spaghettiSauce','Spaghetti sauce'],
     ['groundBeef','Ground beef'],
-    ['groundBeefPorkBlend','Ground beef/pork blend'],
+    ['groundPorkBeefBlend','Ground beef/pork blend'],
     ['plantBasedBurgers','Plant based burgers'],
     ['pizzaRanchPizza','Pizza ranch pizza'],
     ['veggieRavioli','Veggie ravioli'],
@@ -236,8 +236,8 @@ export class RequestService {
     return this.httpClient.delete(this.itemDonorUrl + '/' + item._id).pipe(map(res => res));
   }
 
-  updateRequest(request: Partial<Request>): Observable<string> {
-    return this.httpClient.post<{id: string}>(this.updateRequestUrl, request).pipe(map(res=> res.id));
+  updateRequest(request: Partial<Request>): Observable<object> {
+    return this.httpClient.post(this.updateRequestUrl, request).pipe(map(res=> res));
   }
 
   addRequestPriority(request: Request, priorityGiven: number): Observable<number>{
