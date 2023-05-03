@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.Updates;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import com.mongodb.client.result.DeleteResult;
@@ -168,10 +170,13 @@ public class ClientRequestController {
   }
 
   public void editRequest(Context ctx) {
-    String RequestID = ctx.queryParam("id");
     Request incomingRequest = ctx.bodyValidator(Request.class).get();
-    Bson filter = eq("_id", RequestID);
-    //Bson updateOp = Updates.inc("");
+    ObjectId requestId = new ObjectId(incomingRequest._id);
+    System.out.println(incomingRequest.fulfilled);
+    Bson filter = eq("_id", requestId);
+    requestCollection.updateOne(filter, Updates.set("fulfilled", incomingRequest.fulfilled));
+    requestCollection.updateOne(filter, Updates.set("name", incomingRequest.name));
+    requestCollection.updateOne(filter, Updates.set("description", incomingRequest.description));
   }
 
   /**
