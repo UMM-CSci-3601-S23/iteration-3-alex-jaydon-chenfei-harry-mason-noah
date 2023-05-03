@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Request } from './request';
 import { RequestService } from './request.service';
-
-
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-request-volunteer',
   templateUrl: './request-volunteer.component.html',
@@ -13,14 +14,16 @@ import { RequestService } from './request.service';
 })
 
 export class RequestVolunteerComponent implements OnInit, OnDestroy {
+  @Input() request: Request;
   public serverFilteredRequests: Request[];
   public filteredRequests: Request[];
   public requestDescription: string;
-  public readableRequests: Request[];
+  public sortedRequests: Request[];
 
   authHypothesis: boolean;
 
   private ngUnsubscribe = new Subject<void>();
+;
 
   constructor(public requestService: RequestService, private snackBar: MatSnackBar) {
   }
@@ -49,6 +52,55 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     this.filteredRequests = this.serverFilteredRequests;
   }
 
+
+  drop(event: CdkDragDrop<string[]>): void {
+    moveItemInArray(this.filteredRequests, event.previousIndex, event.currentIndex);
+    this.updatePriorities();
+  }
+
+  // Add this method for updating priorities based on the new order of the cards
+  updatePriorities(): void {
+    this.filteredRequests.forEach((request, index) => {
+      const newPriority = index + 1;
+      if (request.priority !== newPriority) {
+        request.priority = newPriority;
+        this.updateRequestPriority(request, newPriority);
+      }
+    });
+  }
+  //
+
+  updateRequestPriority(request: Request, priority: number){
+    this.requestService
+    .addRequestPriority(this.request, priority)
+    .subscribe({
+      next: () => {
+        this.updateFilter();
+      }
+    });
+  }
+
+
+  setRequestPriority(request: Request, priority: number): void {
+    this.requestService.addRequestPriority(request, priority).pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe({
+      next: () => {
+        this.getRequestsFromServer();
+      },
+      error: (err) => {
+        this.snackBar.open(
+          `Problem contacting the server to update priority – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          {duration: 5000});
+      },
+    });
+  }
+  // MAY NOT BE NECESSARY
+  sortRequestsByPriority(): void {
+    this.filteredRequests.sort((a, b) => a.priority - b.priority);
+  }
+
   ngOnInit(): void {
     this.getRequestsFromServer();
     this.authHypothesis = document.cookie.includes('auth_token');
@@ -69,6 +121,33 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.snackBar.open(
           `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          {duration: 5000});
+      },
+    });
+  }
+  public postRequest(request: Request): void {
+    const strippedRequest: Partial<Request> = {...request};
+    delete strippedRequest._id;
+    this.requestService.addDonorRequest(strippedRequest).pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe({
+      next: (returnedRequests) => {
+        this.requestService.deleteClientRequest(request).subscribe({
+          next: (_) => { this.getRequestsFromServer(); },
+          error: (err) => {
+            this.snackBar.open(
+              `Problem contacting the server to delete request – Error Code: ${err.status}\nMessage: ${err.message}`,
+              'OK',
+              {duration: 5000});
+          },
+        });
+
+      },
+
+      error: (err) => {
+        this.snackBar.open(
+          `Problem contacting the server to add request – Error Code: ${err.status}\nMessage: ${err.message}`,
           'OK',
           {duration: 5000});
       },

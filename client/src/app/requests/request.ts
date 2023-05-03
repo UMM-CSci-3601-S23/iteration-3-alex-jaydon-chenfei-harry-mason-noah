@@ -3,6 +3,7 @@ export interface Request {
   name: string;
   // in the future income will be required
   incomeValid: string;
+  priority?: number;
   dateAdded: string;
   description?: string;
   selections?: string[];
