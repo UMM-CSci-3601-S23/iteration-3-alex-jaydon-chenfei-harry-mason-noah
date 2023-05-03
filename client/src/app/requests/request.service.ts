@@ -147,12 +147,8 @@ export class RequestService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getClientRequests(filters?: {description?: string}): Observable<Request[]> {
-  public getPriorityKey(): string{
-    return this.priorityKey;
-  }
 
-  getClientRequests(filters?: {itemType?: ItemType; foodType?: FoodType; description?: string}): Observable<Request[]> {
+  getClientRequests(filters?: {description?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
 
@@ -165,6 +161,7 @@ export class RequestService {
     });
 
   }
+}
 
 
   getRequestById(id: string): Observable<Request>{
@@ -193,7 +190,7 @@ export class RequestService {
     });
   }
 
-  descriptionKey(descriptionKey: any, description: string): HttpParams {
+  getDescriptionKey(descriptionKey: any, description: string): HttpParams {
     throw new Error('Method not implemented.');
   }
 
@@ -275,15 +272,5 @@ export class RequestService {
       stringSelections = stringSelections + this.getReadableItem(selections[i], diaperSize) + ', ';
     }
     return stringSelections.substring(0,stringSelections.length - 2);
-  }
-
-
-  addRequestPriority(request: Request, priorityGiven: number): Observable<number>{
-    const putUrl = `${this.priorityUrl}/${request._id}`;
-    const priorityBody = new HttpParams().set(this.priorityKey, priorityGiven);
-
-    return this.httpClient.put<{priority: number}>(putUrl, priorityGiven,{
-      params:priorityBody,
-    }).pipe(map(res => res.priority));
   }
 }

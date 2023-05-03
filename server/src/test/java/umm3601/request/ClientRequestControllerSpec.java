@@ -46,6 +46,7 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.json.JavalinJackson;
 import io.javalin.validation.BodyValidator;
 import io.javalin.validation.ValidationException;
+import io.javalin.validation.Validator;
 import umm3601.Authentication;
 
 /**

@@ -134,7 +134,7 @@ public class DonorRequestController {
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Request newRequest = ctx.bodyValidator(Request.class).get();
+    Request newRequest = ctx.bodyValidator(Request.class)
       .check(req -> req.priority <= UPPER_PRIORITY_BOUND && req.priority >= LOWER_PRIORITY_BOUND,
       "Request priority must be a number between 1 and 5").get();
 

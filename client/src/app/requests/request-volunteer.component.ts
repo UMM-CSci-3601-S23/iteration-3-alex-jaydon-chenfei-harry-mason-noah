@@ -33,6 +33,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     this.updatePriorities();
   }
 
+
   // Add this method for updating priorities based on the new order of the cards
   updatePriorities(): void {
     this.filteredRequests.forEach((request, index) => {
@@ -43,6 +44,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getClientRequests({
@@ -69,22 +71,8 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   }
 
 
-  drop(event: CdkDragDrop<string[]>): void {
-    moveItemInArray(this.filteredRequests, event.previousIndex, event.currentIndex);
-    this.updatePriorities();
-  }
 
   // Add this method for updating priorities based on the new order of the cards
-  updatePriorities(): void {
-    this.filteredRequests.forEach((request, index) => {
-      const newPriority = index + 1;
-      if (request.priority !== newPriority) {
-        request.priority = newPriority;
-        this.updateRequestPriority(request, newPriority);
-      }
-    });
-  }
-  //
 
   updateRequestPriority(request: Request, priority: number){
     this.requestService
@@ -117,15 +105,6 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     this.filteredRequests.sort((a, b) => a.priority - b.priority);
   }
 
-  updateRequestPriority(reqeust: Request, priority: number){
-    .addRequestPriority(this.request, priority)
-    this.requestService
-    .subscribe({
-      next: () => {
-        this.updateFilter();
-      }
-  }
-    });
   ngOnInit(): void {
     this.getRequestsFromServer();
     this.authHypothesis = document.cookie.includes('auth_token');
