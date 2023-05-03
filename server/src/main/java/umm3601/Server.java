@@ -129,7 +129,7 @@ public class Server {
     server.delete("/api/requestedItem/{id}", requestedItemController::deleteItem);
 
     //Mark requests as complete
-    server.post("/api/archive", Server::archiveRequest);
+    server.post("/api/archive", clientRequestController::archiveRequest);
 
     // Magically grant authorization for the demo
     // DO NOT USE THIS! THIS IS A TERRIBLE IDEA AND NOT THE WAY SECURITY SHOULD EVER WORK, THIS IS FOR THE DEMO ONLY

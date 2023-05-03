@@ -52,6 +52,10 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
       next: (updatedRequest) => {
+        this.snackBar.open(
+          `Request successfully archived`,
+          'OK',
+          {duration: 5000});
         this.getRequestsFromServer();
       },
       error: (err) => {

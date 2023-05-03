@@ -218,6 +218,13 @@ public class ClientRequestController {
     requestCollection.updateOne(filter, Updates.set("description", incomingRequest.description));
   }
 
+  public void archiveRequest(Context ctx) {
+    Request incomingRequest = ctx.bodyValidator(Request.class).get();
+    ObjectId requestId = new ObjectId(incomingRequest._id);
+    Bson filter = eq("_id", requestId);
+    requestCollection.updateOne(filter, Updates.set("archived", true));
+  }
+
   /**
    * Utility function to generate the md5 hash for a given string
    *

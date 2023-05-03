@@ -19,6 +19,7 @@ public class Request {
   public String dateAdded;
   public String diaperSize;
   public Boolean incomeValid;
+  public Boolean archived;
   public int priority;
 
   @Override
