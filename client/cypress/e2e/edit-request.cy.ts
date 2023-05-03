@@ -14,6 +14,10 @@ describe('Edit a request', ()=> {
     const request: Request = {
       _id: '588935f57546a2daea44de7c',
       dateAdded: '20230423',
+      name: '',
+      incomeValid: '',
+      fulfilled: [],
+      priority: 0
     };
 
     page.navigateToDonor();

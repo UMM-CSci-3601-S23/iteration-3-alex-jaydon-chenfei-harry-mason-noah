@@ -70,7 +70,11 @@ describe('Add donor request', () => {
     it('Should go to the right page, and have the right info', () => {
       const request: Request = {
         _id: '588935f57546a2daea44de7c',
-        priority: 0
+        priority: 0,
+        name: '',
+        incomeValid: '',
+        dateAdded: '',
+        fulfilled: []
       };
       // page.setMatSelect('itemType', 'Other');
       page.newRequest(request);
@@ -160,10 +164,12 @@ describe('Add volunteer request', () => {
         _id: '588935f57546a2daea44de7c',
         name: 'joe',
         dateAdded: '20230423',
-      //   itemType: 'food',
-      //   foodType: 'meat',
-        description: 'This is a test edit'
-        priority: 0
+        //   itemType: 'food',
+        //   foodType: 'meat',
+        description: 'This is a test edit',
+        priority: 0,
+        incomeValid: '',
+        fulfilled: []
       };
       // page.setMatSelect('itemType', 'Other');
       page.newRequest(request);

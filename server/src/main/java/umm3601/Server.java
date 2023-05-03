@@ -1,6 +1,9 @@
 package umm3601;
 
 import java.util.Arrays;
+import io.javalin.http.Context;
+
+
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerAddress;
@@ -17,10 +20,13 @@ import umm3601.request.DonorRequestController;
 import umm3601.request.RequestedItemController;
 import umm3601.request.DonorPledgeController;
 import umm3601.user.UserController;
+import umm3601.request.Request;
+
 
 public class Server {
 
   private static final int SERVER_PORT = 4569;
+
 
   public static void main(String[] args) {
     // Check for the presence of the `--no-auth` command line flag if this flag
@@ -100,6 +106,7 @@ public class Server {
     server.get("/api/donorRequests/priorities", donorRequestController::getRequestsPriorities);
 
 
+
     // Add a new request
     server.post("/api/clientRequests", clientRequestController::addNewRequest);
     server.post("/api/donorRequests", donorRequestController::addNewRequest);
@@ -120,6 +127,9 @@ public class Server {
     server.delete("/api/clientRequests/{id}", clientRequestController::deleteRequest);
     server.delete("/api/donorRequests/{id}", donorRequestController::deleteRequest);
     server.delete("/api/requestedItem/{id}", requestedItemController::deleteItem);
+
+    //Mark requests as complete
+    server.post("/api/archive", Server::archiveRequest);
 
     // Magically grant authorization for the demo
     // DO NOT USE THIS! THIS IS A TERRIBLE IDEA AND NOT THE WAY SECURITY SHOULD EVER WORK, THIS IS FOR THE DEMO ONLY

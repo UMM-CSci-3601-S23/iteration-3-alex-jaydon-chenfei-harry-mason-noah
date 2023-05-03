@@ -6,6 +6,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { Request } from './request';
 import { RequestService } from './request.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Observable } from 'rxjs';
+
 @Component({
   selector: 'app-request-volunteer',
   templateUrl: './request-volunteer.component.html',
@@ -45,6 +47,21 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     });
   }
 
+  public markAsComplete(request: Request): void {
+    this.requestService.markRequestAsComplete(request).pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe({
+      next: (updatedRequest) => {
+        this.getRequestsFromServer();
+      },
+      error: (err) => {
+        this.snackBar.open(
+          `Problem contacting the server to mark request as complete – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          {duration: 5000});
+      },
+    });
+  }
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getClientRequests({

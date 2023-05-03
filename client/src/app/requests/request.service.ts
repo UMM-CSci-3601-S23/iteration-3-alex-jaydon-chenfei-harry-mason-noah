@@ -8,6 +8,7 @@ import { Pledge } from '../donor-pledge/pledge';
 import { Router } from '@angular/router';
 import { RequestedItem } from './requestedItem';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -247,6 +248,13 @@ export class RequestService {
         params:priorityBody,
       }).pipe(map(res => res.priority));
   }
+
+  // Add this method to your RequestService
+  markRequestAsComplete(request: Request): Observable<Request> {
+    return this.httpClient.post<Request>('/api/archive', request);
+    }
+
+
 
   public getReadableItem(camelCase: string, diaperSize?: string): string{
     const mappedValue = this.itemMap.get(camelCase);
