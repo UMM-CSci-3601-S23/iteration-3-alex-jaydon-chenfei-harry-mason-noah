@@ -87,7 +87,6 @@ public class DonorRequestController {
       .find(combinedFilter)
       .sort(sortingOrder)
       .into(new ArrayList<>());
-
     // Set the JSON body of the response to be the list of requests returned by the database.
     // According to the Javalin documentation (https://javalin.io/documentation#context),
     // this calls result(jsonString), and also sets content type to json
@@ -165,21 +164,4 @@ public class DonorRequestController {
     ctx.status(HttpStatus.OK);
   }
 
-
-  /**
-   * Utility function to generate the md5 hash for a given string
-   *
-   * @param str the string to generate a md5 for
-   */
-  @SuppressWarnings("lgtm[java/weak-cryptographic-algorithm]")
-  public String md5(String str) throws NoSuchAlgorithmException {
-    MessageDigest md = MessageDigest.getInstance("MD5");
-    byte[] hashInBytes = md.digest(str.toLowerCase().getBytes(StandardCharsets.UTF_8));
-
-    StringBuilder result = new StringBuilder();
-    for (byte b : hashInBytes) {
-      result.append(String.format("%02x", b));
-    }
-    return result.toString();
-  }
 }

@@ -9,9 +9,9 @@
       <!--Item Type Filter-->
       <div class="flex-row gap-8 flex-wrap">
       <mat-form-field class="input-field" id="descriptionID">
-        <mat-label>Description</mat-label>
-        <input matInput data-test="requestDescriptionInput" placeholder="Filter by description"
-        [(ngModel)]="requestDescription" (input)="getRequestsFromServer()">
+        <mat-label>Item Name</mat-label>
+        <input matInput data-test="requestItemInput" placeholder="Filter by item name"
+        [(ngModel)]="itemName" (input)="getRequestsFromServer()">
         <mat-hint> Filtered on Server </mat-hint>
       </mat-form-field>
     </div>
@@ -27,25 +27,21 @@
 
 <!--List View-->
 <div class="flex-row">
-  <div class="flex-1" *ngIf="serverFilteredRequests; else requestsError">
+  <div class="flex-1" *ngIf="serverFilteredItems; else requestsError">
     <mat-card-content>
       <mat-nav-list class="donor-nav-list">
         <h2 mat-subheader>Requests</h2>
-        <div mat-list-item *ngFor="let request of this.serverFilteredRequests" class="donor-list-item">
+        <div mat-list-item *ngFor="let item of this.serverFilteredItems"  class="donor-list-item">
           <mat-card class="example-card">
-            <ng-container *ngIf="request.amount > 0">
-              <mat-card-header [matBadge]="request.amount" matBadgePosition="above after">
-                <mat-card-title class="donor-list-itemType">{{request.itemType}}</mat-card-title>
-                <mat-card-subtitle class="donor-list-foodType">{{request.foodType}}</mat-card-subtitle>
+            <ng-container *ngIf="item.amount > 0">
+              <mat-card-header [matBadge]="item.amount" matBadgePosition="above after">
+                <mat-card-title class="donor-list-itemType">{{this.requestService.getReadableItem(item.name)}}</mat-card-title>
               </mat-card-header>
-            <mat-card-content>
-              <p matListItemBody class="donor-list-description"> {{request.description}} </p>
-            </mat-card-content>
             <mat-card-actions *ngIf="this.authHypothesis">
-              <button mat-mini-fab matTooltip="Pledge" color="accent" data-test="pledgeRequestButton" [routerLink]="['/requests/donor', request._id]">
+              <button mat-mini-fab matTooltip="Pledge" color="accent" data-test="pledgeRequestButton" [routerLink]="['/requests/donor', item._id]">
                 <mat-icon>favorite</mat-icon>
               </button>
-              <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
+              <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton">
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-card-actions>

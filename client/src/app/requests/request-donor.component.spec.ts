@@ -64,27 +64,24 @@ describe('Donor Request View', () => {
 
   it('contains all requests', () => {
     donorList.updateFilter();
-    expect(donorList.serverFilteredRequests.length).toBe(4);
+    expect(donorList.serverFilteredItems.length).toBe(4);
   });
 
-  it('can call deleteDonorRequest()', () => {
-    donorList.deleteRequest(donorList.serverFilteredRequests[0]);
-  });
 
   it('contains a request for food', () => {
-  //   expect(donorList.serverFilteredRequests.some((request: Request) => request.itemType === 'food')).toBe(true);
+  //   expect(donorList.serverFilteredItems.some((request: Request) => request.itemType === 'food')).toBe(true);
   });
 
   it('contains a request for toiletries', () => {
-  //   expect(donorList.serverFilteredRequests.some((request: Request) => request.itemType === 'toiletries')).toBe(true);
+  //   expect(donorList.serverFilteredItems.some((request: Request) => request.itemType === 'toiletries')).toBe(true);
   });
 
   it('contains a request for other', () => {
-  //   expect(donorList.serverFilteredRequests.some((request: Request) => request.itemType === 'other')).toBe(true);
+  //   expect(donorList.serverFilteredItems.some((request: Request) => request.itemType === 'other')).toBe(true);
   });
 
   /*it('contains a request for itemType food and foodType meat', () => {
-    expect(donorList.serverFilteredRequests.some((request: Request) => request.itemType === 'food'
+    expect(donorList.serverFilteredItems.some((request: Request) => request.itemType === 'food'
      && request.foodType === 'meat')).toBe(true);
   });*/
 });
@@ -151,12 +148,12 @@ describe('Misbehaving Donor view', () => {
   });
 
   it('generates an error if we don\'t set up a RequestDonorService', () => {
-    expect(donorList.serverFilteredRequests).toBeUndefined();
+    expect(donorList.serverFilteredItems).toBeUndefined();
   });
 
   it('updateFilter properly reassigns our request list', ()=>{
     donorList.updateFilter();
-    expect(donorList.filteredRequests === donorList.serverFilteredRequests).toBeTruthy();
+    expect(donorList.filteredRequests === donorList.serverFilteredItems).toBeTruthy();
   });
 });
 

@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { Request } from './request';
 import { RequestService } from './request.service';
+import { RequestedItem } from './requestedItem';
 
 
 @Component({
@@ -15,10 +16,10 @@ import { RequestService } from './request.service';
 export class RequestDonorComponent implements OnInit, OnDestroy {
   @Input() simple?: boolean = false;
 
-  public serverFilteredRequests: Request[];
-  public filteredRequests: Request[];
-  public requestDescription: string;
-  public readableRequests: Request[];
+  public serverFilteredItems: RequestedItem[];
+  public filteredRequests: RequestedItem[];
+  public itemName: string;
+  // public readableRequests: Request[];
 
   authHypothesis: boolean;
 
@@ -29,12 +30,12 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getDonorRequests({
-      description: this.requestDescription
+      name: this.itemName
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
       next: (returnedRequests) => {
-        this.serverFilteredRequests = returnedRequests;
+        this.serverFilteredItems = returnedRequests;
       },
 
       error: (err) => {
@@ -48,7 +49,7 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
 
   //
   public updateFilter(): void {
-    this.filteredRequests = this.serverFilteredRequests;
+    this.filteredRequests = this.serverFilteredItems;
   }
   ngOnInit(): void {
       this.getRequestsFromServer();

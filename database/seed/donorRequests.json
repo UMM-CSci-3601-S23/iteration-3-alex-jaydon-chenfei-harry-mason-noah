@@ -6,7 +6,7 @@
     "name": "Harry Potter",
     "dateAdded": "20141001",
     "description": "Fresh Apples",
-    "amount": 6
+
     "selections": [
       "corn",
       "crackers",
@@ -17,7 +17,7 @@
     "_id": {
       "$oid": "588935f5597715f06f3e8f6c"
     },
-    "amount": 35
+
     "name": "Percy Jackson",
     "dateAdded": "20131001",
     "description": "Fresh Bananas",
@@ -31,7 +31,7 @@
     "_id": {
       "$oid": "588935f51c55b55c75a84848"
     },
-    "amount":108
+
     "name": "Katniss Everdeen",
     "dateAdded": "20160101",
     "description": "Fresh Carrots",
@@ -45,7 +45,7 @@
     "_id": {
       "$oid": "588935f52787254123f71fed"
     },
-    "amount":9
+
     "name": "Jeff Bezos",
     "dateAdded": "20170915",
     "description": "Fresh Durians",
@@ -59,7 +59,7 @@
     "_id": {
       "$oid": "588935f5de613130e931ffd5"
     },
-    "amount":7
+
     "name": "Joseph R. Biden",
     "dateAdded": "20171001",
     "description": "Fresh Broccoli",
@@ -73,7 +73,7 @@
     "_id": {
       "$oid": "588935f55b432bb2ff322160"
     },
-    "amount":5
+
     "name": "Edward Cullen",
     "dateAdded": "20170908",
     "description": "Fresh Oranges",

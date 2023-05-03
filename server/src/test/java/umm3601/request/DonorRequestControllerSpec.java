@@ -527,8 +527,4 @@ class DonorRequestControllerSpec {
     assertEquals(1, db.getCollection("donorRequests").countDocuments(eq("_id", new ObjectId(testID))));
   }
 
-  @Test
-  void tryMd5Hash() throws NoSuchAlgorithmException {
-    assertNotNull(requestController.md5("Hello World!"));
-  }
 }
