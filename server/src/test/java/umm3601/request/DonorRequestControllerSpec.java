@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,8 +41,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.javalin.validation.BodyValidator;
-import io.javalin.validation.ValidationException;
-import io.javalin.validation.Validator;
 import umm3601.Authentication;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;

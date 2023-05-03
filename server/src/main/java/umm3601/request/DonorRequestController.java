@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Objects;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
@@ -23,11 +21,7 @@ import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 import umm3601.Authentication;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class DonorRequestController {
