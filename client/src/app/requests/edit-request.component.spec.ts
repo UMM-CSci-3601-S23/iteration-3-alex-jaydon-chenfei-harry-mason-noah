@@ -125,6 +125,8 @@ describe('EditRequestComponent', () => {
       editRequestComponent.setRequestValues({
         _id: '588935f57546a2daea44de7c',
         name: 'joe',
+        fulfilled: [],
+        incomeValid: 'true',
         dateAdded: '13980507',
         description: 'This is a test edit',
       });
@@ -322,6 +324,8 @@ describe('Partially Misbehaving request service', () => {
       _id: '588935f57546a2daea44de7c',
       name: 'joe',
       dateAdded: '20230423',
+      fulfilled: [],
+        incomeValid: 'true',
     //   itemType: 'food',
     //   foodType: 'meat',
       description: 'This is a test edit'

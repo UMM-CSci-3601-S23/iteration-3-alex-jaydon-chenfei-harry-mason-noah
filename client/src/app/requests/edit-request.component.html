@@ -1,4 +1,4 @@
-<div class="flex-row">
+<div *ngIf="this.request" class="flex-row">
   <div class="flex-1">
     <form [formGroup]="editRequestForm" (ngSubmit)="submitForm();">
       <div class="formRow">
@@ -14,14 +14,14 @@
             </mat-form-field>
           </div>
           <div style="display: inline-block;">
-            <mat-card-title class = "new-request-title">
+            <mat-card-title class = "new-request-title" *ngIf="this.request">
               {{this.requestService.getReadableDate(request.dateAdded)}}
             </mat-card-title>
           </div>
         </mat-card-content>
       </div>
       <mat-card-header>
-        <mat-card-subtitle *ngIf="request.incomeValid";else="higher">
+        <mat-card-subtitle *ngIf="this.request&&request.incomeValid";else="higher">
           This person's household income is below the guidelines
         </mat-card-subtitle>
         <mat-card-subtitle #higher>
@@ -33,10 +33,10 @@
         <mat-card-actions align="end">
           <mat-card-title [ngStyle]="{'color': 'green'}" class="itemName" *ngIf="request.diaperSize && this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
           <mat-card-title [ngStyle]="{'color': 'green'}" class="itemName" *ngIf="!request.diaperSize && this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item)}}</mat-card-title>
-          <mat-card-title [ngStyle]="{'color': 'black'}" class="itemName" *ngIf="request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
-          <mat-card-title [ngStyle]="{'color': 'black'}" class="itemName" *ngIf="!request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item)}}</mat-card-title>
-          <button>
-            Post
+          <mat-card-title [ngStyle]="{'color': 'red'}" class="itemName" *ngIf="request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
+          <mat-card-title [ngStyle]="{'color': 'red'}" class="itemName" *ngIf="!request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item)}}</mat-card-title>
+          <button mat-mini-fab matTooltip="Post" color="primary" data-test="postRequestButton" (click)="postRequest(item)">
+            <mat-icon>send</mat-icon>
           </button>
           <mat-checkbox *ngIf="this.request.fulfilled.includes(item)" checked="true" (change)="updateFulfilled(item)"></mat-checkbox>
           <mat-checkbox *ngIf="!this.request.fulfilled.includes(item)" checked="false" (change)="updateFulfilled(item)"></mat-checkbox>

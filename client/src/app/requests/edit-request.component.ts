@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
 import { Request } from './request';
 import { RequestVolunteerComponent } from './request-volunteer.component';
@@ -16,7 +16,6 @@ import { RequestService } from './request.service';
 
 export class EditRequestComponent implements OnInit, OnDestroy{
   request: Request;
-  router: any;
   itemType: any;
   fulfilled: string[];
   checked: true;
@@ -42,7 +41,7 @@ export class EditRequestComponent implements OnInit, OnDestroy{
 
 
   constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, public requestService: RequestService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder, private router: Router) {
   }
 
   formControlHasError(controlName: string): boolean {
@@ -60,13 +59,24 @@ export class EditRequestComponent implements OnInit, OnDestroy{
   }
 
   submitForm() {
-    this.requestService.addDonorRequest(this.editRequestForm.value).subscribe({
+    const newRequest = {
+      _id: this.request._id,
+      name: this.editRequestForm.get('clientName').getRawValue(),
+      incomeValid: this.request.incomeValid,
+      dateAdded: this.request.dateAdded,
+      description: this.editRequestForm.get('description').getRawValue(),
+      selections: this.request.selections,
+      fulfilled: this.request.fulfilled,
+      diaperSize: (this.request.selections.includes('diapers') ? this.request.diaperSize : undefined)
+    };
+    this.requestService.updateRequest(newRequest).subscribe({
       next: (newId) => {
         this.snackBar.open(
-          `Request successfully submitted`,
+          `Request successfully saved`,
           null,
           { duration: 2000 }
         );
+        this.router.navigate(['/requests/volunteer']);
       },
       error: err => {
         this.snackBar.open(
@@ -75,13 +85,10 @@ export class EditRequestComponent implements OnInit, OnDestroy{
           { duration: 5000 }
         );
       },
-      // complete: () => console.log('Add user completes!')
     });
   }
 
   setRequestValues(request: Request): void {
-    console.log('THIS IS THE REQUEST:');
-    console.log(request);
     this.request = request;
     this.editRequestForm.get('clientName').setValue(this.request.name);
     this.editRequestForm.get('description').setValue(this.request.description);
@@ -109,7 +116,6 @@ export class EditRequestComponent implements OnInit, OnDestroy{
       }
     });
     this.fulfilled = [''];
-    console.log(this.request.fulfilled);
   }
 
   ngOnDestroy(): void {
@@ -118,13 +124,35 @@ export class EditRequestComponent implements OnInit, OnDestroy{
   }
 
   updateFulfilled(item: string): void {
-    console.log(this.request.fulfilled);
     if (!this.request.fulfilled.includes(item)){
       this.request.fulfilled.push(item);
     }
     else{
       this.request.fulfilled.splice(this.request.fulfilled.indexOf(item), 1);
     }
-    console.log(this.request.fulfilled);
   }
+
+  postRequest(itemName: string): void {
+    const newItem = {
+      name: itemName,
+      amount: 1,
+    };
+    this.requestService.addDonorItem(newItem).subscribe({
+      next: (newId) => {
+        this.snackBar.open(
+          `Item successfully posted to donor`,
+          null,
+          { duration: 2000 }
+        );
+      },
+      error: err => {
+        this.snackBar.open(
+          `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          { duration: 5000 }
+        );
+      },
+    });
+  }
+
 }
