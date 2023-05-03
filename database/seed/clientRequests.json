@@ -11,6 +11,9 @@
       "cheese",
       "creamyCannedSoup"
     ],
+    "fulfilled": [
+      "almonds"
+    ],
     "incomeValid": true
   },
   {
@@ -42,6 +45,9 @@
       "wholeChicken",
       "hotDogSauce"
     ],
+    "fulfilled": [
+      "almonds"
+    ],
     "incomeValid": true
   },
   {
@@ -56,6 +62,9 @@
       "rice",
       "cookieMix"
     ],
+    "fulfilled": [
+      "almonds"
+    ],
     "incomeValid": false
   },
   {
@@ -69,6 +78,9 @@
       "cannedChili",
       "veggieRavioli",
       "diapers"
+    ],
+    "fulfilled": [
+      "almonds"
     ],
     "diaperSize": "premature",
     "incomeValid": true
@@ -85,6 +97,9 @@
       "tuna",
       "fishSticks"
     ],
+    "fulfilled": [
+      "almonds"
+    ],
     "incomeValid": false
   },
   {
@@ -98,6 +113,9 @@
       "peanutButter",
       "bread",
       "fruitOrVegetablePuree"
+    ],
+    "fulfilled": [
+      "almonds"
     ],
     "incomeValid": true
   }
