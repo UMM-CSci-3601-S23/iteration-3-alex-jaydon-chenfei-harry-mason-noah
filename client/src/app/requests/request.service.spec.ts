@@ -12,6 +12,8 @@ describe('RequestService', () => {
       _id: '1',
       name: 'sarah',
       dateAdded: '20200222',
+      fulfilled: [],
+      incomeValid: 'true',
       // itemType: 'food',
       description: 'I would like to be able to get some spaghetti noodles',
       // foodType: 'grain'
@@ -20,6 +22,8 @@ describe('RequestService', () => {
       _id: '2',
       name: 'hannah',
       dateAdded: '20230516',
+      fulfilled: [],
+      incomeValid: 'true',
       // itemType: 'toiletries',
       description: 'I need some toothpaste',
       // foodType: ''
@@ -28,6 +32,8 @@ describe('RequestService', () => {
       _id: '3',
       name: 'kyle',
       dateAdded: '20180719',
+      fulfilled: [],
+      incomeValid: 'true',
       // itemType: 'other',
       description: 'Would it be possible for me to get some Advil?',
       // foodType: ''
@@ -181,7 +187,7 @@ describe('RequestService', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
 
 
-      requestService.getDonorRequests({description: 'Need Milk'}).subscribe(() => {
+      requestService.getDonorRequests({name: 'Need Milk'}).subscribe(() => {
         //check if called once
         expect(mockedMethod)
           .withContext('one call')
