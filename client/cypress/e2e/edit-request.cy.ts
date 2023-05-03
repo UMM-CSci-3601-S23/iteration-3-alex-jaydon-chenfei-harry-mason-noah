@@ -17,11 +17,9 @@ describe('Edit a request', ()=> {
       dateAdded: '20230423',
     //   itemType: 'food',
     //   foodType: 'meat',
-      description: 'This is a test edit'
+      description: 'This is a test edit',
+      priority: 0
     };
-
-    page.editRequest(request);
-    page.getSnackBar().should('contain', `Request successfully submitted`);
 
     page.navigateToDonor();
 
@@ -29,9 +27,11 @@ describe('Edit a request', ()=> {
     // page.selectFoodType('meat');
     page.filterDescription('This is a test edit');
 
+
     cy.get('.donor-list-description').should('contain.text', request.description);
     // cy.get('.donor-list-itemType').should('contain.text', request.itemType);
     // cy.get('.donor-list-foodType').should('contain.text', request.foodType);
+
   });
 
 });

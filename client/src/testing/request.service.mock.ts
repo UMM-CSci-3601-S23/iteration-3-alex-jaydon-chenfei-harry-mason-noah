@@ -13,6 +13,7 @@ export class MockRequestService extends RequestService {
   public static testRequests: Request[] = [
     {
       _id: '1_id',
+
       name: 'noah',
       dateAdded: '20210213',
       fulfilled: [],
@@ -20,7 +21,8 @@ export class MockRequestService extends RequestService {
       selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'food',
       description: 'I would like some ground beef'
-      // foodType: 'meat'
+      // foodType: 'meat',
+      priority: 3
     },
     {
       _id: '2_id',
@@ -31,7 +33,8 @@ export class MockRequestService extends RequestService {
       selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'toiletries',
       description: 'I need more toothpaste'
-      // foodType: ''
+      // foodType: '',
+      priority: 3
     },
     {
       _id: '3_id',
@@ -42,7 +45,8 @@ export class MockRequestService extends RequestService {
       selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'other',
       description: 'I need more paper plates'
-      // foodType: ''
+      // foodType: '',
+      priority: 3
     },
     {
       _id: '4_id',
@@ -54,7 +58,8 @@ export class MockRequestService extends RequestService {
       diaperSize: 'newborn',
       // itemType: 'food',
       description: 'I would like some milk'
-      // foodType: 'dairy'
+      // foodType: 'dairy',
+      priority: 3
     }
   ];
 
@@ -63,6 +68,7 @@ export class MockRequestService extends RequestService {
       _id: 'item_1',
       name: 'hotSauce',
       amount: 3
+
     }
   ];
 

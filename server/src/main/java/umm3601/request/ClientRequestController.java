@@ -2,6 +2,7 @@ package umm3601.request;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
 import static com.mongodb.client.model.Filters.regex;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,10 @@ import java.security.NoSuchAlgorithmException;
 public class ClientRequestController {
   static final String SORT_ORDER_KEY = "sortorder";
   static final String DESCRIPTION_KEY = "description";
+  static final String PRIORITY_KEY = "priority";
+
+  static final int LOWER_PRIORITY_BOUND = 1; // highest possible request priority (#1 most important)
+  static final int UPPER_PRIORITY_BOUND = 5; // lowest possible (#5)
 
 
   private final JacksonMongoCollection<Request> requestCollection;
@@ -62,13 +67,14 @@ public class ClientRequestController {
       request = requestCollection.find(eq("_id", new ObjectId(id))).first();
     } catch (IllegalArgumentException e) {
       throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID.");
+    } catch (NullPointerException e) {
+      throw new NotFoundResponse("The desired request was not found");
     }
     if (request == null) {
       throw new NotFoundResponse("The desired request was not found");
-    } else {
-      ctx.json(request);
-      ctx.status(HttpStatus.OK);
     }
+    ctx.json(request);
+    ctx.status(HttpStatus.OK);
   }
 
   /**
@@ -120,8 +126,8 @@ public class ClientRequestController {
     // Sort the results. Use the `sortby` query param (default "name")
     // as the field to sort by, and the query param `sortorder` (default
     // "asc") to specify the sort order.
-    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "name");
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
+    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "priority");
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "desc");
     Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
     return sortingOrder;
   }
@@ -148,6 +154,39 @@ public class ClientRequestController {
     // See, e.g., https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
     // for a description of the various response codes.
     ctx.status(HttpStatus.CREATED);
+  }
+
+  public void setPriority(Context ctx) {
+    Integer priority = ctx.queryParamAsClass(PRIORITY_KEY, Integer.class)
+      .check(it -> it >= LOWER_PRIORITY_BOUND && it <= UPPER_PRIORITY_BOUND,
+    "Priority must be a number between 1 and 5 inclusive")
+      .get();
+    String id = ctx.pathParam("id");
+    Request request;
+    try {
+      // ctx requires an _id path parameter.
+      // We should make sure this is a real request id before continuing.
+      request = requestCollection
+        .find(eq("_id", new ObjectId(id))).first();
+    } catch (IllegalArgumentException e) {
+      throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID");
+    } catch (NotFoundResponse e) {
+      throw new NotFoundResponse("The desired request was not found");
+    }
+
+    List<Bson> toSet = new ArrayList<>();
+    toSet.add(eq("_id", new ObjectId(id))); // filter
+
+    toSet.add(set("priority", priority)); // update
+
+    requestCollection.updateOne(
+        toSet.get(0) /* filter */,
+        toSet.get(1) /* update */
+    );
+    request.priority = priority;
+    // Send a JSON response with the request whose priority was changed.
+    ctx.json(request);
+    ctx.status(HttpStatus.OK);
   }
 
   /**

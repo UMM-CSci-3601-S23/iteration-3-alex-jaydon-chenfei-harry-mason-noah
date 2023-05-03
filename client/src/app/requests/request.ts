@@ -8,4 +8,6 @@ export interface Request {
   selections?: string[];
   fulfilled: string[];
   diaperSize?: string;
+  priority: number;
+
 }

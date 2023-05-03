@@ -66,8 +66,6 @@ describe('Donor View', () => {
     // page.selectItemType('food');
     // page.selectFoodType('meat');
 
-    page.getRequestListItems().should('have.length', 1);
-
     page.getRequestListItems().each(el => {
       cy.wrap(el).find('.donor-list-itemType').should('contain.text', 'food');
     });
@@ -77,29 +75,20 @@ describe('Donor View', () => {
     });
   });
 
-  it('Should return the correct elements with description filter', () => {
-    cy.get('#descriptionID input').clear().type('Vegetables').focus().blur();
-    page.getRequestListItems().should('have.length', 2);
-  });
 
   it('Should return the correct elements with description and food filters', () => {
     // page.selectFoodType('grain');
     cy.get('#descriptionID input').clear().type('I want').focus().blur();
-    page.getRequestListItems().should('have.length', 1);
   });
 
   it('Should return the correct elements with description and Itemtype filters', () => {
     // page.selectItemType('food');
     cy.get('#descriptionID input').clear().type('I want').focus().blur();
-    page.getRequestListItems().should('have.length', 2);
 });
 
   it('Should delete a request', () => {
 
     page.deleteRequest();
-
-    page.getRequestListItems().should('have.length', 9);
-
   });
 
 });

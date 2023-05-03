@@ -16,7 +16,9 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'food',
       description: 'I would like to be able to get some spaghetti noodles',
-      // foodType: 'grain'
+
+      // foodType: 'grain',
+      priority: 4
     },
     {
       _id: '2',
@@ -26,7 +28,9 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'toiletries',
       description: 'I need some toothpaste',
-      // foodType: ''
+      // foodType: '',
+      priority: 3
+
     },
     {
       _id: '3',
@@ -36,7 +40,9 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'other',
       description: 'Would it be possible for me to get some Advil?',
-      // foodType: ''
+      // foodType: '',
+      priority: 1
+
     }
   ];
 
@@ -292,6 +298,7 @@ describe('deleteDonorRequest', ()=> {
 
 
 });
+
 
 
 

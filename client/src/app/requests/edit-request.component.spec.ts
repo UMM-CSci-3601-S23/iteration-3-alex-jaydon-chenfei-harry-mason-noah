@@ -123,12 +123,15 @@ describe('EditRequestComponent', () => {
 
     it('should fill in values properly', ()=> {
       editRequestComponent.setRequestValues({
+
         _id: '588935f57546a2daea44de7c',
         name: 'joe',
         fulfilled: [],
         incomeValid: 'true',
         dateAdded: '13980507',
         description: 'This is a test edit',
+        priority: 1
+
       });
 
       // expect(itemTypeControl.value === 'food').toBeTrue();
@@ -328,7 +331,8 @@ describe('Partially Misbehaving request service', () => {
         incomeValid: 'true',
     //   itemType: 'food',
     //   foodType: 'meat',
-      description: 'This is a test edit'
+      description: 'This is a test edit',
+      priority: 1
     });
 
 
