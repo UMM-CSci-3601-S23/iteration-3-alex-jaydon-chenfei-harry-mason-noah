@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
-import { Request } from '../requests/request';
 import { RequestService } from '../requests/request.service';
 import { TimeSlot } from './pledge';
+import { RequestedItem } from '../requests/requestedItem';
+
 
 
 @Component({
@@ -15,7 +16,7 @@ import { TimeSlot } from './pledge';
 })
 
 export class DonorPledgeComponent implements OnInit, OnDestroy{
-  request: Request;
+  item: RequestedItem;
   timeSlot: any;
 
 
@@ -25,6 +26,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     // the client wants
     comment: new FormControl('', Validators.compose([
       Validators.maxLength(200),
+
     ])),
 
     timeSlot: new FormControl<TimeSlot>('',Validators.compose([
@@ -40,8 +42,9 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     amount: new FormControl<number>(0, Validators.compose([
       Validators.required,
       Validators.min(1),
+      this.maxAmountValidator(0),
     ])),
-    requestId: new FormControl('', Validators.required),
+    itemId: new FormControl('', Validators.required),
   });
 
   readonly newRequestValidationMessages = {
@@ -58,14 +61,16 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     ],
     amount:[
       { type: 'required', message: 'The amount is required' },
-      { type: 'min', message: 'The amount can not be less than 1' }
+      { type: 'min', message: 'The amount can not be less than 1' },
+      { type: 'maxAmount', message: 'The amount cannot be greater than the current amount needed' }
     ]
   };
   private ngUnsubscribe = new Subject<void>();
 
 
 
-  constructor(private snackBar: MatSnackBar, private route: ActivatedRoute, private requestService: RequestService ) {
+  // eslint-disable-next-line max-len
+  constructor(private router: Router, private snackBar: MatSnackBar, private route: ActivatedRoute, public requestService: RequestService ) {
   }
 
   formControlHasError(controlName: string): boolean {
@@ -82,7 +87,20 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
     return 'Unknown error';
   }
 
+  maxAmountValidator(maxAmount: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value > maxAmount) {
+        return { maxAmount: true };
+      }
+      return null;
+    };
+  }
+
   submitForm() {
+    const newItem = {
+      name: this.item.name,
+      amount: -1 * this.newPledgeForm.get('amount').getRawValue(),
+    };
     this.requestService.addDonorPledge(this.newPledgeForm.value).subscribe({
       next: (newId) => {
         const name = this.newPledgeForm.get('name').value;
@@ -93,6 +111,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
           null,
           { duration: 10000 }
         );
+        this.router.navigate(['/requests/donor']);
       },
       error: err => {
         this.snackBar.open(
@@ -101,21 +120,21 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
           { duration: 5000 }
         );
       },
-      // complete: () => console.log('Add user completes!')
     });
   }
 
-  setRequestValues(request: Request): void {
-    console.log('THIS IS THE REQUEST:');
-    console.log(request);
-    this.request = request;
-    this.newPledgeForm.get('requestId').setValue(request._id);
-    // this.newPledgeForm.setValue({
-    //   comment: '',
-    //   timeSlot: '',
-    //   name: '',
-    //   amount:0,
-    // });
+  setRequestValues(item: RequestedItem): void {
+    this.item = item;
+    this.newPledgeForm.get('itemId').setValue(item._id);
+
+    // Update the max amount for the amount FormControl
+    const currentAmount = item.amount;
+    this.newPledgeForm.get('amount').setValidators([
+      Validators.required,
+      Validators.min(1),
+      this.maxAmountValidator(currentAmount),
+    ]);
+    this.newPledgeForm.get('amount').updateValueAndValidity();
   }
 
 
@@ -125,13 +144,13 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
       //Map the paramMap into the id
       map((paramMap: ParamMap) => paramMap.get('id')),
       //maps the id string to the Observable<Request>
-      switchMap((id: string) => this.requestService.getDonorRequestById(id)),
+      switchMap((id: string) => this.requestService.getRequestedItemById(id)),
       //Allows the pipeline to continue until 'this.ngUnsubscribe' emits a value
       //It then destroys the pipeline
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
-      next: request => {
-        this.setRequestValues(request);
+      next: item => {
+        this.setRequestValues(item);
       },
       error: _err => {
         /*(this.snackbar.open('Problem loading the Request – try again', 'OK', {

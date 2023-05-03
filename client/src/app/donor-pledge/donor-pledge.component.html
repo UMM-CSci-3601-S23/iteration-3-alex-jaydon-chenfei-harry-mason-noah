@@ -1,4 +1,4 @@
-<div class="flex-row">
+<div class="flex-row" *ngIf="this.item">
   <div class="flex-1">
     <form [formGroup]="newPledgeForm" (ngSubmit)="submitForm();">
       <mat-card-header>
@@ -7,9 +7,7 @@
         </mat-card-title>
         <mat-card-subtitle>
           <div>
-            <p>Name: <span class="donor-pledge-name">{{ this.request.name }}</span></p>
-            <p>Selections: <span class="donor-pledge-selections">{{ this.request.selections }}</span></p>
-            <p>Description: <span class="donor-pledge-description">{{ this.request.description }}</span></p>
+            <p>Name of item: <span class="donor-pledge-name">{{this.requestService.getReadableItem(this.item.name)}}</span></p>
           </div>
         </mat-card-subtitle>
       </mat-card-header>
@@ -17,7 +15,7 @@
 
       <div>
         <mat-form-field class="input-field">
-          <mat-label>Preferred Name</mat-label>
+          <mat-label>Your Preferred Name</mat-label>
           <input matInput formControlName="name"
           required data-test="donorNameInput" placeholder="Ex.Alex">
         </mat-form-field>
@@ -31,7 +29,7 @@
           <mat-label>Amount to Donate</mat-label>
           <input matInput formControlName="amount"
           required data-test="donateAmount" type="number" placeholder="Ex.3"
-          min="1" [max]="request.amount">
+          min="1" [max]="item.amount">
        </mat-form-field>
        <mat-error *ngIf="formControlHasError('amount')" data-test="amountError">
         {{getErrorMessage('amount')}}

@@ -29,7 +29,7 @@ public class DonorPledgeController {
 
   private static final String TIMESLOT_REGEX = "^(Monday|Tuesday|Wednesday|Thursday|Friday)$";
 
-  private final JacksonMongoCollection<Request> requestCollection;
+  private final JacksonMongoCollection<RequestedItem> requestedItemCollection;
   private final JacksonMongoCollection<Pledge> pledgeCollection;
   private Authentication auth;
 
@@ -40,10 +40,10 @@ public class DonorPledgeController {
       "donorPledges",
       Pledge.class,
       UuidRepresentation.STANDARD);
-    requestCollection = JacksonMongoCollection.builder().build(
+    requestedItemCollection = JacksonMongoCollection.builder().build(
       database,
-      "donorRequests",
-      Request.class,
+      "requestedItems",
+      RequestedItem.class,
       UuidRepresentation.STANDARD);
   }
 
@@ -55,12 +55,12 @@ public class DonorPledgeController {
     .get();
 
     pledgeCollection.insertOne(newPledge);
-
+    System.out.println(newPledge.amount);
     // Find the request by its ID and update the amount needed
-    ObjectId requestId = new ObjectId(newPledge.requestId);
+    ObjectId requestId = new ObjectId(newPledge.itemId);
     Bson filter = eq("_id", requestId);
     Bson updateOperation = Updates.inc("amount", -newPledge.amount);
-    requestCollection.updateOne(filter, updateOperation);
+    requestedItemCollection.updateOne(filter, updateOperation);
 
     ctx.json(Map.of("id", newPledge._id));
     ctx.status(HttpStatus.CREATED);
