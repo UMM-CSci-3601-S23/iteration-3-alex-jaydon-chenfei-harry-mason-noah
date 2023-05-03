@@ -55,7 +55,7 @@ const MATERIAL_MODULES: any[] = [
   MatToolbarModule,
   MatTooltipModule,
   MatStepperModule,
-  MatCheckboxModule
+  MatCheckboxModule,
   MatBadgeModule
 ];
 
