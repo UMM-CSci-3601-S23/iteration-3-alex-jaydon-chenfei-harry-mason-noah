@@ -9,3 +9,19 @@
 .income-warning{
   color: red;
 }
+
+.priority-container {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.priority-field {
+  width: 110px;
+}
+
+.priority-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
