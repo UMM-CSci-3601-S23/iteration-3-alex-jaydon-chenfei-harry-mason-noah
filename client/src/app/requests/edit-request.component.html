@@ -35,7 +35,7 @@
           <mat-card-title [ngStyle]="{'color': 'green'}" class="itemName" *ngIf="!request.diaperSize && this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item)}}</mat-card-title>
           <mat-card-title [ngStyle]="{'color': 'red'}" class="itemName" *ngIf="request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
           <mat-card-title [ngStyle]="{'color': 'red'}" class="itemName" *ngIf="!request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item)}}</mat-card-title>
-          <button mat-mini-fab matTooltip="Post" color="primary" data-test="postRequestButton" (click)="postRequest(item)">
+          <button *ngIf="!this.request.archived" mat-mini-fab matTooltip="Post" color="primary" data-test="postRequestButton" (click)="postRequest(item)">
             <mat-icon>send</mat-icon>
           </button>
           <mat-checkbox *ngIf="this.request.fulfilled.includes(item)" checked="true" (change)="updateFulfilled(item)"></mat-checkbox>

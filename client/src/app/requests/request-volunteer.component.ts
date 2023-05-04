@@ -20,7 +20,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   public serverFilteredRequests: Request[] = [];
   public filteredRequests: Request[];
   public requestDescription: string;
-  public archiveView: boolean;
+  public archiveView: string;
   public sortedRequests: Request[];
 
   authHypothesis: boolean;
@@ -129,6 +129,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.archiveView = 'false';
     this.getRequestsFromServer();
     this.authHypothesis = document.cookie.includes('auth_token');
 }

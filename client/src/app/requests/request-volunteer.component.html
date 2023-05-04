@@ -1,35 +1,34 @@
 <div *ngIf="this.authHypothesis" class="requests-container">
-  <div class="flex-row">
-    <div class="flex-1">
-      <!--Filters-->
-      <mat-card class="search-card">
-        <mat-card-header>
-          <mat-card-title class="donor-view-title">Needs requested</mat-card-title>
-        </mat-card-header>
+  <div class="flex-1">
+    <mat-card class="search-card">
       <mat-card-content>
-        <!--Item Type Filter-->
         <div class="flex-row gap-8 flex-wrap">
-        <mat-form-field class="input-field" id="descriptionID">
-          <mat-label>Description</mat-label>
-          <input matInput data-test="requestDescriptionInput" placeholder="Filter by description"
-          [(ngModel)]="requestDescription" (input)="getRequestsFromServer()">
-          <mat-hint> Filtered on Server </mat-hint>
-        </mat-form-field>
-        <mat-radio-group [(ngModel)]="archiveView" (change)="getRequestsFromServer()" class="archiveFilterButtons" aria-label="Select an option">
-          <mat-radio-button [checked]="true" value=false>View Current Requests</mat-radio-button>
-          <mat-radio-button value=true>View Archived Requests</mat-radio-button>
-        </mat-radio-group>
-      </div>
+          <mat-form-field class="input-field" id="descriptionID">
+            <mat-label>Description</mat-label>
+              <!--Description Filter-->
+            <input matInput data-test="requestDescriptionInput" placeholder="Filter by description"
+            [(ngModel)]="requestDescription" (input)="getRequestsFromServer()">
+          </mat-form-field>
+          <button mat-fab extended class="viewPledgesButton" [routerLink]="['/requests/pledges']">
+            <mat-icon>bookmark</mat-icon>
+            View pledges
+          </button>
+          <mat-radio-group [(ngModel)]="archiveView" (change)="getRequestsFromServer()" class="archiveFilterButtons" aria-label="Select an option">
+              <!--Archive Filter-->
+            <mat-radio-button value="false" >View Current Requests</mat-radio-button>
+            <mat-radio-button value="true" >View Archived Requests</mat-radio-button>
+          </mat-radio-group>
+        </div>
       </mat-card-content>
-      </mat-card>
-    </div>
+    </mat-card>
   </div>
 
   <!--List View-->
   <div class="flex-row">
     <div class="flex-1" *ngIf="serverFilteredRequests; else requestsError">
       <mat-nav-list class="volunteer-nav-list">
-        <h3 mat-subheader>Requests</h3>
+        <h3 *ngIf="this.archiveView === 'true'" mat-subheader>Archived Requests</h3>
+        <h3 *ngIf="this.archiveView === 'false'" mat-subheader>Current Requests</h3>
         <div mat-list-item *ngFor="let request of this.serverFilteredRequests" class="volunteer-list-item edit-request">
           <mat-card class="example-card">
             <div class="priority-wrapper"> <!-- Added the priority-wrapper class -->
@@ -49,14 +48,14 @@
             </div>
             <mat-card-actions>
               <p matListItemBody class="itemName"> {{request.description}} </p>
+              <button mat-mini-fab class="deleteButton" color="accent" matTooltip="Archive" *ngIf="!request.archived"(click)="markAsComplete(request)">
+                <mat-icon>archive</mat-icon>
+              </button>
               <button mat-mini-fab class="deleteButton" matTooltip="Edit Request" color="warn" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
                 <mat-icon>delete</mat-icon>
-              </button>
-              <button *ngIf="!request.archived"(click)="markAsComplete(request)">
-                mark as complete
               </button>
             </mat-card-actions>
             <p class="income-warning" *ngIf="!request.incomeValid">!Income is more than guideline for a family of this size!</p>
