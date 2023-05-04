@@ -24,20 +24,31 @@ describe('Donor View', () => {
   //Tests with name filter
   it('Should return the correct elements with different inputs', () => {
 
+    page.enterItemName().type('o');
+    page.getRequestListItems().should('have.length', 2);
+    page.getRequestListItems().each(($el) => {
+      const itemNameElement = $el.find('.itemName');
+      const itemName = itemNameElement.text().trim().toLowerCase();
+      expect(itemName).to.contain('o');
+    });
+
+    page.enterItemName().clear();
+    page.enterItemName().type('ou');
     page.getRequestListItems().should('have.length', 1);
-
-    page.getRequestListItems().each(el => {
-      cy.wrap(el).find('.donor-list-itemType').should('contain.text', 'food');
+    page.getRequestListItems().each(($el) => {
+      const itemNameElement = $el.find('.itemName');
+      const itemName = itemNameElement.text().trim().toLowerCase();
+      expect(itemName).to.contain('ou');
     });
 
-    page.getRequestListItems().each(el => {
-    //   cy.wrap(el).find('.donor-list-foodType').should('contain.text', 'dairy');
     });
-  });
+
 
   it('Should delete a request', () => {
 
     page.deleteRequest();
+
+    page.getRequestListItems().should('have.length', 3);
   });
 
 });
