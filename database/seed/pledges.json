@@ -3,9 +3,30 @@
     "_id": {
       "$oid": "588935f5556f992bf8f37c01"
     },
+    "name": "john doe",
+    "amount": 2,
+    "comment": "I'll pull up in my moms kia soul",
+    "itemName": "fishSticks",
+    "timeSlot": "Tuesday"
+  },
+  {
+    "_id": {
+      "$oid": "588935f5556f991bf8f37c01"
+    },
     "name": "john smith",
-    "amount": 12,
+    "amount": 1,
     "comment": "I'll pull up in my kia soul",
-    "itemId": "hotSauce"
+    "itemName": "chicken",
+    "timeSlot": "Tuesday"
+  },
+  {
+    "_id": {
+      "$oid": "588935f5556f892bf8f37c01"
+    },
+    "name": "jane smith",
+    "amount": 120,
+    "comment": "I'll pull up in my husbands kia soul",
+    "itemName": "hotSauce",
+    "timeSlot": "Tuesday"
   }
-  ]
+]
