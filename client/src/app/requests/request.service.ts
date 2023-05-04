@@ -24,6 +24,8 @@ export class RequestService {
   readonly requestedItem: string = `${environment.apiUrl}getRequestedItems`;
   readonly getRequestedItem: string = `${environment.apiUrl}requestedItem`;
   readonly itemDonorUrl: string = `${environment.apiUrl}requestedItem`;
+  readonly getPledgesUrl: string = `${environment.apiUrl}getPledges`;
+  readonly deletePledgeUrl: string = `${environment.apiUrl}deletePledge`;
   readonly authUrl: string = `http://localhost:4568/api/auth`;
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
@@ -151,7 +153,7 @@ export class RequestService {
   }
 
 
-  getClientRequests(filters?: {description?: string; archived?: boolean}): Observable<Request[]> {
+  getClientRequests(filters?: {description?: string; archived?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
       if (filters.description) {
@@ -224,9 +226,21 @@ export class RequestService {
     return this.httpClient.post<{id: string}>(this.newPledgeDonorUrl, newPledge).pipe(map(res => res.id));
   }
 
+  getPledges(): Observable<Pledge[]> {
+    const httpParams: HttpParams = new HttpParams();
+    return this.httpClient.get<Pledge[]>(this.getPledgesUrl, {
+      params: httpParams,
+    });
+  }
+
   deleteClientRequest(request: Partial<Request>): Observable<object> {
     // Send delete request to delete a request
     return this.httpClient.delete(this.requestClientUrl + '/' + request._id).pipe(map(res => res));
+  }
+
+  deletePledge(pledge: Partial<Pledge>): Observable<object> {
+    // Send delete request to delete a request
+    return this.httpClient.delete(this.deletePledgeUrl + '/' + pledge._id).pipe(map(res => res));
   }
 
   deleteDonorRequest(request: Partial<Request>): Observable<object> {

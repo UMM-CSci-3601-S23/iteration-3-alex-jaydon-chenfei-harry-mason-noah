@@ -44,7 +44,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
       Validators.min(1),
       this.maxAmountValidator(0),
     ])),
-    itemId: new FormControl('', Validators.required),
+    itemName: new FormControl('', Validators.required),
   });
 
   readonly newRequestValidationMessages = {
@@ -97,10 +97,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
   }
 
   submitForm() {
-    const newItem = {
-      name: this.item.name,
-      amount: -1 * this.newPledgeForm.get('amount').getRawValue(),
-    };
+    this.newPledgeForm.get('itemName').setValue(this.item.name);
     this.requestService.addDonorPledge(this.newPledgeForm.value).subscribe({
       next: (newId) => {
         const name = this.newPledgeForm.get('name').value;
@@ -125,7 +122,7 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
 
   setRequestValues(item: RequestedItem): void {
     this.item = item;
-    this.newPledgeForm.get('itemId').setValue(item._id);
+    this.newPledgeForm.get('itemName').setValue(item.name);
 
     // Update the max amount for the amount FormControl
     const currentAmount = item.amount;

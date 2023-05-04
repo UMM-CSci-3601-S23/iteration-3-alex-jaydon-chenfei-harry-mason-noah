@@ -7,7 +7,8 @@
         </mat-card-title>
         <mat-card-subtitle>
           <div>
-            <p>Name of item: <span class="donor-pledge-name">{{this.requestService.getReadableItem(this.item.name)}}</span></p>
+            <p *ngIf="this.item.amount === 1">{{this.item.amount}} portion of {{this.requestService.getReadableItem(this.item.name)}} are currently being requested.</p>
+            <p *ngIf="this.item.amount !== 1">{{this.item.amount}} portions of {{this.requestService.getReadableItem(this.item.name)}} are currently being requested.</p>
           </div>
         </mat-card-subtitle>
       </mat-card-header>

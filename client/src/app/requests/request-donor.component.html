@@ -3,7 +3,7 @@
     <!--Filters-->
     <mat-card class="search-card">
       <mat-card-header>
-        <mat-card-title class="donor-view-title">Needs requested</mat-card-title>
+        <mat-card-title class="donor-view-title">Items requested by the food shelf</mat-card-title>
       </mat-card-header>
     <mat-card-content>
       <!--Item Type Filter-->
@@ -12,7 +12,6 @@
         <mat-label>Item Name</mat-label>
         <input matInput data-test="requestItemInput" placeholder="Filter by item name"
         [(ngModel)]="itemName" (input)="getRequestsFromServer()">
-        <mat-hint> Filtered on Server </mat-hint>
       </mat-form-field>
     </div>
     </mat-card-content>
@@ -30,7 +29,6 @@
   <div class="flex-1" *ngIf="serverFilteredItems; else requestsError">
     <mat-card-content>
       <mat-nav-list class="donor-nav-list">
-        <h2 mat-subheader>Requests</h2>
         <div mat-list-item *ngFor="let item of this.serverFilteredItems"  class="donor-list-item">
           <mat-card class="example-card">
             <ng-container *ngIf="item.amount > 0">
