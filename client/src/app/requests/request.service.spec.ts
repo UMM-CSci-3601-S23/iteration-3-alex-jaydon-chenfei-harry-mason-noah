@@ -16,6 +16,7 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'food',
       description: 'I would like to be able to get some spaghetti noodles',
+      archived: 'false',
       priority: 4
     },
     {
@@ -26,6 +27,7 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'toiletries',
       description: 'I need some toothpaste',
+      archived: 'false',
       priority: 3
     },
     {
@@ -36,6 +38,7 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'other',
       description: 'Would it be possible for me to get some Advil?',
+      archived: 'false',
       priority: 1
     }
   ];
@@ -154,7 +157,7 @@ describe('RequestService', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
 
       // get requests with description 'Need Milk'
-      requestService.getDonorRequests({ description: 'Need Milk' }).subscribe(() => {
+      requestService.getDonorRequests({ name: 'Need Milk' }).subscribe(() => {
         // check if called once
         expect(mockedMethod)
           .withContext('one call')
@@ -205,7 +208,7 @@ describe('RequestService', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
 
       //get requests with foodType dairy
-      requestService.getDonorRequests({description: 'Need Milk'}).subscribe(() => {
+      requestService.getDonorRequests({name: 'Need Milk'}).subscribe(() => {
         //check if called once
         expect(mockedMethod)
           .withContext('one call')
@@ -222,6 +225,8 @@ describe('RequestService', () => {
     //test a itemType 'food' with a foodType 'meat'
     it('correctly calls api/requests with itemType \'food\' and foodType \'meat\'', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
+    });
+  });
 
   describe('filterRequests', ()=> {
     it('returns the correct array of requests', ()=>{
@@ -247,7 +252,8 @@ describe('RequestService', () => {
           .withContext('talks to the correct endpoint')
           .toHaveBeenCalledWith(requestService.newRequestClientUrl, testRequests[1]);
       });
-  }));
+    }));
+  });
 
   describe('addDonorRequest', ()=> {
     it('talks to the right endpoint and is called once', waitForAsync(() => {
@@ -266,57 +272,47 @@ describe('RequestService', () => {
         expect(mockedMethod)
           .withContext('talks to the correct endpoint')
           .toHaveBeenCalledWith(requestService.newRequestDonorUrl, testRequests[1]);
+        });
+    }));
+  });
+
+  describe('deleteClientRequest', ()=> {
+    it('talks to the right endpoint and is called once', waitForAsync(() => {
+      // Mock the `httpClient.addUser()` method, so that instead of making an HTTP request,
+      // it just returns our test data.
+      const REQUEST_ID = '2';
+      const mockedMethod = spyOn(httpClient, 'delete').and.returnValue(of(REQUEST_ID));
+
+      // paying attention to what is returned (undefined) didn't work well here,
+      // but I'm putting something in here to remind us to look into that
+      requestService.deleteClientRequest(testRequests[1]).subscribe((returnedString) => {
+        console.log('The thing returned was:' + returnedString);
+        expect(mockedMethod)
+          .withContext('one call')
+          .toHaveBeenCalledTimes(1);
+        expect(mockedMethod)
+          .withContext('talks to the correct endpoint');
       });
-  }));
+    }));
+  });
+
+  describe('deleteDonorRequest', ()=> {
+    it('talks to the right endpoint and is called once', waitForAsync(() => {
+      // Mock the `httpClient.addUser()` method, so that instead of making an HTTP request,
+      // it just returns our test data.
+      const REQUEST_ID = '2';
+      const mockedMethod = spyOn(httpClient, 'delete').and.returnValue(of(REQUEST_ID));
+
+      // paying attention to what is returned (undefined) didn't work well here,
+      // but I'm putting something in here to remind us to look into that
+      requestService.deleteDonorRequest(testRequests[1]).subscribe((returnedString) => {
+        console.log('The thing returned was:' + returnedString);
+        expect(mockedMethod)
+          .withContext('one call')
+          .toHaveBeenCalledTimes(1);
+        expect(mockedMethod)
+          .withContext('talks to the correct endpoint');
+      });
+    }));
+  });
 });
-
-describe('deleteClientRequest', ()=> {
-  it('talks to the right endpoint and is called once', waitForAsync(() => {
-    // Mock the `httpClient.addUser()` method, so that instead of making an HTTP request,
-    // it just returns our test data.
-    const REQUEST_ID = '2';
-    const mockedMethod = spyOn(httpClient, 'delete').and.returnValue(of(REQUEST_ID));
-
-    // paying attention to what is returned (undefined) didn't work well here,
-    // but I'm putting something in here to remind us to look into that
-    requestService.deleteClientRequest(testRequests[1]).subscribe((returnedString) => {
-      console.log('The thing returned was:' + returnedString);
-      expect(mockedMethod)
-        .withContext('one call')
-        .toHaveBeenCalledTimes(1);
-      expect(mockedMethod)
-        .withContext('talks to the correct endpoint');
-    });
-}));});
-
-describe('deleteDonorRequest', ()=> {
-  it('talks to the right endpoint and is called once', waitForAsync(() => {
-    // Mock the `httpClient.addUser()` method, so that instead of making an HTTP request,
-    // it just returns our test data.
-    const REQUEST_ID = '2';
-    const mockedMethod = spyOn(httpClient, 'delete').and.returnValue(of(REQUEST_ID));
-
-    // paying attention to what is returned (undefined) didn't work well here,
-    // but I'm putting something in here to remind us to look into that
-    requestService.deleteDonorRequest(testRequests[1]).subscribe((returnedString) => {
-      console.log('The thing returned was:' + returnedString);
-      expect(mockedMethod)
-        .withContext('one call')
-        .toHaveBeenCalledTimes(1);
-      expect(mockedMethod)
-        .withContext('talks to the correct endpoint');
-    });
-}));
-
-});
-
-
-
-
-});
-
-
-
-});
-});
-

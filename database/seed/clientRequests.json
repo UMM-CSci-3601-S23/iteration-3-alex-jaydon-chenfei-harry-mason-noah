@@ -14,7 +14,8 @@
     "fulfilled": [
       "almonds"
     ],
-    "incomeValid": true
+    "incomeValid": true,
+    "archived": true
   },
   {
     "_id": {
@@ -31,7 +32,8 @@
     "fulfilled": [
       "almonds"
     ],
-    "incomeValid": false
+    "incomeValid": false,
+    "archived": false
   },
   {
     "_id": {
@@ -48,7 +50,8 @@
     "fulfilled": [
       "almonds"
     ],
-    "incomeValid": true
+    "incomeValid": true,
+    "archived": true
   },
   {
     "_id": {
@@ -65,7 +68,8 @@
     "fulfilled": [
       "almonds"
     ],
-    "incomeValid": false
+    "incomeValid": false,
+    "archived": false
   },
   {
     "_id": {
@@ -83,7 +87,8 @@
       "almonds"
     ],
     "diaperSize": "premature",
-    "incomeValid": true
+    "incomeValid": true,
+    "archived": true
   },
   {
     "_id": {
@@ -100,7 +105,8 @@
     "fulfilled": [
       "almonds"
     ],
-    "incomeValid": false
+    "incomeValid": false,
+    "archived": false
   },
   {
     "_id": {
@@ -117,6 +123,7 @@
     "fulfilled": [
       "almonds"
     ],
-    "incomeValid": true
+    "incomeValid": true,
+    "archived": true
   }
 ]

@@ -34,17 +34,15 @@
         <div mat-list-item *ngFor="let item of this.serverFilteredItems"  class="donor-list-item">
           <mat-card class="example-card">
             <ng-container *ngIf="item.amount > 0">
-              <mat-card-header [matBadge]="item.amount" matBadgePosition="above after">
-                <mat-card-title class="donor-list-itemType">{{this.requestService.getReadableItem(item.name)}}</mat-card-title>
-              </mat-card-header>
-            <mat-card-actions *ngIf="this.authHypothesis">
-              <button mat-mini-fab matTooltip="Pledge" color="accent" data-test="pledgeRequestButton" [routerLink]="['/requests/donor', item._id]">
-                <mat-icon>favorite</mat-icon>
-              </button>
-              <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(item)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </mat-card-actions>
+              <mat-card-actions [matBadge]="item.amount" matBadgePosition="above after">
+                <mat-card-title class="itemName">{{this.requestService.getReadableItem(item.name)}}</mat-card-title>
+                <button mat-mini-fab class="pledgeButton" matTooltip="Pledge" color="accent" data-test="pledgeRequestButton" [routerLink]="['/requests/donor', item._id]">
+                  <mat-icon>favorite</mat-icon>
+                </button>
+                <button mat-mini-fab class="deleteButton" *ngIf="this.authHypothesis" matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(item)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-actions>
           </ng-container>
           </mat-card>
         </div>

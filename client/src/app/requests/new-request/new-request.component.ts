@@ -107,6 +107,7 @@ export class NewRequestComponent implements OnInit{
       description: this.newRequestForm.get('misc').getRawValue(),
       selections: this.selections,
       fulfilled: [],
+      archived: 'false',
       diaperSize: (this.diapers ? this.newRequestForm.controls.diaperSize.getRawValue() : undefined)
     };
     if (this.destination === 'client') {

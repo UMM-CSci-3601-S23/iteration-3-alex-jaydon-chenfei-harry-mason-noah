@@ -8,4 +8,5 @@ export interface Request {
   selections?: string[];
   fulfilled: string[];
   priority: number;
+  archived: string;
 }

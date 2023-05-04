@@ -6,6 +6,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { Request } from './request';
 import { RequestService } from './request.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Observable } from 'rxjs';
+
 @Component({
   selector: 'app-request-volunteer',
   templateUrl: './request-volunteer.component.html',
@@ -18,6 +20,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   public serverFilteredRequests: Request[] = [];
   public filteredRequests: Request[];
   public requestDescription: string;
+  public archiveView: boolean;
   public sortedRequests: Request[];
 
   authHypothesis: boolean;
@@ -28,10 +31,10 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   constructor(public requestService: RequestService, private snackBar: MatSnackBar) {
   }
 
-  drop(event: CdkDragDrop<string[]>): void {
+  /*drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.filteredRequests, event.previousIndex, event.currentIndex);
     this.updatePriorities();
-  }
+  }*/
 
 
   // Add this method for updating priorities based on the new order of the cards
@@ -45,10 +48,30 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     });
   }
 
+  public markAsComplete(request: Request): void {
+    this.requestService.markRequestAsComplete(request).pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe({
+      next: (updatedRequest) => {
+        this.snackBar.open(
+          `Request successfully archived`,
+          'OK',
+          {duration: 5000});
+        this.getRequestsFromServer();
+      },
+      error: (err) => {
+        this.snackBar.open(
+          `Problem contacting the server to mark request as complete – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          {duration: 5000});
+      },
+    });
+  }
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getClientRequests({
-      description: this.requestDescription
+      description: this.requestDescription,
+      archived: this.archiveView
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({

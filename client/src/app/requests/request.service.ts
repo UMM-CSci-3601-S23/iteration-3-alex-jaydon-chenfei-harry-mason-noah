@@ -8,6 +8,7 @@ import { Pledge } from '../donor-pledge/pledge';
 import { Router } from '@angular/router';
 import { RequestedItem } from './requestedItem';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -48,7 +49,7 @@ export class RequestService {
     ['dicedTomatoes','Diced tomatoes'],
     ['spaghettiSauce','Spaghetti sauce'],
     ['groundBeef','Ground beef'],
-    ['groundBeefPorkBlend','Ground beef/pork blend'],
+    ['groundPorkBeefBlend','Ground beef/pork blend'],
     ['plantBasedBurgers','Plant based burgers'],
     ['pizzaRanchPizza','Pizza ranch pizza'],
     ['veggieRavioli','Veggie ravioli'],
@@ -141,6 +142,7 @@ export class RequestService {
   readonly priorityUrl: string = `${environment.apiUrl}clientRequests/set-priority`;
 
   private readonly descriptionKey = 'description';
+  private readonly archivedKey = 'archived';
   private readonly priorityKey = 'priority';
   private readonly nameKey = 'name';
 
@@ -149,18 +151,19 @@ export class RequestService {
   }
 
 
-  getClientRequests(filters?: {description?: string}): Observable<Request[]> {
+  getClientRequests(filters?: {description?: string; archived?: boolean}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-
       if (filters.description) {
         httpParams = httpParams.set(this.descriptionKey, filters.description);
+      }
+      if (filters.archived) {
+        httpParams = httpParams.set(this.archivedKey, filters.archived);
       }
 // We'll need to add a conditional in here that handles a donor get request as well
     return this.httpClient.get<Request[]>(this.requestClientUrl, {
       params: httpParams,
     });
-
   }
 }
 
@@ -236,8 +239,8 @@ export class RequestService {
     return this.httpClient.delete(this.itemDonorUrl + '/' + item._id).pipe(map(res => res));
   }
 
-  updateRequest(request: Partial<Request>): Observable<string> {
-    return this.httpClient.post<{id: string}>(this.updateRequestUrl, request).pipe(map(res=> res.id));
+  updateRequest(request: Partial<Request>): Observable<object> {
+    return this.httpClient.post(this.updateRequestUrl, request).pipe(map(res=> res));
   }
 
   addRequestPriority(request: Request, priorityGiven: number): Observable<number>{
@@ -247,6 +250,13 @@ export class RequestService {
         params:priorityBody,
       }).pipe(map(res => res.priority));
   }
+
+  // Add this method to your RequestService
+  markRequestAsComplete(request: Request): Observable<Request> {
+    return this.httpClient.post<Request>('/api/archive', request);
+    }
+
+
 
   public getReadableItem(camelCase: string, diaperSize?: string): string{
     const mappedValue = this.itemMap.get(camelCase);
