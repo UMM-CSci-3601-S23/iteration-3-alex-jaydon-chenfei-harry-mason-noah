@@ -16,6 +16,7 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'food',
       description: 'I would like to be able to get some spaghetti noodles',
+      archived: 'false',
       priority: 4
     },
     {
@@ -26,6 +27,7 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'toiletries',
       description: 'I need some toothpaste',
+      archived: 'false',
       priority: 3
     },
     {
@@ -36,6 +38,7 @@ describe('RequestService', () => {
       incomeValid: 'true',
       // itemType: 'other',
       description: 'Would it be possible for me to get some Advil?',
+      archived: 'false',
       priority: 1
     }
   ];

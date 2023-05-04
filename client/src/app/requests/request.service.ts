@@ -142,6 +142,7 @@ export class RequestService {
   readonly priorityUrl: string = `${environment.apiUrl}clientRequests/set-priority`;
 
   private readonly descriptionKey = 'description';
+  private readonly archivedKey = 'archived';
   private readonly priorityKey = 'priority';
   private readonly nameKey = 'name';
 
@@ -150,18 +151,19 @@ export class RequestService {
   }
 
 
-  getClientRequests(filters?: {description?: string}): Observable<Request[]> {
+  getClientRequests(filters?: {description?: string; archived?: boolean}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-
       if (filters.description) {
         httpParams = httpParams.set(this.descriptionKey, filters.description);
+      }
+      if (filters.archived) {
+        httpParams = httpParams.set(this.archivedKey, filters.archived);
       }
 // We'll need to add a conditional in here that handles a donor get request as well
     return this.httpClient.get<Request[]>(this.requestClientUrl, {
       params: httpParams,
     });
-
   }
 }
 

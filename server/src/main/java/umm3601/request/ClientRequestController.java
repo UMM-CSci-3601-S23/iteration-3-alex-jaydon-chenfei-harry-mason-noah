@@ -35,6 +35,7 @@ import java.security.NoSuchAlgorithmException;
 public class ClientRequestController {
   static final String SORT_ORDER_KEY = "sortorder";
   static final String DESCRIPTION_KEY = "description";
+  static final String ARCHIVED_KEY = "archived";
   static final String PRIORITY_KEY = "priority";
 
   static final int LOWER_PRIORITY_BOUND = 1; // highest possible request priority (#1 most important)
@@ -110,9 +111,13 @@ public class ClientRequestController {
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>(); // start with a blank document
     if (ctx.queryParamMap().containsKey(DESCRIPTION_KEY)) {
-      Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(DESCRIPTION_KEY)),
+      Pattern pattern1 = Pattern.compile(Pattern.quote(ctx.queryParam(DESCRIPTION_KEY)),
       Pattern.CASE_INSENSITIVE);
-      filters.add(regex(DESCRIPTION_KEY, pattern));
+      filters.add(regex(DESCRIPTION_KEY, pattern1));
+    }
+    if (ctx.queryParamMap().containsKey(ARCHIVED_KEY)) {
+      Boolean pattern2 = Boolean.valueOf(ctx.queryParam(ARCHIVED_KEY));
+      filters.add(eq(ARCHIVED_KEY, pattern2));
     }
 
 

@@ -15,39 +15,15 @@
           [(ngModel)]="requestDescription" (input)="getRequestsFromServer()">
           <mat-hint> Filtered on Server </mat-hint>
         </mat-form-field>
+        <mat-radio-group [(ngModel)]="archiveView" (change)="getRequestsFromServer()" class="archiveFilterButtons" aria-label="Select an option">
+          <mat-radio-button [checked]="true" value=false>View Current Requests</mat-radio-button>
+          <mat-radio-button value=true>View Archived Requests</mat-radio-button>
+        </mat-radio-group>
       </div>
       </mat-card-content>
       </mat-card>
     </div>
   </div>
-
- <!-- card view -->
- <!-- <div class="flex-row">
-  <div class="flex-1" fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10" *ngIf="serverFilteredRequests">
-    <div class="request-cards-container flex-row gap-10 flew-wrap">
-      <mat-card *ngFor="let request of filteredRequests" class="priority-request-card">
-        <mat-card-header>
-          <mat-card-title>{{ request.itemType }}</mat-card-title>
-          <mat-card-subtitle>{{ request.foodType }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p>{{ request.description }}</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <mat-form-field class="input-field">
-            <mat-label>Priority</mat-label>
-            <mat-select [(ngModel)]="request.priority" (selectionChange)="setRequestPriority(request, request.priority)">
-              <mat-option *ngFor="let priority of [1, 2, 3, 4, 5]" [value]="priority">{{priority}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-  </div>
-</div> -->
-
-
-
 
   <!--List View-->
   <div class="flex-row">
@@ -75,13 +51,13 @@
               <p matListItemBody class="itemName"> {{request.description}} </p>
               <button mat-mini-fab class="deleteButton" matTooltip="Edit Request" color="warn" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
                 <mat-icon>more_vert</mat-icon>
-            </button>
+              </button>
               <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
                 <mat-icon>delete</mat-icon>
               </button>
-            <button (click)="markAsComplete(request)">
-              mark as complete
-            </button>
+              <button *ngIf="!request.archived"(click)="markAsComplete(request)">
+                mark as complete
+              </button>
             </mat-card-actions>
             <p class="income-warning" *ngIf="!request.incomeValid">!Income is more than guideline for a family of this size!</p>
           </mat-card>
@@ -113,3 +89,4 @@
     Sorry, you don't have permission to view this page :(
   </h2>
 </div>
+

@@ -20,6 +20,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   public serverFilteredRequests: Request[] = [];
   public filteredRequests: Request[];
   public requestDescription: string;
+  public archiveView: boolean;
   public sortedRequests: Request[];
 
   authHypothesis: boolean;
@@ -30,10 +31,10 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   constructor(public requestService: RequestService, private snackBar: MatSnackBar) {
   }
 
-  drop(event: CdkDragDrop<string[]>): void {
+  /*drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this.filteredRequests, event.previousIndex, event.currentIndex);
     this.updatePriorities();
-  }
+  }*/
 
 
   // Add this method for updating priorities based on the new order of the cards
@@ -69,7 +70,8 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getClientRequests({
-      description: this.requestDescription
+      description: this.requestDescription,
+      archived: this.archiveView
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
