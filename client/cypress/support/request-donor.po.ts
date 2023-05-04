@@ -8,7 +8,7 @@ export class RequestDonorPage {
   private readonly formFieldSelector = `mat-form-field`;
   private readonly descFieldName = 'description';
   private readonly deleteButton = '[data-test=deleteRequestButton]';
-
+  private readonly nameFilter = '[data-test=requestItemInput]';
 
   navigateTo() {
     return cy.visit(this.baseUrl);
@@ -36,9 +36,11 @@ export class RequestDonorPage {
     return cy.get(`${this.formFieldSelector} [formcontrolname=${fieldName}]`);
   }
 
-    deleteRequest() {
+  deleteRequest() {
+    cy.get(this.deleteButton).first().click({ multiple: false });
+  }
 
-      cy.get(this.deleteButton).first().click({ multiple: false }) ;
-
-    }
+  enterItemName() {
+    return cy.get(this.nameFilter);
+  }
 };
