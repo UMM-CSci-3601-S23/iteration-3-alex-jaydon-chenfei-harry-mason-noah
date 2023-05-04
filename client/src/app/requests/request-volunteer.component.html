@@ -34,8 +34,8 @@
             <div class="priority-wrapper"> <!-- Added the priority-wrapper class -->
               <mat-card-header>
                 <mat-card-title class="volunteer-list-name">{{request.name}} {{this.requestService.getReadableDate(request.dateAdded)}}</mat-card-title>
-                <mat-card-subtitle class="donor-list-selections" *ngIf="request.diaperSize">{{this.requestService.getReadableSelections(request.selections, request.diaperSize)}}</mat-card-subtitle>
-                <mat-card-subtitle class="donor-list-selections" *ngIf="!request.diaperSize">{{this.requestService.getReadableSelections(request.selections)}}</mat-card-subtitle>
+                <mat-card-subtitle class="donor-list-selections" *ngIf="request.diaperSize">{{this.requestService.getReadableUnfulfilled(request.fulfilled, request.selections, request.diaperSize)}}</mat-card-subtitle>
+                <mat-card-subtitle class="donor-list-selections" *ngIf="!request.diaperSize">{{this.requestService.getReadableUnfulfilled(request.fulfilled, request.selections)}}</mat-card-subtitle>
               </mat-card-header>
               <div class="priority-container"> <!-- Moved this div container here -->
                 <mat-form-field class="priority-field">

@@ -298,4 +298,15 @@ export class RequestService {
     }
     return stringSelections.substring(0,stringSelections.length - 2);
   }
+
+  public getReadableUnfulfilled(fulfilled: string[], selections: string[], diaperSize?: string): string{
+    let stringSelections = '';
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let i =0; i < selections.length; i++){
+      if (!fulfilled.includes(selections[i])){
+        stringSelections = stringSelections + this.getReadableItem(selections[i], diaperSize) + ', ';
+      }
+    }
+    return stringSelections.substring(0,stringSelections.length - 2);
+  }
 }
