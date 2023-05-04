@@ -7,7 +7,7 @@
 {$CADDY_HOST}  # Set host with environment variable
 
 route {
-    reverse_proxy /api* server:4567
+    reverse_proxy /api* server:4569
     try_files {path} {path}/ /
     file_server
 }
