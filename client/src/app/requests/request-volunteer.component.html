@@ -79,10 +79,6 @@
   </div>
 
 
-  <!--app-new-request is the selector for the new-request component. By calling it here, we basically
-  copy the whole new-request component found on the client page onto the volunteer page.-->
-  <app-new-request [destination]="'donor'">
-  </app-new-request>
 <div *ngIf="!this.authHypothesis">
   <h2>
     Sorry, you don't have permission to view this page :(

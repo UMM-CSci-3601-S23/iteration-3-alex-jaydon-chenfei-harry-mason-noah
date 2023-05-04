@@ -67,7 +67,7 @@ public class PledgeController {
     pledgeCollection.insertOne(newPledge);
     System.out.println(newPledge.amount);
     // Find the request by its ID and update the amount needed
-    ObjectId itemName2 = new ObjectId(newPledge.itemName);
+    String itemName2 = newPledge.itemName;
     Bson filter = eq("name", itemName2);
     Bson updateOperation = Updates.inc("amount", -newPledge.amount);
     requestedItemCollection.updateOne(filter, updateOperation);
