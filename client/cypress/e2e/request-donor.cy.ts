@@ -13,7 +13,7 @@ describe('Donor View', () => {
   });
 
   it('Should have the correct title', () => {
-    page.getDonorViewTitle().should('have.text', 'Needs requested');
+    page.getDonorViewTitle().should('have.text', 'Items requested by the food shelf');
   });
 
   it('Should display 4 items', () => {
