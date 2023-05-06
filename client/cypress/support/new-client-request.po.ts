@@ -6,8 +6,6 @@ export class NewRequestPage {
   private readonly title = '.new-request-title';
   private readonly button = '[data-test=confirmNewRequestButton]';
   private readonly snackBar = '.mat-mdc-simple-snack-bar';
-  // private readonly itemTypeFieldName = 'itemType';
-  // private readonly foodTypeFieldName = 'foodType';
   private readonly descFieldName = 'description';
   private readonly formFieldSelector = `mat-form-field`;
   private readonly dropDownSelector = `mat-option`;

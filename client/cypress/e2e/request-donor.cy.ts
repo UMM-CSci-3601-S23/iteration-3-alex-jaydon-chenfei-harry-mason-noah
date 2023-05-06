@@ -43,12 +43,17 @@ describe('Donor View', () => {
 
     });
 
+    it('Should be able to pledge a request', () => {
 
-  it('Should delete a request', () => {
+      page.pledgeRequest();
 
-    page.deleteRequest();
+      cy.url().should('match', /^https?:\/\/(?:localhost:\d+|[^/]+)\/requests\/donor\/[a-f0-9]{24}$/);
+    });
 
-    page.getRequestListItems().should('have.length', 3);
-  });
+    it('Should delete a request', () => {
 
+      page.deleteRequest();
+
+      page.getRequestListItems().should('have.length', 3);
+    });
 });

@@ -19,8 +19,6 @@ describe('Add donor request', () => {
     // are filled. Once the last (`#emailField`) is filled, then the button should
     // become enabled.
     page.newRequestButton().should('be.disabled');
-    // page.setMatSelect('itemType', 'Food');
-    page.newRequestButton().should('be.disabled');
     page.getFormField('description').type('test');
     page.newRequestButton().should('be.disabled');
     // Write a description with more than 5 characters
@@ -53,11 +51,6 @@ describe('Add donor request', () => {
     // Entering a valid description should remove the error.
     page.getFormField('description').clear().type('Old dutch chips').blur();
     cy.get('[data-test=descriptionError]').should('not.exist');
-
-    // page.setMatSelect('itemType', '--');
-    // cy.get('[data-test=itemTypeError]').should('exist').and('be.visible');
-    // page.setMatSelect('itemType', 'Other');
-    // cy.get('[data-test=itemTypeError]').should('not.exist');
   });
 
   describe('Adding a new request', () => {
@@ -74,7 +67,8 @@ describe('Add donor request', () => {
         name: '',
         incomeValid: '',
         dateAdded: '',
-        fulfilled: []
+        fulfilled: [],
+        archived: ''
       };
       // page.setMatSelect('itemType', 'Other');
       page.newRequest(request);
@@ -164,12 +158,11 @@ describe('Add volunteer request', () => {
         _id: '588935f57546a2daea44de7c',
         name: 'joe',
         dateAdded: '20230423',
-        //   itemType: 'food',
-        //   foodType: 'meat',
         description: 'This is a test edit',
-        priority: 0,
+        priority: 3,
         incomeValid: '',
-        fulfilled: []
+        fulfilled: [],
+        archived: ''
       };
       // page.setMatSelect('itemType', 'Other');
       page.newRequest(request);

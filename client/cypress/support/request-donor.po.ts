@@ -8,6 +8,7 @@ export class RequestDonorPage {
   private readonly formFieldSelector = `mat-form-field`;
   private readonly descFieldName = 'description';
   private readonly deleteButton = '[data-test=deleteRequestButton]';
+  private readonly pledgeButton = '[data-test=pledgeRequestButton]';
   private readonly nameFilter = '[data-test=requestItemInput]';
 
   navigateTo() {
@@ -42,5 +43,9 @@ export class RequestDonorPage {
 
   enterItemName() {
     return cy.get(this.nameFilter);
+  }
+
+  pledgeRequest() {
+    cy.get(this.pledgeButton).first().click();
   }
 };
