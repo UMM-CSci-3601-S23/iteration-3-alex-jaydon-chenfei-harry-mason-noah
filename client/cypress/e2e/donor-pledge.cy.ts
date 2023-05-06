@@ -20,17 +20,22 @@ describe('Pledge Form', () => {
     page.confirmPledgeButton().should('be.disabled');
     page.getFormField('name').type('Alex',{ force: true });
     page.confirmPledgeButton().should('be.disabled');
-    page.getFormField('amount').clear().type('3');
+    page.getFormField('amount').clear().type('800');
     page.confirmPledgeButton().should('be.disabled');
     page.setMatSelect('timeSlot','Monday');
     page.confirmPledgeButton().should('be.enabled');
-    page.getFormField('comment').type('No comments');
+    page.getFormField('comment').type('For the purpose of testing');
+    page.confirmPledgeButton().click();
+    // eslint-disable-next-line max-len
+    // page.getSnackBar().should('contain', `Dear Alex, thank you so much for your generous pledge! We truly appreciate your support and can't
+    // wait to welcome you on Monday.`,
+    // { timeout: 10000});
+    page.getBadgeAmount();
   });
 
 
-  it('Goes back to the donor page', () => {
-    cy.get('[data-test="backtoDonorPageButton"]').click();
-    // Replace with the expected URL after clicking the "BACK TO DONOR PAGE" button
-    cy.url().should('include', '/expected-url-for-donor-page');
+  it('should navigate back to the donor page', () => {
+   page.backtoDonorPageButton().click();
+   cy.url().should('match', /^https?:\/\/(?:localhost:\d+|[^/]+)\/requests\/donor$/);
   });
 });
