@@ -19,9 +19,10 @@ export class MockRequestService extends RequestService {
       incomeValid: 'true',
       selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'food',
-      description: 'I would like some ground beef'
+      description: 'I would like some ground beef',
       // foodType: 'meat'
-      priority: 3
+      priority: 3,
+      archived: 'true'
     },
     {
       _id: '2_id',
@@ -31,9 +32,10 @@ export class MockRequestService extends RequestService {
       incomeValid: 'true',
       selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'toiletries',
-      description: 'I need more toothpaste'
-      // foodType: ''
-      priority: 4
+      description: 'I need more toothpaste',
+      // foodType: 'meat'
+      priority: 3,
+      archived: 'true'
     },
     {
       _id: '3_id',
@@ -43,9 +45,10 @@ export class MockRequestService extends RequestService {
       incomeValid: 'true',
       selections: ['hotSauce', 'tomatoSoup', 'vegOil'],
       // itemType: 'other',
-      description: 'I need more paper plates'
-      // foodType: ''
-      priority: 1
+      description: 'I need more paper plates',
+      // foodType: 'meat'
+      priority: 3,
+      archived: 'true'
     },
     {
       _id: '4_id',
@@ -56,9 +59,10 @@ export class MockRequestService extends RequestService {
       selections: ['hotSauce', 'tomatoSoup', 'vegOil', 'diapers'],
       diaperSize: 'newborn',
       // itemType: 'food',
-      description: 'I would like some milk'
-      // foodType: 'dairy'
-      priority: 2
+      description: 'I would like some milk',
+      // foodType: 'meat'
+      priority: 3,
+      archived: 'true'
     }
   ];
 
