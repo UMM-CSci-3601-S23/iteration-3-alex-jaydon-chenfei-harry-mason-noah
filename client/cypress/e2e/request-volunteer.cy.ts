@@ -21,24 +21,27 @@ describe('Volunteer View', () => {
     page.getRequestListItems().should('have.length', 6);
   });
 
-  //Tests with the functionality of priority
-  it('should sort requests by priority', () => {
+  it('Should display 5 requests when viewing archived requests', () => {
 
   });
 
-  it('should be able to click Archive button', () => {
+  it('Should sort requests by priority', () => {
+
+  });
+
+  it('Should be able to click Archive button', () => {
     page.archiveRequest();
 
     page.getRequestListItems().should('have.length', 5);
   });
 
-  it('should be able to click EditRequest button', () => {
+  it('Should be able to click EditRequest button', () => {
     page.editRequest();
 
     cy.url().should('match', /^https?:\/\/(?:localhost:\d+|[^/]+)\/requests\/volunteer\/[a-f0-9]{24}$/);
   });
 
-  it('should be able to click Delete button', () => {
+  it('Should be able to click Delete button', () => {
     page.deleteRequest();
 
     page.getRequestListItems().should('have.length', 4);
