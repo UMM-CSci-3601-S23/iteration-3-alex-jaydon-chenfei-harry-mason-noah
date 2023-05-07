@@ -261,7 +261,6 @@ export class RequestService {
       }).pipe(map(res => res.priority));
   }
 
-
   markRequestAsComplete(request: Request): Observable<Request> {
     return this.httpClient.post<Request>('/api/archive', request);
     }

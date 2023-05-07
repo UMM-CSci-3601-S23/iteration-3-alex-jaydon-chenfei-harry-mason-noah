@@ -7,6 +7,8 @@ import { Request } from './request';
 import { RequestService } from './request.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-request-volunteer',
@@ -31,13 +33,6 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   constructor(public requestService: RequestService, private snackBar: MatSnackBar) {
   }
 
-  /*drop(event: CdkDragDrop<string[]>): void {
-    moveItemInArray(this.filteredRequests, event.previousIndex, event.currentIndex);
-    this.updatePriorities();
-  }*/
-
-
-  // Add this method for updating priorities based on the new order of the cards
   updatePriorities(): void {
     this.filteredRequests.forEach((request, index) => {
       const newPriority = index + 1;
@@ -94,16 +89,19 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   }
 
 
+  addRequestPriority(request: Request, priority: number): Observable<number> {
+    return this.requestService.addRequestPriority(request, priority).pipe(
+      map(() => priority)
+    );
+  }
 
-  // Add this method for updating priorities based on the new order of the cards
 
-  updateRequestPriority(request: Request, priority: number){
-    this.requestService
-    .addRequestPriority(this.request, priority)
-    .subscribe({
+
+  updateRequestPriority(request: Request, priority: number) {
+    this.addRequestPriority(request, priority).subscribe({
       next: () => {
         this.updateFilter();
-      }
+      },
     });
   }
 
