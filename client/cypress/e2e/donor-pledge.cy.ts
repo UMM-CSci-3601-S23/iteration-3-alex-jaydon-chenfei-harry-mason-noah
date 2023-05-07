@@ -26,11 +26,26 @@ describe('Pledge Form', () => {
     page.confirmPledgeButton().should('be.enabled');
     page.getFormField('comment').type('For the purpose of testing');
     page.confirmPledgeButton().click();
-    // eslint-disable-next-line max-len
-    // page.getSnackBar().should('contain', `Dear Alex, thank you so much for your generous pledge! We truly appreciate your support and can't
-    // wait to welcome you on Monday.`,
-    // { timeout: 10000});
-    page.getBadgeAmount();
+    // page.getSnackBar().should('contain', `Dear Alex, thank you so much for your generous pledge! `,{ timeout: 20000});
+    // page.getSnackBar().should('contain', `We truly appreciate your support and can\'t wait to welcome you on Monday.`,{ timeout: 20000});
+    page.getBadgeAmount().should('contain','100');
+  });
+
+  it('Should be unable to see the requesteditem when we have enough pledges', () => {
+    page.confirmPledgeButton().should('be.disabled');
+    page.getFormField('name').type('Jay',{ force: true });
+    page.confirmPledgeButton().should('be.disabled');
+    page.getFormField('amount').clear().type('100');
+    page.confirmPledgeButton().should('be.disabled');
+    page.setMatSelect('timeSlot','Tuesday');
+    page.confirmPledgeButton().should('be.enabled');
+    page.getFormField('comment').type('For the purpose of testing2');
+    page.confirmPledgeButton().click();
+    page.getRequestListItems().each(($el) => {
+      const itemNameElement = $el.find('.itemName');
+      const itemName = itemNameElement.text().trim().toLowerCase();
+      expect(itemName).to.not.contain('tomato soup');
+    });
   });
 
 

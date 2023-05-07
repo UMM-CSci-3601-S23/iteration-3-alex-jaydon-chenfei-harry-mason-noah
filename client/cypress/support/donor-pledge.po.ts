@@ -6,6 +6,7 @@ export class DonorPledgePage {
   private readonly dropDownSelector = `mat-option`;
   private readonly badge = '[data-test=itemAmountBadge]';
   private readonly snackBar = '.mat-mdc-simple-snack-bar';
+  private readonly requestListItemSelector = '.donor-nav-list .donor-list-item';
 
   navigateTo() {
     return cy.visit(this.pledgeUrl);
@@ -42,4 +43,9 @@ export class DonorPledgePage {
   getSnackBar() {
     return cy.get(this.snackBar);
   }
+
+  getRequestListItems() {
+    return cy.get(this.requestListItemSelector);
+  }
+
 };
