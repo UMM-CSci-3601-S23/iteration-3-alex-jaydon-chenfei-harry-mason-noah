@@ -110,15 +110,12 @@ export class MockRequestService extends RequestService {
 
   deleteClientRequest(request: Partial<Request>): Observable<object> {
     this.deletedClientRequests.push(request);
-    // Send delete request to delete a request
     return of (Object);
   }
+  deletePledge(pledge: Partial<Pledge>): Observable<object> {
+    return of({});
+  }
 
-
-  // deleteRequest(request: Partial<Request>): Observable<object> {
-  //   // Send delete request to delete a request
-  //   return of (Object);
-  // }
 
   deleteDonorRequest(request: Partial<Request>): Observable<object> {
     this.deletedDonorRequests.push(request);
