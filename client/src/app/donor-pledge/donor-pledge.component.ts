@@ -95,30 +95,32 @@ export class DonorPledgeComponent implements OnInit, OnDestroy{
       return null;
     };
   }
-
   submitForm() {
-    this.newPledgeForm.get('itemName').setValue(this.item.name);
-    this.requestService.addDonorPledge(this.newPledgeForm.value).subscribe({
-      next: (newId) => {
-        const name = this.newPledgeForm.get('name').value;
-        const timeSlot = this.newPledgeForm.get('timeSlot').value;
-        this.snackBar.open(
-          `Dear ${name}, thank you so much for your generous pledge!
-          We truly appreciate your support and can't wait to welcome you on ${timeSlot}.`,
-          null,
-          { duration: 10000 }
-        );
-        this.router.navigate(['/requests/donor']);
-      },
-      error: err => {
-        this.snackBar.open(
-          `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
-          'OK',
-          { duration: 5000 }
-        );
-      },
-    });
-  }
+    if (this.newPledgeForm.valid) {
+        this.newPledgeForm.get('itemName').setValue(this.item.name);
+        this.requestService.addDonorPledge(this.newPledgeForm.value).subscribe({
+            next: (newId) => {
+                const name = this.newPledgeForm.get('name').value;
+                const timeSlot = this.newPledgeForm.get('timeSlot').value;
+                this.snackBar.open(
+                    `Dear ${name}, thank you so much for your generous pledge!
+                    We truly appreciate your support and can't wait to welcome you on ${timeSlot}.`,
+                    null,
+                    { duration: 10000 }
+                );
+                this.router.navigate(['/requests/donor']);
+            },
+            error: err => {
+                this.snackBar.open(
+                    `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
+                    'OK',
+                    { duration: 5000 }
+                );
+            },
+        });
+    }
+}
+
 
   setRequestValues(item: RequestedItem): void {
     this.item = item;
