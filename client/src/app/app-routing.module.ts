@@ -13,7 +13,6 @@ import { ViewPledgesComponent } from './view-pledges/view-pledges.component';
 // 'users/new'; the router would just think that the string 'new' is a user ID.
 const routes: Routes = [
   {path: '', component: HomeComponent, title: 'Home'},
-  {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/volunteer', component: RequestVolunteerComponent, title: 'Volunteer View'},
   {path: 'requests/client', component: NewRequestComponent, title: 'New Request'},
   {path: 'requests/volunteer/:id', component: EditRequestComponent, title: 'Edit Request'},

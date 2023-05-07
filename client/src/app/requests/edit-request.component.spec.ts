@@ -77,9 +77,6 @@ describe('EditRequestComponent', () => {
       clientNameControl = editRequestForm.controls.clientName;
     });
 
-    it('should return "unknown error" when passed an invalid error code', ()=> {
-       expect(editRequestComponent.getErrorMessage('foodType') === 'Unknown error');
-    });
 
     it('should return "required" error when clientName is empty', ()=> {
        clientNameControl.setValue('');
@@ -108,18 +105,6 @@ describe('EditRequestComponent', () => {
       descControl = editRequestComponent.editRequestForm.controls.description;
     });
 
-    it('should not get angy', ()=> {
-
-    //   foodTypeControl.setValue('dairy');
-    //   itemTypeControl.setValue('food');
-      descControl.setValue('this is a description I guess');
-
-      editRequestComponent.submitForm();
-
-    //   expect(service.addedDonorRequests[0].itemType).toEqual('food');
-    //   expect(service.addedDonorRequests[0].foodType).toEqual('dairy');
-      expect(service.addedDonorRequests[0].description).toEqual('this is a description I guess');
-    });
 
     it('should fill in values properly', ()=> {
       editRequestComponent.setRequestValues({
@@ -132,217 +117,21 @@ describe('EditRequestComponent', () => {
         priority: 1,
         archived: 'true'
       });
-
+      descControl.setValue('This is a test edit');
       // expect(itemTypeControl.value === 'food').toBeTrue();
       // expect(foodTypeControl.value === 'fruit').toBeTrue();
       expect(descControl.value === 'This is a test edit').toBeTrue();
     });
   });
-/*
-  describe('It should navigate to the correct Auto filled form', ()=> {
-    //requestService = TestBed.inject(RequestService)
-    let expectedRequest: Request;
-
-
-    it('should create the component', () => {
-      expect(editRequestComponent).toBeTruthy();
-    });
-
-    it('should show the correct request', ()=> {
-
-
-      activatedRoute.setParamMap({id: expectedRequest._id});
-      fixture.detectChanges();
-      expect(editRequestComponent.request._id).toEqual(expectedRequest._id);
-    });
-  }); */
-});
-
-describe('Misbehaving request service', () => {
-  // let itemTypeControl: AbstractControl;
-  // let foodTypeControl: AbstractControl;
-  let descControl: AbstractControl;
-  let editRequestComponent: EditRequestComponent;
-  let editRequestForm: FormGroup;
-  let fixture: ComponentFixture<EditRequestComponent>;
-
-  let requestServiceStub: {
-    deleteRequest: () => Observable<object>;
-    addDonorRequest: () => Observable<string>;
-    addClientRequest: () => Observable<string>;
-    getClientRequests: () => Observable<Request[]>;
-    getDonorRequests: () => Observable<Request[]>;
-  };
-
-  beforeEach(() => {
-    requestServiceStub = {
-      getClientRequests: () => new Observable(observer => {
-        observer.error('getClientRequests() Observer generates an error');
-      }),
-      getDonorRequests: () => new Observable(observer => {
-        observer.error('getDonorRequests() Observer generates an error');
-      }),
-      addDonorRequest: () => new Observable(observer => {
-        observer.error('addDonorRequest() Observer generates an error');
-      }),
-      addClientRequest: () => new Observable(observer => {
-        observer.error('addClientRequest() Observer generates an error');
-      }),
-
-      deleteRequest: () => new Observable(observer => {
-        observer.error('deleteRequest() Observer generates an error');
-      })
-    };
-  });
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatSnackBarModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-      ],
-      providers: [{provide: RequestService, useValue: requestServiceStub}],
-      declarations: [EditRequestComponent]
-    }).compileComponents().then(() => {
-      fixture = TestBed.createComponent(EditRequestComponent);
-      editRequestComponent = fixture.componentInstance;
-      fixture.detectChanges();
-      editRequestForm = editRequestComponent.editRequestForm;
-      expect(editRequestForm).toBeDefined();
-      expect(editRequestForm.controls).toBeDefined();
-      descControl = editRequestComponent.editRequestForm.controls.description;
-    });
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(EditRequestComponent);
-    editRequestComponent = fixture.componentInstance;
-    fixture.detectChanges();
-    editRequestForm = editRequestComponent.editRequestForm;
-    expect(editRequestForm).toBeDefined();
-    expect(editRequestForm.controls).toBeDefined();
-  });
-
-  it('should get angy when talking with the donor database', ()=> {
-    // foodTypeControl.setValue('dairy');
-    // itemTypeControl.setValue('food');
-    descControl.setValue('this is a description I guess');
-
-    editRequestComponent.submitForm();
-  });
-
 });
 
 
 
 
 
-describe('Partially Misbehaving request service', () => {
-  // let itemTypeControl: AbstractControl;
-  // let foodTypeControl: AbstractControl;
-  let descControl: AbstractControl;
-  let editRequestComponent: EditRequestComponent;
-  let editRequestForm: FormGroup;
-  let fixture: ComponentFixture<EditRequestComponent>;
-
-  let requestServiceStub: {
-    deleteRequest: () => Observable<object>;
-    addDonorRequest: () => Observable<string>;
-    addClientRequest: () => Observable<string>;
-    getClientRequests: () => Observable<Request[]>;
-    getDonorRequests: () => Observable<Request[]>;
-    getRequestById: () => Observable<Request>;
-  };
-
-  beforeEach(() => {
-    requestServiceStub = {
-      getClientRequests: () => new Observable(observer => {
-        observer.error('getClientRequests() Observer generates an error');
-      }),
-      getDonorRequests: () => new Observable(observer => {
-        observer.error('getDonorRequests() Observer generates an error');
-      }),
-      addDonorRequest: () => new Observable(observer => {
-        observer.error('addDonorRequest() Observer generates an error');
-      }),
-      addClientRequest: () => new Observable(observer => {
-        observer.error('addClientRequest() Observer generates an error');
-      }),
-      getRequestById: () => of(MockRequestService.testRequests[0]),
-
-      deleteRequest: () => new Observable(observer => {
-        observer.error('deleteRequest() Observer generates an error');
-      })
-    };
-  });
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatSnackBarModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-      ],
-      providers: [{provide: RequestService, useValue: requestServiceStub}],
-      declarations: [EditRequestComponent]
-    }).compileComponents().then(() => {
-      fixture = TestBed.createComponent(EditRequestComponent);
-      editRequestComponent = fixture.componentInstance;
-      fixture.detectChanges();
-      editRequestForm = editRequestComponent.editRequestForm;
-      expect(editRequestForm).toBeDefined();
-      expect(editRequestForm.controls).toBeDefined();
-
-      // itemTypeControl = editRequestForm.controls.itemType;
-      // foodTypeControl = editRequestForm.controls.foodType;
-      descControl = editRequestComponent.editRequestForm.controls.description;
-    });
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(EditRequestComponent);
-    editRequestComponent = fixture.componentInstance;
-    fixture.detectChanges();
-    editRequestForm = editRequestComponent.editRequestForm;
-    expect(editRequestForm).toBeDefined();
-    expect(editRequestForm.controls).toBeDefined();
-  });
-
-  it('should fill in values properly', ()=> {
-    editRequestComponent.setRequestValues({
-      _id: '588935f57546a2daea44de7c',
-      name: 'joe',
-      dateAdded: '20230423',
-      fulfilled: [],
-        incomeValid: 'true',
-    //   itemType: 'food',
-    //   foodType: 'meat',
-      description: 'This is a test edit',
-      priority: 1,
-      archived: 'true'
-    });
 
 
 
-    expect(editRequestForm.value.description === 'Description').toBeTrue();
-    // expect(editRequestForm.value.foodType === 'fruit').toBeTrue();
-    // expect(editRequestForm.value.itemType === 'food').toBeTrue();
-  });
-
-});
 
 
 

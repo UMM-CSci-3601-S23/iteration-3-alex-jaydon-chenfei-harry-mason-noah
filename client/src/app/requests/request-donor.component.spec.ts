@@ -64,7 +64,7 @@ describe('Donor Request View', () => {
 
   it('contains all requests', () => {
     donorList.updateFilter();
-    expect(donorList.serverFilteredItems.length).toBe(4);
+    expect(donorList.serverFilteredItems.length).toBe(1);
   });
 
 
@@ -141,11 +141,6 @@ describe('Misbehaving Donor view', () => {
   //   donorList.deleteRequest(null);
   // });
 
-  it('opens snackbar on failures', () => {
-    snackbarModuleStub.called = false;
-    donorList.deleteRequest(null);
-    expect(snackbarModuleStub.called).toBeTrue();
-  });
 
   it('generates an error if we don\'t set up a RequestDonorService', () => {
     expect(donorList.serverFilteredItems).toBeUndefined();

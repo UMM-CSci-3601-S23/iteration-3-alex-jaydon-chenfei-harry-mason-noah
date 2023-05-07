@@ -72,47 +72,47 @@ describe('NewRequestComponent', () => {
     });
 
     it('should work with a household size of 1', ()=> {
-      houseSize.setValue(1);
+      houseSize.setValue('1');
       expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$40770');
     });
 
     it('should work with a household size of 2', ()=> {
-      houseSize.setValue(2);
+      houseSize.setValue('2');
       expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$54930');
     });
 
     it('should work with a household size of 3', ()=> {
-      houseSize.setValue(3);
+      houseSize.setValue('3');
       expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$69090');
     });
 
     it('should work with a household size of 4', ()=> {
-      houseSize.setValue(4);
+      houseSize.setValue('4');
       expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$83250');
     });
 
     it('should work with a household size of 5', ()=> {
-      houseSize.setValue(5);
+      houseSize.setValue('5');
       expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$97410');
     });
 
     it('should work with a household size of 6', ()=> {
-      houseSize.setValue(6);
+      houseSize.setValue('6');
       expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$111570');
     });
 
     it('should work with a household size of 7', ()=> {
-      houseSize.setValue(7);
+      houseSize.setValue('7');
       expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$125730');
     });
 
     it('should work with a household size of 8', ()=> {
-      houseSize.setValue(8);
+      houseSize.setValue('8');
       expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$139890');
     });
 
     it('should work with a household size of >8', ()=> {
-      houseSize.setValue(10);
+      houseSize.setValue('10');
       expect(newRequestComponent.calculateHouseholdIncome()).toEqual('$149330');
     });
 

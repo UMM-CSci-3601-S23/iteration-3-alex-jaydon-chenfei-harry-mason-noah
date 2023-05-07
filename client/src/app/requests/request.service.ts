@@ -174,11 +174,6 @@ export class RequestService {
     return this.httpClient.get<Request>(this.requestClientUrl + '/' + id);
   }
 
-  getDonorRequestById(id: string): Observable<Request> {
-    return this.httpClient.get<Request>(this.requestDonorUrl + '/' + id);
-  }
-
-
   getRequestedItemById(id: string): Observable<RequestedItem> {
     return this.httpClient.get<RequestedItem>(this.getRequestedItem + '/' + id);
   }
@@ -196,9 +191,6 @@ export class RequestService {
     });
   }
 
-  getDescriptionKey(descriptionKey: any, description: string): HttpParams {
-    throw new Error('Method not implemented.');
-  }
 
   filterRequests(requests: Request[]): Request[] {
     const filteredRequests = requests;
@@ -254,6 +246,10 @@ export class RequestService {
   }
 
   updateRequest(request: Partial<Request>): Observable<object> {
+    return this.httpClient.post(this.updateRequestUrl, request).pipe(map(res=> res));
+  }
+
+  updateClientPledge(request: Partial<Request>): Observable<object> {
     return this.httpClient.post(this.updateRequestUrl, request).pipe(map(res=> res));
   }
 

@@ -70,7 +70,7 @@ export class EditRequestComponent implements OnInit, OnDestroy{
       diaperSize: (this.request.selections.includes('diapers') ? this.request.diaperSize : undefined)
     };
     this.requestService.updateRequest(newRequest).subscribe({
-      next: (newId) => {
+      next: () => {
         this.snackBar.open(
           `Request successfully saved`,
           null,
@@ -138,7 +138,7 @@ export class EditRequestComponent implements OnInit, OnDestroy{
       amount: 1,
     };
     this.requestService.addDonorItem(newItem).subscribe({
-      next: (newId) => {
+      next: () => {
         this.snackBar.open(
           `Item successfully posted to donor`,
           null,

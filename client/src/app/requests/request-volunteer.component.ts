@@ -123,10 +123,6 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
       },
     });
   }
-  // MAY NOT BE NECESSARY
-  sortRequestsByPriority(): void {
-    this.filteredRequests.sort((a, b) => a.priority - b.priority);
-  }
 
   ngOnInit(): void {
     this.archiveView = 'false';

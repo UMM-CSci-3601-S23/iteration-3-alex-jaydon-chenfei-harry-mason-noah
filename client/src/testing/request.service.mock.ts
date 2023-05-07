@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
+import { Pledge } from 'src/app/donor-pledge/pledge';
 import { Request } from 'src/app/requests/request';
 import { RequestService } from 'src/app/requests/request.service';
 import { RequestedItem } from 'src/app/requests/requestedItem';
@@ -73,6 +74,17 @@ export class MockRequestService extends RequestService {
       amount: 3
     }
   ];
+
+  public static  testPledges: Pledge[] = [
+    {
+    _id: '2',
+    comment: 'hahah',
+    timeSlot: 'Monday',
+    name: 'Mason',
+    amount: 4,
+    itemName: 'hotSauce'
+  }
+];
 
   public addedClientRequests: Partial<Request>[] = [];
   public addedDonorRequests: Partial<Request>[] = [];
