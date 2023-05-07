@@ -1,5 +1,6 @@
 import { Request } from 'src/app/requests/request';
 import { EditRequestPage } from 'cypress/support/edit-request.po';
+import { first } from 'cypress/types/lodash';
 
 describe('Edit a request', ()=> {
   const page = new EditRequestPage();
@@ -20,17 +21,26 @@ describe('Edit a request', ()=> {
   });
 
   it('should change the word color to green when mat-checkbox is checked', () => {
-    // Find the first mat-card-title and store its class
+    // Find the first itemname and store its class
     cy.get('.itemName').first().as('firstItemName');
     // Check the color before checking the mat-checkbox (assuming it's red)
     cy.get('@firstItemName')
       .invoke('css', 'color')
       .should('eq', 'rgb(255, 0, 0)'); // Red in RGB
-    // Find the first mat-checkbox and check it
+    // Find the first checkbox and check it
     cy.get('mat-checkbox').first().click();
     // Check if the color of the mat-card-title changed to green
     cy.get('@firstItemName')
       .invoke('css', 'color')
       .should('eq', 'rgb(0, 128, 0)'); // Green in RGB
   });
+
+  it('should have correct behavior after clicking the post button', () => {
+    page.post();
+    page.navigateToDonor();
+    page.getRequestListItems().should('have.length', 5);
+    page.getRequestListItems().should('contain', 'Almonds');
+  });
+
+
 });

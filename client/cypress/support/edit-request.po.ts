@@ -6,13 +6,14 @@ export class EditRequestPage {
   private readonly title = '.new-request-title';
   private readonly button1 = '[data-test=confirmNewRequestButton]';
   private readonly button2 = '[data-test=postRequestButton]';
-  private readonly button3 = '[data-test=submitRevisionSButton]';
+  private readonly button3 = '[data-test=submitRevisionButton]';
+  private readonly button4 = '[data-test=postRequestButton]';
   private readonly snackBar = '.mat-mdc-simple-snack-bar';
   private readonly descFieldName = 'description';
   private readonly formFieldSelector = `mat-form-field`;
   private readonly dropDownSelector = `mat-option`;
-  private readonly checkbox = `mat-checkbox`;
   private readonly requestDescription = '[data-test=requestDescriptionInput]';
+  private readonly requestListItemSelector = '.donor-nav-list .donor-list-item';
 
   navigateToEditRequest() {
     return cy.visit(this.editRequestUrl);
@@ -63,11 +64,15 @@ export class EditRequestPage {
     cy.get(this.requestDescription).click().type(value);
   }
 
-  getCheckBox() {
-    cy.get(this.checkbox).first();
-  }
 
   submitRevision(){
     cy.get(this.button3).click();
+  }
+  post(){
+    cy.get(this.button4).first().click();
+  }
+
+  getRequestListItems() {
+    return cy.get(this.requestListItemSelector);
   }
 }
