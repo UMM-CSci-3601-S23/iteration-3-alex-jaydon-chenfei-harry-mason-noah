@@ -28,7 +28,7 @@
     <div class="flex-1" *ngIf="serverFilteredRequests; else requestsError">
       <mat-nav-list class="volunteer-nav-list">
         <h3 *ngIf="this.archiveView === 'true'" mat-subheader>Archived Requests</h3>
-        <h3 *ngIf="this.archiveView === 'false'" mat-subheader>Current Requests</h3>
+        <h3 data-test="subheader" *ngIf="this.archiveView === 'false'" mat-subheader>Current Requests</h3>
         <div mat-list-item *ngFor="let request of this.serverFilteredRequests" class="volunteer-list-item edit-request">
           <mat-card class="example-card">
             <div class="priority-wrapper"> <!-- Added the priority-wrapper class -->
@@ -48,7 +48,7 @@
             </div>
             <mat-card-actions>
               <p matListItemBody class="itemName"> {{request.description}} </p>
-              <button mat-mini-fab class="deleteButton" color="accent" matTooltip="Archive" *ngIf="!request.archived"(click)="markAsComplete(request)">
+              <button mat-mini-fab class="deleteButton" color="accent" matTooltip="Archive" *ngIf="!request.archived"(click)="markAsComplete(request)" data-test="archiveRequestButton">
                 <mat-icon>archive</mat-icon>
               </button>
               <button mat-mini-fab class="deleteButton" matTooltip="Edit Request" color="warn" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">

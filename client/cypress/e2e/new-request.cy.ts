@@ -1,4 +1,3 @@
-import { Request } from 'src/app/requests/request';
 import { NewRequestPage } from '../support/new-request.po';
 
 describe('Add request', () => {
