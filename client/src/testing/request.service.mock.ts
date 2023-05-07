@@ -103,11 +103,17 @@ export class MockRequestService extends RequestService {
   getDonorRequests(): Observable<RequestedItem[]> {
     return of(MockRequestService.testItems);
   }
+
+  getPledges(): Observable<Pledge[]> {
+    return of(MockRequestService.testPledges);
+  }
+
   deleteClientRequest(request: Partial<Request>): Observable<object> {
     this.deletedClientRequests.push(request);
     // Send delete request to delete a request
     return of (Object);
   }
+
 
   // deleteRequest(request: Partial<Request>): Observable<object> {
   //   // Send delete request to delete a request
@@ -129,6 +135,14 @@ export class MockRequestService extends RequestService {
   addDonorRequest(newRequest: Partial<Request>): Observable<string> {
     this.addedDonorRequests.push(newRequest);
     return of('added! <3');
+  }
+
+  addRequestPriority(request: Partial<Request>, priority: number): Observable<number> {
+    const index = MockRequestService.testRequests.findIndex(r => r._id === request._id);
+    if (index !== -1) {
+      MockRequestService.testRequests[index].priority = priority;
+    }
+    return of(priority);
   }
 
 }
