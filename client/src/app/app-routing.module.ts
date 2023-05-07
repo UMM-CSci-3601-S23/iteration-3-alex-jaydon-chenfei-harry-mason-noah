@@ -14,6 +14,7 @@ import { ViewPledgesComponent } from './view-pledges/view-pledges.component';
 const routes: Routes = [
   {path: '', component: HomeComponent, title: 'Home'},
   {path: 'requests/volunteer', component: RequestVolunteerComponent, title: 'Volunteer View'},
+  {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/client', component: NewRequestComponent, title: 'New Request'},
   {path: 'requests/volunteer/:id', component: EditRequestComponent, title: 'Edit Request'},
   {path: 'requests/donor/:id', component: DonorPledgeComponent, title: 'Pledge Request'},
