@@ -19,6 +19,8 @@ Pocketshelf 3.0 is our tool to help clients, donors, and volunteers of the steve
 
 • A view to see all current pledges as well as their relevant information, such as what's being donated, how much, and when it will be delivered. 
 
+Finally, we made an entry level authentication system to hide all the important and personal information that naturally could be gleamed off of seeing volunteer view, as well as making things like deleting posted items off of donor view only able to be done by Volunteers after becoming authenticated.
+
 
 ### Tools and Technologies we used 
 
@@ -28,6 +30,16 @@ For our backend, we used Javalin, a light web framework that acts more as a libr
 
 
 That probably includes describing what tools, languages, and technologies the project uses. 
+
+### Known Issues
+• The post button in edit-request redirects back to volunteer view for some reason.
+
+• Pledges are not processed properly and error out if not authenticated.
+
+### Todo
+• We would like to make a "pledge not received" button of some sorts in the case that a pledge was made but not brought in. This button would automatically delete the pledge as well as adding back whatever was pledged to be brought in back to the donor view.
+
+• We would like there to be some consistency in the way donor view is presented, right now there is no sorting on the items. We would like to make a sorting mechanism that displays the item with the highest number of requests at the top, and the item with the least number of requests at the bottom. 
 
 ### Try Pocketshelf 3.0 for yourself!
 ![Here](https://docs.google.com/document/d/13HHazWTxdvMwt1FRh3CoDaKdxpRUhnFa6t99sgd8bMU/edit#heading=h.bllyran0q013) is a link with a tutorial of how to set up and deploy our repository.
