@@ -2,7 +2,7 @@
   <div class="flex-1">
     <mat-card class="home-card">
       <mat-card-header>
-        <mat-card-title>
+        <mat-card-title datatest="title">
           PocketShelf: Request Form!
         </mat-card-title>
       </mat-card-header>
@@ -18,7 +18,7 @@
             <mat-form-field appearance="fill">
               <mat-label>Name</mat-label>
                 <input matInput placeholder="Name/Nombre" formControlName="clientName" required>
-                  <mat-error *ngIf="formControlHasError('clientName')" data-test="nameDescriptionError">
+                  <mat-error *ngIf="formControlHasError('clientName')" datatest="nameDescriptionError">
                   {{getErrorMessage('clientName')}}
                   </mat-error>
             </mat-form-field><br /><br />
@@ -370,7 +370,7 @@
           type="button"
           class= "submit_button"
           type="submit"
-          data-test="confirmAddRequestButton"
+          datatest="confirmAddRequestButton"
           [disabled]="newRequestForm.invalid">
           Submit Request Form
         </button>

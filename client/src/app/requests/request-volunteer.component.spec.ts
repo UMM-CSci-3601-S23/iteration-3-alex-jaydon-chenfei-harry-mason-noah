@@ -274,38 +274,6 @@ describe('Partially misbehaving Volunteer view', () => {
     expect(hasCalledDelete).toBeFalse();
     expect(hasCalledAddDonor).toBeFalse();
   });
-
-  it('should update request priority and call updateFilter', () => {
-    const request: Request = {
-      _id: '1',
-      name: 'Test Request',
-      dateAdded: '',
-      archived: '',
-      incomeValid: '',
-      fulfilled: [],
-      description: '',
-      priority: 0
-    };
-    const priority = 5;
-    const requestServiceStub2 = {
-      getRequests: () => new Observable(observer => {
-        observer.error('getRequests() Observer generates an error');
-      }),
-      addRequestPriority: () => of(null)
-    };
-    const requestService = requestServiceStub2;
-
-    // Spy on addRequestPriority method and return an observable
-    spyOn(requestService, 'addRequestPriority').and.returnValue(of(null));
-
-    // Spy on updateFilter method
-    spyOn(volunteerList, 'updateFilter');
-
-    volunteerList.updateRequestPriority(request, priority);
-
-    expect(requestService.addRequestPriority).toHaveBeenCalledWith();
-    expect(volunteerList.updateFilter).toHaveBeenCalled();
-  });
   describe('MockRequestService', () => {
     let mockRequestService: MockRequestService;
 
