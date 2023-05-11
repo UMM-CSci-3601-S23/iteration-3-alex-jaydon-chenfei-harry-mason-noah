@@ -96,8 +96,8 @@ public class RequestedItemController {
     RequestedItem newItem = ctx.bodyValidator(RequestedItem.class).get();
     Bson filter = eq("name", newItem.name);
 
-    if (itemCollection.findOne(filter) != null){
-      RequestedItem existingItem = itemCollection.findOne(filter);
+    if (itemCollection.findOne(filter) != null) {
+      //RequestedItem existingItem = itemCollection.findOne(filter);
       Bson updateOperation = Updates.inc("amount", +newItem.amount);
       itemCollection.updateOne(filter, updateOperation);
       ctx.status(HttpStatus.OK);
@@ -111,7 +111,6 @@ public class RequestedItemController {
 
     //if (itemCollection.findOne(filter)
     // Find the request by its ID and update the amount needed
-    //System.out.println("jefoeo jefeffef");
 
   }
 
