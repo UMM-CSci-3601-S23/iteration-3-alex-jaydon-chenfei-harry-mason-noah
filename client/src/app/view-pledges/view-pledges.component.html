@@ -1,0 +1,60 @@
+<div *ngIf="this.authHypothesis" class="requests-container">
+  <div class="flex-row">
+    <div class="flex-1">
+      <!--Filters-->
+        <mat-card-header class="flex-row gap-8 flex-wrap">
+          <mat-card-title class="donor-view-title">Active pledges</mat-card-title>
+          <button mat-fab extended class="backButton" [routerLink]="['/requests/volunteer']">
+            <mat-icon>reply</mat-icon>
+            GO BACK
+          </button>
+          <br />
+        </mat-card-header>
+    </div>
+  </div>
+
+  <!--List View-->
+  <div class="flex-row">
+    <div class="flex-1 flex-wrap" *ngIf="pledges; else requestsError">
+      <mat-nav-list class="volunteer-nav-list">
+        <div mat-list-item *ngFor="let pledge of this.pledges" class="volunteer-list-item edit-request">
+          <mat-card class="example-card">
+            <div class="priority-wrapper"> <!-- Added the priority-wrapper class -->
+              <mat-card-header>
+                <mat-card-title *ngIf="pledge.amount === 1" class="volunteer-list-name">{{pledge.name}} pledged {{pledge.amount}} portion of {{this.requestService.getReadableItem(pledge.itemName)}}</mat-card-title>
+                <mat-card-title *ngIf="pledge.amount !== 1"class="volunteer-list-name">{{pledge.name}} pledged {{pledge.amount}} portions of {{this.requestService.getReadableItem(pledge.itemName)}}</mat-card-title>
+                <mat-card-subtitle class="donor-list-selections" >They will bring it in on {{pledge.timeSlot}}</mat-card-subtitle>
+                <mat-card-subtitle *ngIf="pledge.comment!==''"class="donor-list-selections" >Comment: {{pledge.comment}}</mat-card-subtitle>
+                <button mat-mini-fab class="backButton" matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deletePledge(pledge)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-header>
+              <br />
+            </div>
+          </mat-card>
+          <br />
+        </div>
+      </mat-nav-list>
+    </div>
+  </div>
+
+    <ng-template #requestsError>
+      <div class="flex-1" class="requests-error">
+        <mat-error>
+          There was a problem loading the requests. The server may be down or there are
+          network issues.
+        </mat-error>
+        <mat-error>
+          Please wait a bit and try again or start the server.
+        </mat-error>
+      </div>
+    </ng-template>
+  </div>
+
+
+<div *ngIf="!this.authHypothesis">
+  <h2>
+    Sorry, you don't have permission to view this page :(
+  </h2>
+</div>
+

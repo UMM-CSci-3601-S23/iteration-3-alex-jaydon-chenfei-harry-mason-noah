@@ -14,11 +14,13 @@ public class Request {
 
   public String name;
   public String[] selections;
-  public String itemType;
+  public String[] fulfilled;
   public String description;
-  public String foodType;
   public String dateAdded;
   public String diaperSize;
+  public Boolean incomeValid;
+  public Boolean archived;
+  public int priority;
 
   @Override
   public boolean equals(Object obj) {

@@ -1,0 +1,29 @@
+.mat-mdc-form-field-input-control.mat-mdc-form-field-input-control {
+  font-size: 32px;
+  line-height: 38px;
+}
+
+.mat-mdc-text-field-wrapper {
+  width: 100%;
+}
+
+.mat-mdc-form-field-infix{
+  width:100%
+}
+
+.mat-mdc-card-title{
+  font-size: var(--mdc-typography-headline6-font-size, 32px);
+}
+
+.itemName{
+  margin-right: auto;
+}
+
+.formRow{
+  display: flex;
+  flex-direction: row;
+}
+
+.new-request-title{
+  margin-left: 16px;
+}

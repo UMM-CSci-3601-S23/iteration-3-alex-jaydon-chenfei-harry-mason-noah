@@ -28,4 +28,6 @@ const pluginConfig: Cypress.PluginConfig = (on, _config) => {
 
 };
 
+
 export default pluginConfig;
+

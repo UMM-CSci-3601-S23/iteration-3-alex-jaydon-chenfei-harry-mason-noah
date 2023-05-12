@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
-import { Request, ItemType, FoodType } from './request';
+import { Request } from './request';
 import { RequestService } from './request.service';
-
+import { RequestedItem } from './requestedItem';
 
 @Component({
   selector: 'app-request-donor',
@@ -13,31 +13,29 @@ import { RequestService } from './request.service';
 })
 
 export class RequestDonorComponent implements OnInit, OnDestroy {
-  public serverFilteredRequests: Request[];
-  public filteredRequests: Request[];
+  @Input() simple?: boolean = false;
 
-  public requestItemType: ItemType;
-  public requestDescription: string;
-  public requestFoodType: FoodType;
+  public serverFilteredItems: RequestedItem[];
+  public filteredRequests: RequestedItem[];
+  public itemName: string;
+  // public readableRequests: Request[];
 
   authHypothesis: boolean;
 
-
   private ngUnsubscribe = new Subject<void>();
 
-  constructor(private requestService: RequestService, private snackBar: MatSnackBar) {
+  constructor(public requestService: RequestService, private snackBar: MatSnackBar) {
   }
-  //Gets the requests from the server with the correct filters
+
+  // Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getDonorRequests({
-      itemType: this.requestItemType,
-      foodType: this.requestFoodType,
-      description: this.requestDescription
+      name: this.itemName
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
       next: (returnedRequests) => {
-        this.serverFilteredRequests = returnedRequests;
+        this.serverFilteredItems = returnedRequests;
       },
 
       error: (err) => {
@@ -48,10 +46,11 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
       },
     });
   }
-  //
+
   public updateFilter(): void {
-    this.filteredRequests = this.serverFilteredRequests;
+    this.filteredRequests = this.serverFilteredItems;
   }
+
   ngOnInit(): void {
       this.getRequestsFromServer();
       this.authHypothesis = document.cookie.includes('auth_token');
@@ -62,8 +61,8 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
       this.ngUnsubscribe.complete();
   }
 
-  public deleteRequest(request: Request): void {
-    this.requestService.deleteDonorRequest(request).pipe(
+  public deleteRequest(item: RequestedItem): void {
+    this.requestService.deleteDonorItem(item).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
       next: (returnedRequests) => {
@@ -78,5 +77,4 @@ export class RequestDonorComponent implements OnInit, OnDestroy {
       },
     });
   }
-  }
-
+}

@@ -2,7 +2,7 @@
   <div class="flex-1">
     <mat-card class="home-card">
       <mat-card-header>
-        <mat-card-title data-cy="requestHeader">
+        <mat-card-title datatest="title">
           PocketShelf: Request Form!
         </mat-card-title>
       </mat-card-header>
@@ -17,16 +17,96 @@
           <ng-template matStepLabel>Fill out your name </ng-template>
             <mat-form-field appearance="fill">
               <mat-label>Name</mat-label>
-                <input
-                matInput placeholder="Name/Nombre"
-                formControlName="clientName"
-                required
-                data-cy="clientName">
-                  <mat-error *ngIf="formControlHasError('clientName')" data-test="nameDescriptionError">
+                <input matInput placeholder="Name/Nombre" formControlName="clientName" required>
+                  <mat-error *ngIf="formControlHasError('clientName')" datatest="nameDescriptionError">
                   {{getErrorMessage('clientName')}}
                   </mat-error>
             </mat-form-field><br /><br />
        </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+        <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+          <ng-template matStepLabel>Household Size</ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label># of persons in your home</mat-label>
+                <input matInput formControlName="clientHouseholdSize" required>
+                  <mat-error *ngIf="formControlHasError('clientHouseholdSize')" data-test="nameDescriptionError">
+                  {{getErrorMessage('clientHouseholdSize')}}
+                  </mat-error>
+            </mat-form-field><br /><br />
+       </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+        <ng-template matStepLabel>Household Income</ng-template>
+        <p>Is your household income less than {{calculateHouseholdIncome()}}</p>
+        <mat-form-field appearance="fill" >
+            <mat-select formControlName = "incomeValid"
+            required
+            [disabled]="newRequestForm.get('clientHouseholdSize').invalid">
+              <mat-option value = True>Yes</mat-option>
+              <mat-option value = False>No</mat-option>
+            </mat-select>
+            <!-- this error does not work yet -->
+            <mat-error *ngIf="formControlHasError('incomeValid')" data-test="nameDescriptionError">
+              {{getErrorMessage('incomeValid')}}
+              </mat-error>
+        </mat-form-field><br /><br />
+     </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+        <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+          <ng-template matStepLabel>Household Size</ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label># of persons in your home</mat-label>
+                <input matInput formControlName="clientHouseholdSize" required>
+                  <mat-error *ngIf="formControlHasError('clientHouseholdSize')" data-test="nameDescriptionError">
+                  {{getErrorMessage('clientHouseholdSize')}}
+                  </mat-error>
+            </mat-form-field><br /><br />
+       </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "newRequestForm">
+    <form [formGroup] = "newRequestForm">
+      <section class="form-fruits-fresh" [formGroup]="newRequestForm">
+        <ng-template matStepLabel>Household Income</ng-template>
+        <p>Is your household income less than {{calculateHouseholdIncome()}}</p>
+        <mat-form-field appearance="fill" >
+            <mat-select formControlName = "incomeValid"
+            required
+            [disabled]="newRequestForm.get('clientHouseholdSize').invalid">
+              <mat-option value = True>Yes</mat-option>
+              <mat-option value = False>No</mat-option>
+            </mat-select>
+            <!-- this error does not work yet -->
+            <mat-error *ngIf="formControlHasError('incomeValid')" data-test="nameDescriptionError">
+              {{getErrorMessage('incomeValid')}}
+              </mat-error>
+        </mat-form-field><br /><br />
+     </section>
        <div>
         <button mat-button matStepperNext>Next</button>
       </div>
@@ -186,7 +266,7 @@
     <form [formGroup] = "newRequestForm">
       <ng-template matStepLabel>MILK & CHEESE / LÁCTEOS</ng-template>
         <section class="form-milk-and-cheese" [formGroup]="newRequestForm">
-          <mat-checkbox  (change)="updateList('freshMilk')">Fresh milk (lactose free) / Leche (sin lactosa)</mat-checkbox><br />
+          <mat-checkbox  (change)="updateList('freshMilkLactoseFree')">Fresh milk (lactose free) / Leche (sin lactosa)</mat-checkbox><br />
           <mat-checkbox  (change)="updateList('miscDairyProducts')">Misc dairy products / Varios productos lácteos</mat-checkbox><br />
           <mat-checkbox  (change)="updateList('cheese')">Cheese / Queso</mat-checkbox><br />
           <mat-checkbox  (change)="updateList('yogurt')">Yogurt / Yogur</mat-checkbox><br />
@@ -247,7 +327,8 @@
           <mat-checkbox  (change)="updateList('diapers')">Diapers / Pañales</mat-checkbox><br />
           <mat-form-field  appearance="fill">
             <mat-label>Size? / ¿Talla?</mat-label>
-            <mat-select formControlName = "diaperSize">
+
+            <mat-select formControlName = "diaperSize" [disabled]="!this.selections.includes('diapers')">
               <mat-option value = "premature">Premature / Prematuro</mat-option>
               <mat-option value = "newborn">Newborn / Recién nacido</mat-option>
               <mat-option value = "1">1</mat-option>
@@ -332,8 +413,8 @@
           type="button"
           class= "submit_button"
           type="submit"
-          data-test="confirmAddRequestButton"
-          data-cy="confirmAddRequestButton">
+          datatest="confirmAddRequestButton"
+          [disabled]="newRequestForm.invalid">
           Submit Request Form
         </button>
       </mat-card-actions>

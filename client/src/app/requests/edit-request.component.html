@@ -1,51 +1,54 @@
-<div class="flex-row">
+<div *ngIf="this.request" class="flex-row">
   <div class="flex-1">
-    <form [formGroup]="newRequestForm" (ngSubmit)="submitForm();">
+    <form [formGroup]="editRequestForm" (ngSubmit)="submitForm();">
+      <div class="formRow">
+        <mat-card-content>
+          <div style="display: inline-block;">
+            <mat-form-field>
+              <div class="mat-mdc-text-field-wrapper">
+                <input class="name mat-mdc-form-field-input-control" matInput placeholder="Name" formControlName="clientName" required>
+                  <mat-error *ngIf="formControlHasError('clientName')" data-test="nameDescriptionError">
+                  {{getErrorMessage('clientName')}}
+                  </mat-error>
+              </div>
+            </mat-form-field>
+          </div>
+          <div style="display: inline-block;">
+            <mat-card-title class = "new-request-title" *ngIf="this.request">
+              {{this.requestService.getReadableDate(request.dateAdded)}}
+            </mat-card-title>
+          </div>
+        </mat-card-content>
+      </div>
       <mat-card-header>
-        <mat-card-title class = "new-request-title">
-          Item Request Form
-        </mat-card-title>
+        <mat-card-subtitle *ngIf="this.request&&request.incomeValid";else="higher">
+          This person's household income is below the guidelines
+        </mat-card-subtitle>
+        <mat-card-subtitle #higher>
+          This person's household income is above the guidelines
+        </mat-card-subtitle>
       </mat-card-header>
-    <mat-card-content>
-    <div class = "drop-downs">
-      <mat-form-field>
-        <mat-label>Item Category</mat-label>
-        <mat-select
-        required
-        [(ngModel)]="itemType"
-        formControlName="itemType"
-        data-test="itemTypeSelect"
-        >
-          <mat-option value ="--">--</mat-option>
-          <mat-option value="food">Food</mat-option>
-          <mat-option value="toiletries">Toiletries</mat-option>
-          <mat-option value="other">Other</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formControlHasError('itemType')" data-test="itemTypeError">
-          {{getErrorMessage('itemType')}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Food Category</mat-label>
-        <mat-select
-        [disabled]="itemType !== 'food'"
-        formControlName="foodType"
-        >
-          <mat-option value="dairy">Dairy</mat-option>
-          <mat-option value="grain">Grain</mat-option>
-          <mat-option value="meat">Meat</mat-option>
-          <mat-option value="fruit">Fruit</mat-option>
-          <mat-option value="vegetable">Vegetable</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formControlHasError('foodType')" data-test="foodTypeError">
-          {{getErrorMessage('foodType')}}
-        </mat-error>
-      </mat-form-field>
+    <div mat-list-item *ngFor="let item of this.request.selections"  class="volunteer-list-item edit-request">
+      <mat-card class="example-card">
+        <mat-card-actions align="end">
+          <mat-card-title [ngStyle]="{'color': 'green'}" class="itemName" *ngIf="request.diaperSize && this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
+          <mat-card-title [ngStyle]="{'color': 'green'}" class="itemName" *ngIf="!request.diaperSize && this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item)}}</mat-card-title>
+          <mat-card-title [ngStyle]="{'color': 'red'}" class="itemName" *ngIf="request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item, request.diaperSize)}}</mat-card-title>
+          <mat-card-title [ngStyle]="{'color': 'red'}" class="itemName" *ngIf="!request.diaperSize && !this.request.fulfilled.includes(item)">{{this.requestService.getReadableItem(item)}}</mat-card-title>
+          <button *ngIf="!this.request.archived" mat-mini-fab matTooltip="Post" color="primary" data-test="postRequestButton" (click)="postRequest(item)">
+            <mat-icon>send</mat-icon>
+          </button>
+          <mat-checkbox *ngIf="this.request.fulfilled.includes(item)" checked="true" (change)="updateFulfilled(item)"></mat-checkbox>
+          <mat-checkbox *ngIf="!this.request.fulfilled.includes(item)" checked="false" (change)="updateFulfilled(item)"></mat-checkbox>
+        </mat-card-actions>
+      </mat-card>
+      <br />
     </div>
+    <br />
     <div>
-      <mat-form-field class = "desc">
+      <mat-form-field class = "mat-mdc-text-field-wrapper">
         <mat-label>Item description</mat-label>
-        <textarea matInput formControlName="description"
+        <textarea class="mat-mdc-form-field-infix" matInput formControlName="description"
         required>
         </textarea>
         <mat-error *ngIf="formControlHasError('description')" data-test="descriptionError">
@@ -53,7 +56,6 @@
         </mat-error>
       </mat-form-field>
     </div>
-    </mat-card-content>
     <div>
     <mat-card-actions align="end">
       <button
@@ -62,9 +64,9 @@
         type="button"
         color="dark-primary"
         type="submit"
-        data-test="confirmNewRequestButton"
+        data-test="submitRevisionButton"
       >
-        SUBMIT REQUEST
+        SUBMIT REVISION
       </button>
     </mat-card-actions>
   </div>

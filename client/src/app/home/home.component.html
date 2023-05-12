@@ -7,27 +7,6 @@
         </mat-card-title>
       </mat-card-header>
     </mat-card>
-    <div class="tactile-stuff">
-    <mat-form-field class="input-field">
-      <mat-label>I am a...</mat-label>
-      <mat-select
-      [(ngModel)]="userRole"
-      (selectionChange)="changeRole(userRole)"
-      data-test="userRoleSelect"
-      required >
-        <mat-option>--</mat-option>
-        <mat-option value="donor">Donor</mat-option>
-        <mat-option value="client">Client</mat-option>
-        <mat-option value="volunteer">Volunteer</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <a class="continue-button"
-    mat-raised-button
-    [routerLink] = "['/requests', userRole]"
-    matRipple
-    [disabled]="!userRole">
-      Continue
-  </a>
-    </div>
+    <img src = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi2-prod.mirror.co.uk%2Fincoming%2Farticle10107314.ece%2FALTERNATES%2Fs615%2FBoy-eating-spaghetti.jpg&f=1&nofb=1&ipt=0676d26e9a0b1e3c11ab33a38272846ba5f50dafa3a90420087788298940d890&ipo=images">
   </div>
 </div>

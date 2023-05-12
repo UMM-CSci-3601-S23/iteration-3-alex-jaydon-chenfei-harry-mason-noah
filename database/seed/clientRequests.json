@@ -3,56 +3,171 @@
     "_id": {
       "$oid": "588935f57546a2daea44de7c"
     },
-    "itemType": "food",
-    "description": "I'd like some apples",
-    "foodType": "fruit"
+    "name": "Jax",
+    "dateAdded": "20090221",
+    "description": "Grandmaster-At-Arms",
+    "selections": [
+      "pancakeMix",
+      "cheese",
+      "creamyCannedSoup"
+    ],
+    "fulfilled": [
+    ],
+    "incomeValid": true,
+    "archived": true
   },
   {
     "_id": {
       "$oid": "588935f5597715f06f3e8f6c"
     },
-    "itemType": "toiletries",
-    "description": "I need some toothpaste",
-    "foodType": ""
+    "name": "Vayne",
+    "dateAdded": "20110510",
+    "description": "Final Hour",
+    "selections": [
+      "almonds",
+      "sweetPotatoes",
+      "peaches"
+    ],
+    "fulfilled": [
+    ],
+    "incomeValid": false,
+    "archived": false
   },
   {
     "_id": {
       "$oid": "588935f51c55b55c75a84848"
     },
-    "itemType": "other",
-    "description": "I need paper plates",
-    "foodType": ""
+    "name": "Jinx",
+    "dateAdded": "20131010",
+    "description": "Super Mega Death Rocket!",
+    "selections": [
+      "groundPorkBeefBlend",
+      "wholeChicken",
+      "hotDogSauce"
+    ],
+    "fulfilled": [
+    ],
+    "incomeValid": true,
+    "archived": false
   },
   {
     "_id": {
       "$oid": "588935f52787254123f71fed"
     },
-    "itemType": "food",
-    "description": "Need milk",
-    "foodType": "dairy"
+    "name": "Samira",
+    "dateAdded": "20200916",
+    "description": "Inferno Trigger",
+    "selections": [
+      "kidneyBeans",
+      "rice",
+      "cookieMix"
+    ],
+    "fulfilled": [
+    ],
+    "incomeValid": false,
+    "archived": false
   },
   {
     "_id": {
       "$oid": "588935f5de613130e931ffd5"
     },
-    "itemType": "food",
-    "description": "I need bread",
-    "foodType": "grain"
+    "name": "Lucian",
+    "dateAdded": "20130722",
+    "description": "The Culling",
+    "selections": [
+      "cannedChili",
+      "veggieRavioli",
+      "diapers"
+    ],
+    "fulfilled": [
+    ],
+    "diaperSize": "premature",
+    "incomeValid": true,
+    "archived": false
   },
   {
     "_id": {
       "$oid": "588935f55b432bb2ff322160"
     },
-    "itemType": "food",
-    "description": "I would like some more ground beef",
-    "foodType": "meat"
+    "name": "Garen",
+    "dateAdded": "20100427",
+    "description": "Demacian Justice",
+    "selections": [
+      "chicken",
+      "tuna",
+      "fishSticks"
+    ],
+    "fulfilled": [
+    ],
+    "incomeValid": false,
+    "archived": false
   },
   {
     "_id": {
       "$oid": "588935f5556f992bf8f37c01"
     },
-    "itemType": "food",
-    "description": "If possible I'd like to be able to add more vegetables to my meals",
-    "foodType": "vegetable"
+    "name": "Tryndamere",
+    "dateAdded": "20090501",
+    "description": "Undying Rage",
+    "selections": [
+      "peanutButter",
+      "bread",
+      "fruitOrVegetablePuree"
+    ],
+    "fulfilled": [
+    ],
+    "incomeValid": true,
+    "archived": true
+  },
+  {
+    "_id": {
+      "$oid": "528935f5597715f06f3e8f6c"
+    },
+    "name": "Sivir",
+    "dateAdded": "20090221",
+    "description": "On The Hunt",
+    "selections": [
+      "birthdayPartyKit",
+      "newbornGiftBag",
+      "syrup"
+    ],
+    "fulfilled": [
+    ],
+    "incomeValid": false,
+    "archived": true
+  },
+  {
+    "_id": {
+      "$oid": "518935f5597715f06f3e8f6c"
+    },
+    "name": "Singed",
+    "dateAdded": "20090418",
+    "description": "Insanity Potion",
+    "selections": [
+      "hotDogSauce",
+      "vegCurry",
+      "laundryDetergent"
+    ],
+    "fulfilled": [
+    ],
+    "incomeValid": true,
+    "archived": false
+  },
+  {
+    "_id": {
+      "$oid": "538935f5597715f06f3e8f6c"
+    },
+    "name": "Camille",
+    "dateAdded": "20161207",
+    "description": "Hextech Ultimatum",
+    "selections": [
+      "salmon",
+      "walnuts",
+      "formula"
+    ],
+    "fulfilled": [
+    ],
+    "incomeValid": false,
+    "archived": true
   }
 ]

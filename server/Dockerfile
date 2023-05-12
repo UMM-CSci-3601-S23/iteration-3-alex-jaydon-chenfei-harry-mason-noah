@@ -8,7 +8,7 @@ RUN ./gradlew assemble --no-daemon
 
 # Build the production server container
 FROM openjdk:11-jdk-slim
-EXPOSE 4567
+EXPOSE 4569
 # Copy the distribution tar that was built in the build stage
 COPY --from=build /tmp/server/build/distributions/server.tar /app/
 WORKDIR /app

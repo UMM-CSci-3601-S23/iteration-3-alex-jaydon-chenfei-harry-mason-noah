@@ -1,74 +1,69 @@
-<div *ngIf="this.authHypothesis">
-  <div class="flex-row">
-    <div class="flex-1">
-      <!--Filters-->
-      <mat-card class="search-card">
-        <mat-card-header>
-          <mat-card-title class="volunteer-view-title">Needs requested</mat-card-title>
-        </mat-card-header>
+<div *ngIf="this.authHypothesis" class="requests-container">
+  <div class="flex-1">
+    <mat-card class="search-card">
       <mat-card-content>
-        <!--Item Type Filter-->
         <div class="flex-row gap-8 flex-wrap">
-          <mat-form-field class="input-field">
-            <mat-label>Item Type</mat-label>
-            <mat-select (selectionChange)="getRequestsFromServer()" [(ngModel)]="requestItemType" data-test="requestItemTypeSelect">
-              <mat-option>--</mat-option>
-              <mat-option value="food">Food</mat-option>
-              <mat-option value="toiletries">Toiletries</mat-option>
-              <mat-option value="other">Other</mat-option>
-            </mat-select>
+          <mat-form-field class="input-field" id="descriptionID">
+            <mat-label>Description</mat-label>
+              <!--Description Filter-->
+            <input matInput data-test="requestDescriptionInput" placeholder="Filter by description"
+            [(ngModel)]="requestDescription" (input)="getRequestsFromServer()">
           </mat-form-field>
+          <button mat-fab extended class="viewPledgesButton" [routerLink]="['/requests/pledges']">
+            <mat-icon>bookmark</mat-icon>
+            View pledges
+          </button>
+          <mat-radio-group [(ngModel)]="archiveView" (change)="getRequestsFromServer()" class="archiveFilterButtons" aria-label="Select an option">
+              <!--Archive Filter-->
+            <mat-radio-button value="false" >View Current Requests</mat-radio-button>
+            <mat-radio-button value="true" >View Archived Requests</mat-radio-button>
+          </mat-radio-group>
         </div>
-
-        <!--Food Type Filter-->
-        <mat-form-field class="input-field">
-          <mat-label>Food Type</mat-label>
-          <mat-select (selectionChange)="getRequestsFromServer()" [(ngModel)]="requestFoodType" data-test="requestFoodTypeSelect">
-            <mat-option>--</mat-option>
-            <mat-option value="dairy">Dairy</mat-option>
-            <mat-option value="grain">Grain</mat-option>
-            <mat-option value="meat">Meat</mat-option>
-            <mat-option value="fruit">Fruit</mat-option>
-            <mat-option value="vegetable">Vegetable</mat-option>
-          </mat-select>
-        </mat-form-field>
-
       </mat-card-content>
-      </mat-card>
-    </div>
+    </mat-card>
   </div>
 
   <!--List View-->
   <div class="flex-row">
     <div class="flex-1" *ngIf="serverFilteredRequests; else requestsError">
-      <mat-card-content>
-        <mat-nav-list class="volunteer-nav-list">
-          <h3 mat-subheader>Requests</h3>
-          <div mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/requests/donor', request._id]" class="volunteer-list-item edit-request">
-            <mat-card class="example-card">
+      <mat-nav-list class="volunteer-nav-list">
+        <h3 *ngIf="this.archiveView === 'true'" mat-subheader>Archived Requests</h3>
+        <h3 data-test="subheader" *ngIf="this.archiveView === 'false'" mat-subheader>Current Requests</h3>
+        <div mat-list-item *ngFor="let request of this.serverFilteredRequests" class="volunteer-list-item edit-request">
+          <mat-card class="example-card">
+            <div class="priority-wrapper"> <!-- Added the priority-wrapper class -->
               <mat-card-header>
-                <mat-card-title class="volunteer-list-itemType">{{request.itemType}}</mat-card-title>
-                <mat-card-subtitle class="volunteer-list-foodType">{{request.foodType}}</mat-card-subtitle>
+                <mat-card-title class="volunteer-list-name">{{request.name}} {{this.requestService.getReadableDate(request.dateAdded)}}</mat-card-title>
+                <mat-card-subtitle class="donor-list-selections" *ngIf="request.diaperSize">{{this.requestService.getReadableUnfulfilled(request.fulfilled, request.selections, request.diaperSize)}}</mat-card-subtitle>
+                <mat-card-subtitle class="donor-list-selections" *ngIf="!request.diaperSize">{{this.requestService.getReadableUnfulfilled(request.fulfilled, request.selections)}}</mat-card-subtitle>
               </mat-card-header>
-              <mat-card-content>
-                <p matListItemBody class="volunteer-list-description"> {{request.description}} </p>
-              </mat-card-content>
-              <mat-card-actions>
-                <button mat-button matToolTip="Edit Request" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
-                  Edit Request
-                </button>
-                <button mat-button data-test="postRequestButton" (click)="postRequest(request)">
-                  Post
-                </button>
-                <button mat-icon-button data-test="deleteRequestButton" (click)="deleteRequest(request)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </mat-card-actions>
-            </mat-card>
-          </div>
-        </mat-nav-list>
-      </mat-card-content>
+              <div class="priority-container"> <!-- Moved this div container here -->
+                <mat-form-field class="priority-field">
+                  <mat-label>Priority</mat-label>
+                  <mat-select [(ngModel)]="request.priority" (selectionChange)="setRequestPriority(request, request.priority)">
+                    <mat-option *ngFor="let priority of [1, 2, 3, 4, 5]" [value]="priority">{{priority}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-card-actions>
+              <p matListItemBody class="itemName"> {{request.description}} </p>
+              <button mat-mini-fab class="deleteButton" color="accent" matTooltip="Archive" *ngIf="!request.archived"(click)="markAsComplete(request)" data-test="archiveRequestButton">
+                <mat-icon>archive</mat-icon>
+              </button>
+              <button mat-mini-fab class="deleteButton" matTooltip="Edit Request" color="warn" [routerLink]="['/requests/volunteer', request._id]" data-test="editRequestButton">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <button mat-mini-fab matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(request)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-card-actions>
+            <p class="income-warning" *ngIf="!request.incomeValid">!Income is more than guideline for a family of this size!</p>
+          </mat-card>
+        </div>
+      </mat-nav-list>
     </div>
+  </div>
 
     <ng-template #requestsError>
       <div class="flex-1" class="requests-error">
@@ -83,13 +78,10 @@
     </ng-template>
   </div>
 
-  <!--app-new-request is the selector for the new-request component. By calling it here, we basically
-  copy the whole new-request component found on the client page onto the volunteer page.-->
-  <app-new-request [destination]="'donor'">
-  </app-new-request>
-</div>
+
 <div *ngIf="!this.authHypothesis">
   <h2>
     Sorry, you don't have permission to view this page :(
   </h2>
 </div>
+

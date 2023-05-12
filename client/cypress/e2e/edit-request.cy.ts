@@ -1,5 +1,6 @@
 import { Request } from 'src/app/requests/request';
 import { EditRequestPage } from 'cypress/support/edit-request.po';
+import { first } from 'cypress/types/lodash';
 
 describe('Edit a request', ()=> {
   const page = new EditRequestPage();
@@ -7,29 +8,39 @@ describe('Edit a request', ()=> {
   beforeEach(()=> {
     cy.setCookie('auth_token', 'TOKEN');
     cy.task('seed:database');
-    page.navigateToRequest();
+    page.navigateToEditRequest();
   });
 
-  it('Should edit the request', ()=> {
-    const request: Request = {
-      _id: '588935f57546a2daea44de7c',
-      itemType: 'food',
-      foodType: 'meat',
-      description: 'This is a test edit'
-    };
+  it('should save the changes after click the submitRevision', () => {
+    page.getFormField('clientName').clear().type('Alex');
+    page.getFormField('description').clear().type('For the purpose of testing');
+    page.submitRevision();
+    page.navigateToEditRequest();
+    page.getFormField('clientName').should('have.value', 'Alex');
+    page.getFormField('description').should('have.value', 'For the purpose of testing');
+  });
 
-    page.editRequest(request);
-    page.getSnackBar().should('contain', `Request successfully submitted`);
+  it('should change the word color to green when mat-checkbox is checked', () => {
+    // Find the first itemname and store its class
+    cy.get('.itemName').first().as('firstItemName');
+    // Check the color before checking the mat-checkbox (assuming it's red)
+    cy.get('@firstItemName')
+      .invoke('css', 'color')
+      .should('eq', 'rgb(255, 0, 0)'); // Red in RGB
+    // Find the first checkbox and check it
+    cy.get('mat-checkbox').first().click();
+    // Check if the color of the mat-card-title changed to green
+    cy.get('@firstItemName')
+      .invoke('css', 'color')
+      .should('eq', 'rgb(0, 128, 0)'); // Green in RGB
+  });
 
+  it('should have correct behavior after clicking the post button', () => {
+    page.post();
     page.navigateToDonor();
-
-    page.selectItemType('food');
-    page.selectFoodType('meat');
-    page.filterDescription('This is a test edit');
-
-    cy.get('.donor-list-description').should('contain.text', request.description);
-    cy.get('.donor-list-itemType').should('contain.text', request.itemType);
-    cy.get('.donor-list-foodType').should('contain.text', request.foodType);
+    page.getRequestListItems().should('have.length', 5);
+    page.getRequestListItems().should('contain', 'Almonds');
   });
+
 
 });

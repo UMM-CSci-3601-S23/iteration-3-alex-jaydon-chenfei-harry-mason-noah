@@ -1,13 +1,12 @@
 export interface Request {
   _id: string;
-  name?: string;
-  dateAdded?: string;
-  itemType?: ItemType;
-  description: string;
-  foodType?: FoodType;
-  selections?: string[];
+  name: string;
   diaperSize?: string;
+  incomeValid: string;
+  dateAdded: string;
+  description?: string;
+  selections?: string[];
+  fulfilled: string[];
+  priority: number;
+  archived: string;
 }
-
-export type ItemType = 'food' | 'toiletries' | 'other';
-export type FoodType = '' | 'dairy' | 'grain' | 'meat' | 'fruit' | 'vegetable';

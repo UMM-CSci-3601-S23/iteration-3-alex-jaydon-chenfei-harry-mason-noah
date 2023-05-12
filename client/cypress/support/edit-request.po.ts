@@ -1,21 +1,22 @@
-import { FoodType, ItemType, Request } from 'src/app/requests/request';
+import { Request } from 'src/app/requests/request';
 
 export class EditRequestPage {
-  private readonly requestUrl = '/requests/volunteer/588935f57546a2daea44de7c';
+  private readonly editRequestUrl = '/requests/volunteer/588935f5597715f06f3e8f6c';
   private readonly donorUrl = '/requests/donor';
   private readonly title = '.new-request-title';
-  private readonly button = '[data-test=confirmNewRequestButton]';
+  private readonly button1 = '[data-test=confirmNewRequestButton]';
+  private readonly button2 = '[data-test=postRequestButton]';
+  private readonly button3 = '[data-test=submitRevisionButton]';
+  private readonly button4 = '[data-test=postRequestButton]';
   private readonly snackBar = '.mat-mdc-simple-snack-bar';
-  private readonly itemTypeFieldName = 'itemType';
-  private readonly foodTypeFieldName = 'foodType';
   private readonly descFieldName = 'description';
   private readonly formFieldSelector = `mat-form-field`;
   private readonly dropDownSelector = `mat-option`;
-  private readonly requestItemTypeDropDown = '[data-test=requestItemTypeSelect]';
-  private readonly requestFoodTypeDropDown = '[data-test=requestFoodTypeSelect]';
   private readonly requestDescription = '[data-test=requestDescriptionInput]';
-  navigateToRequest() {
-    return cy.visit(this.requestUrl);
+  private readonly requestListItemSelector = '.donor-nav-list .donor-list-item';
+
+  navigateToEditRequest() {
+    return cy.visit(this.editRequestUrl);
   }
 
   navigateToDonor() {
@@ -27,7 +28,7 @@ export class EditRequestPage {
   }
 
   newRequestButton() {
-    return cy.get(this.button);
+    return cy.get(this.button1);
   }
 
   selectMatSelectValue(select: Cypress.Chainable, value: string) {
@@ -56,24 +57,22 @@ export class EditRequestPage {
 
   editRequest(newRequest: Request) {
     this.getFormField(this.descFieldName).click().clear().type(newRequest.description);
-    this.setMatSelect('itemType', this.capitalize(newRequest.itemType));
-    if (newRequest.itemType === 'food'){
-      this.setMatSelect('foodType', this.capitalize(newRequest.foodType));
-    }
     return this.newRequestButton().click();
-  }
-
-  selectItemType(value: ItemType) {
-    cy.get(this.requestItemTypeDropDown).click();
-    return cy.get(`${this.dropDownSelector}[value="${value}"]`).click();
-  }
-
-  selectFoodType(value: FoodType) {
-    cy.get(this.requestFoodTypeDropDown).click();
-    return cy.get(`${this.dropDownSelector}[value="${value}"]`).click();
   }
 
   filterDescription(value: string) {
     cy.get(this.requestDescription).click().type(value);
+  }
+
+
+  submitRevision(){
+    cy.get(this.button3).click();
+  }
+  post(){
+    cy.get(this.button4).first().click();
+  }
+
+  getRequestListItems() {
+    return cy.get(this.requestListItemSelector);
   }
 }

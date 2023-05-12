@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +24,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatStepperModule } from '@angular/material/stepper' ;
 import { MatCheckboxModule } from '@angular/material/checkbox' ;
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -32,6 +33,8 @@ import { RequestDonorComponent } from './requests/request-donor.component';
 import { RequestVolunteerComponent } from './requests/request-volunteer.component';
 import { NewRequestComponent } from './requests/new-request/new-request.component';
 import { EditRequestComponent } from './requests/edit-request.component';
+import { DonorPledgeComponent } from './donor-pledge/donor-pledge.component';
+import { ViewPledgesComponent } from './view-pledges/view-pledges.component';
 
 
 
@@ -53,7 +56,8 @@ const MATERIAL_MODULES: any[] = [
   MatToolbarModule,
   MatTooltipModule,
   MatStepperModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatBadgeModule
 ];
 
 @NgModule({
@@ -64,6 +68,8 @@ const MATERIAL_MODULES: any[] = [
     RequestDonorComponent,
     RequestVolunteerComponent,
     EditRequestComponent,
+    DonorPledgeComponent,
+    ViewPledgesComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +80,7 @@ const MATERIAL_MODULES: any[] = [
     HttpClientModule,
     MATERIAL_MODULES,
     LayoutModule,
+    DragDropModule
   ],
   bootstrap: [AppComponent]
 })

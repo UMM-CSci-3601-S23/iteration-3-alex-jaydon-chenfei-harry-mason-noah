@@ -11,95 +11,49 @@ describe('Donor View', () => {
     cy.setCookie('auth_token', 'TOKEN');
     page.navigateTo();
   });
-  //Tests for the page with no filters
+
   it('Should have the correct title', () => {
-    page.getDonorViewTitle().should('have.text', 'Needs requestedfoodtoiletriesotherfoodfoodfoodfoodfoodtoiletriesfood');
+    page.getDonorViewTitle().should('have.text', 'Items requested by the food shelf');
   });
 
-  it('Should display 10 requests', () => {
-    page.getRequestListItems().should('have.length', 10);
+  it('Should display 4 items', () => {
+    page.getRequestListItems().should('have.length', 4);
   });
 
-  //Tests with item filters
-  it('Should return the correct elements with item filter food', () => {
-    page.selectItemType('food');
 
-    page.getRequestListItems().should('have.length', 7);
+  //Tests with name filter
+  it('Should return the correct elements with different inputs', () => {
 
-    page.getRequestListItems().each(el => {
-      cy.wrap(el).find('.donor-list-itemType').should('contain.text', 'food');
-    });
-  });
-
-  it('Should return the correct elements with item filter toiletries', () => {
-    page.selectItemType('toiletries');
-
+    page.enterItemName().type('o');
     page.getRequestListItems().should('have.length', 2);
-
-    page.getRequestListItems().each($list => {
-      cy.wrap($list).find('.donor-list-itemType').should('contain.text', 'toiletries');
+    page.getRequestListItems().each(($el) => {
+      const itemNameElement = $el.find('.itemName');
+      const itemName = itemNameElement.text().trim().toLowerCase();
+      expect(itemName).to.contain('o');
     });
-  });
 
-  it('Should return the correct elements with item filter other', () => {
-    page.selectItemType('other');
+    page.enterItemName().clear();
+    page.enterItemName().type('ou');
     page.getRequestListItems().should('have.length', 1);
-  });
-
-  //Tests with food filters
-  it('Should return the correct elements with item filter food and food filter dairy', () => {
-    page.selectItemType('food');
-    page.selectFoodType('dairy');
-
-    page.getRequestListItems().should('have.length', 1);
-
-    page.getRequestListItems().each(el => {
-      cy.wrap(el).find('.donor-list-itemType').should('contain.text', 'food');
+    page.getRequestListItems().each(($el) => {
+      const itemNameElement = $el.find('.itemName');
+      const itemName = itemNameElement.text().trim().toLowerCase();
+      expect(itemName).to.contain('ou');
     });
 
-    page.getRequestListItems().each(el => {
-      cy.wrap(el).find('.donor-list-foodType').should('contain.text', 'dairy');
-    });
-  });
-
-  it('Should return the correct elements with item filter food and food filter meat', () => {
-    page.selectItemType('food');
-    page.selectFoodType('meat');
-
-    page.getRequestListItems().should('have.length', 1);
-
-    page.getRequestListItems().each(el => {
-      cy.wrap(el).find('.donor-list-itemType').should('contain.text', 'food');
     });
 
-    page.getRequestListItems().each(el => {
-      cy.wrap(el).find('.donor-list-foodType').should('contain.text', 'meat');
+    it('Should be able to pledge a request', () => {
+
+      page.pledgeRequest();
+
+      cy.url().should('match', /^https?:\/\/(?:localhost:\d+|[^/]+)\/requests\/donor\/[a-f0-9]{24}$/);
     });
-  });
 
-  it('Should return the correct elements with description filter', () => {
-    cy.get('#descriptionID input').clear().type('Vegetables').focus().blur();
-    page.getRequestListItems().should('have.length', 2);
-  });
+    it('Should delete a request', () => {
 
-  it('Should return the correct elements with description and food filters', () => {
-    page.selectFoodType('grain');
-    cy.get('#descriptionID input').clear().type('I want').focus().blur();
-    page.getRequestListItems().should('have.length', 1);
-  });
+      page.deleteRequest();
 
-  it('Should return the correct elements with description and Itemtype filters', () => {
-    page.selectItemType('food');
-    cy.get('#descriptionID input').clear().type('I want').focus().blur();
-    page.getRequestListItems().should('have.length', 2);
-});
-
-  it('Should delete a request', () => {
-
-    page.deleteRequest();
-
-    page.getRequestListItems().should('have.length', 9);
-
-  });
-
+      page.getRequestListItems().should('have.length', 3);
+    });
 });

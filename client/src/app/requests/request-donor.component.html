@@ -3,44 +3,17 @@
     <!--Filters-->
     <mat-card class="search-card">
       <mat-card-header>
-        <mat-card-title class="donor-view-title">Needs requested</mat-card-title>
+        <mat-card-title class="donor-view-title">Items requested by the food shelf</mat-card-title>
       </mat-card-header>
     <mat-card-content>
       <!--Item Type Filter-->
       <div class="flex-row gap-8 flex-wrap">
-        <mat-form-field class="input-field">
-          <mat-label>Item Type</mat-label>
-          <mat-select (selectionChange)="getRequestsFromServer()" [(ngModel)]="requestItemType" data-test="requestItemTypeSelect">
-            <mat-option>--</mat-option>
-            <mat-option value="food">Food</mat-option>
-            <mat-option value="toiletries">Toiletries</mat-option>
-            <mat-option value="other">Other</mat-option>
-          </mat-select>
-          <mat-hint>Filtered on Server</mat-hint>
-        </mat-form-field>
-      </div>
-      <div class="flex-row gap-8 flex-wrap">
-      <mat-form-field class="input-field" id="descriptionID">
-        <mat-label>Description</mat-label>
-        <input matInput data-test="requestDescriptionInput" placeholder="Filter by description"
-        [(ngModel)]="requestDescription" (input)="getRequestsFromServer()">
-        <mat-hint> Filtered on Server </mat-hint>
+      <mat-form-field class="input-field" id="nameID">
+        <mat-label>Item Name</mat-label>
+        <input matInput data-test="requestItemInput" placeholder="Filter by item name"
+        [(ngModel)]="itemName" (input)="getRequestsFromServer()">
       </mat-form-field>
     </div>
-      <!--Food Type Filter-->
-      <mat-form-field class="input-field">
-        <mat-label>Food Type</mat-label>
-        <mat-select (selectionChange)="getRequestsFromServer()" [(ngModel)]="requestFoodType" data-test="requestFoodTypeSelect">
-          <mat-option>--</mat-option>
-          <mat-option value="dairy">Dairy</mat-option>
-          <mat-option value="grain">Grain</mat-option>
-          <mat-option value="meat">Meat</mat-option>
-          <mat-option value="fruit">Fruit</mat-option>
-          <mat-option value="vegetable">Vegetable</mat-option>
-        </mat-select>
-        <mat-hint>Filtered on Server</mat-hint>
-      </mat-form-field>
-
     </mat-card-content>
     </mat-card>
   </div>
@@ -53,24 +26,22 @@
 
 <!--List View-->
 <div class="flex-row">
-  <div class="flex-1" *ngIf="serverFilteredRequests; else requestsError">
+  <div class="flex-1" *ngIf="serverFilteredItems; else requestsError">
     <mat-card-content>
       <mat-nav-list class="donor-nav-list">
-        <h2 mat-subheader>Requests</h2>
-        <div mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/requests/donor', request._id]" class="donor-list-item">
+        <div mat-list-item *ngFor="let item of this.serverFilteredItems"  class="donor-list-item">
           <mat-card class="example-card">
-            <mat-card-header>
-              <mat-card-title class="donor-list-itemType">{{request.itemType}}</mat-card-title>
-              <mat-card-subtitle class="donor-list-foodType">{{request.foodType}}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <p matListItemBody class="donor-list-description"> {{request.description}} </p>
-            </mat-card-content>
-            <mat-card-actions *ngIf="this.authHypothesis">
-              <button mat-icon-button data-test="deleteRequestButton" (click)="deleteRequest(request)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </mat-card-actions>
+            <ng-container *ngIf="item.amount > 0">
+              <mat-card-actions [matBadge]="item.amount" matBadgePosition="above after" data-test="itemAmountBadge">
+                <mat-card-title class="itemName">{{this.requestService.getReadableItem(item.name)}}</mat-card-title>
+                <button mat-mini-fab class="pledgeButton" matTooltip="Pledge" color="accent" data-test="pledgeRequestButton" [routerLink]="['/requests/donor', item._id]">
+                  <mat-icon>favorite</mat-icon>
+                </button>
+                <button mat-mini-fab class="deleteButton" *ngIf="this.authHypothesis" matTooltip="Delete" color="primary" data-test="deleteRequestButton" (click)="deleteRequest(item)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-actions>
+          </ng-container>
           </mat-card>
         </div>
       </mat-nav-list>
@@ -89,3 +60,4 @@
     </div>
   </ng-template>
 </div>
+
