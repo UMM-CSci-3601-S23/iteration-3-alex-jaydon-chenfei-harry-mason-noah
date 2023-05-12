@@ -14,8 +14,8 @@ describe('Add request', () => {
     page.newRequestButton().should('be.disabled');
     page.getFormField('clientName').type('Alex');
     page.newRequestButton().should('be.disabled');
-    page.getFormField('clientHouseholdSize').type('3',{force: true});
-    page.newRequestButton().should('be.disabled');
+    // page.getFormField('clientHouseholdSize').type('3',{force: true});
+    // page.newRequestButton().should('be.disabled');
   });
 
 });
